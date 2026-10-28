@@ -100,16 +100,16 @@
       }
     </script>
 
-    <div class="bundle-card__media{% if badge_icon %} bundle-card__media--icon{% endif %}">
+    <div class="bundle-card__media">
       {%- if badge != blank -%}
-        <span class="bundle-card__badge">
+        <span class="bundle-card__badge{% if badge_icon %} bundle-card__badge--icon{% endif %}">
           {%- if badge_icon -%}
             {%- render 'icon-bundle-leaf' -%}
           {%- endif -%}
           {{- badge | escape -}}
         </span>
       {%- endif -%}
-      <a href="{{ product.url }}" class="bundle-card__image-link" tabindex="-1" aria-hidden="true">
+      <a href="{{ product.url }}" class="bundle-card__image-link">
         {%- if product.featured_image -%}
           {{
             product.featured_image
