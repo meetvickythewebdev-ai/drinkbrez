@@ -74,6 +74,7 @@
         "add": {{ section.settings.add_label | json }},
         "soldOut": {{ 'products.product.sold_out' | t | json }},
         "pack": {{ section.settings.pack_label | json }},
+        "adding": {{ section.settings.adding_label | json }},
         "remove": {{ 'sections.cart.remove_title' | t: title: "[title]" | json }},
         "error": {{ 'sections.cart.cart_error' | t | json }}
       }
@@ -114,24 +115,31 @@
       {%- endif -%}
     </div>
 
-    <aside class="bundle-panel" data-bundle-panel aria-label="{{ section.settings.panel_title | escape }}">
+    <div class="bundle-panel__overlay" data-bundle-overlay hidden></div>
+    <aside
+      class="bundle-panel is-collapsed"
+      data-bundle-panel
+      aria-label="{{ section.settings.panel_title | escape }}"
+    >
       <div class="bundle-panel__inner">
         <div class="bundle-panel__header">
-          <h2 class="bundle-panel__title">{{ section.settings.panel_title | escape }}</h2>
+          <div class="bundle-panel__heading">
+            <h2 class="bundle-panel__title">{{ section.settings.panel_title | escape }}</h2>
+            {%- if section.settings.panel_subtitle != blank -%}
+              <p class="bundle-panel__subtitle">{{ section.settings.panel_subtitle | escape }}</p>
+            {%- endif -%}
+          </div>
           <button
             type="button"
             class="bundle-panel__toggle"
             data-bundle-toggle
-            aria-expanded="true"
+            aria-expanded="false"
             aria-controls="BundlePanelBody-{{ section.id }}"
           >
             <span class="visually-hidden">{{ section.settings.panel_title | escape }}</span>
             {{- 'icon-caret.svg' | inline_asset_content -}}
           </button>
         </div>
-        {%- if section.settings.panel_subtitle != blank -%}
-          <p class="bundle-panel__subtitle">{{ section.settings.panel_subtitle | escape }}</p>
-        {%- endif -%}
 
         {%- if tiers.size > 0 -%}
           <div class="bundle-progress">
@@ -214,8 +222,7 @@
 
         <div class="bundle-panel__cta">
           <button type="button" class="bundle-panel__submit" data-bundle-submit disabled>
-            <span>{{ section.settings.cart_label | escape }}</span>
-            {%- render 'loading-spinner' -%}
+            {{- section.settings.cart_label | escape -}}
           </button>
           <p class="bundle-panel__error" role="alert" data-bundle-error hidden></p>
         </div>
@@ -345,6 +352,12 @@
       "id": "cart_label",
       "label": "Add to cart label",
       "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "adding_label",
+      "label": "Adding to cart label",
+      "default": "Adding..."
     },
     {
       "type": "select",
@@ -504,15 +517,15 @@
         },
         {
           "type": "tier",
-          "settings": { "threshold": 200, "discount_amount": 30, "label": "$30", "position": 36 }
+          "settings": { "threshold": 200, "discount_amount": 30, "label": "$30", "position": 40 }
         },
         {
           "type": "tier",
-          "settings": { "threshold": 250, "discount_amount": 50, "label": "$50", "position": 46 }
+          "settings": { "threshold": 250, "discount_amount": 50, "label": "$50", "position": 54 }
         },
         {
           "type": "tier",
-          "settings": { "threshold": 500, "discount_amount": 125, "label": "$125", "position": 96 }
+          "settings": { "threshold": 500, "discount_amount": 125, "label": "$125", "position": 92 }
         }
       ]
     }

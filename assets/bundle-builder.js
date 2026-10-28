@@ -21,8 +21,12 @@ if (!customElements.get('bundle-builder')) {
         this.steps = [...this.querySelectorAll('[data-bundle-step]')];
         this.panel = this.querySelector('[data-bundle-panel]');
         this.toggleButton = this.querySelector('[data-bundle-toggle]');
+        this.overlay = this.querySelector('[data-bundle-overlay]');
+        this.storageKey = `bundle-builder:${this.dataset.sectionId}`;
+        this.cartLabel = this.submitButton.textContent;
 
         this.querySelectorAll('[data-bundle-card]').forEach((card) => this.setupCard(card));
+        this.restoreItems();
 
         this.subscriptionOption = this.querySelector('[data-bundle-subscription-option]');
         if (this.subscriptionOption && ![...this.products.values()].some((product) => product.sellingPlan)) {
@@ -41,6 +45,10 @@ if (!customElements.get('bundle-builder')) {
         });
         this.submitButton.addEventListener('click', () => this.addToCart());
         this.toggleButton?.addEventListener('click', () => this.togglePanel());
+        this.overlay?.addEventListener('click', () => this.togglePanel(false));
+        this.addEventListener('keyup', (event) => {
+          if (event.code === 'Escape' && this.overlay && !this.overlay.hidden) this.togglePanel(false);
+        });
 
         this.render();
       }
@@ -147,19 +155,32 @@ if (!customElements.get('bundle-builder')) {
         }, null);
       }
 
-      // Maps the amount onto the bar so the fill lines up with each milestone marker.
       getProgressPercent(amount) {
-        if (!this.tiers.length || amount <= 0) return 0;
+        const max = this.config.maxThreshold;
+        if (!max || amount <= 0) return 0;
+        return (amount / max) * 100;
+      }
 
-        let previous = { threshold: 0, position: 0 };
-        for (const tier of this.tiers) {
-          if (amount < tier.threshold) {
-            const span = tier.threshold - previous.threshold || 1;
-            return previous.position + ((amount - previous.threshold) / span) * (tier.position - previous.position);
-          }
-          previous = tier;
+      // Keeps the bundle across page loads, dropping anything no longer available.
+      restoreItems() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+          this.items = saved.filter((item) => {
+            const variant = this.products.get(item.productId)?.variantMap.get(item.variantId);
+            return variant && variant.available;
+          });
+        } catch (error) {
+          this.items = [];
         }
-        return 100;
+      }
+
+      saveItems() {
+        try {
+          if (this.items.length) localStorage.setItem(this.storageKey, JSON.stringify(this.items));
+          else localStorage.removeItem(this.storageKey);
+        } catch (error) {
+          // Storage can be unavailable in private browsing; the bundle then lasts for the visit only.
+        }
       }
 
       render() {
@@ -173,6 +194,7 @@ if (!customElements.get('bundle-builder')) {
 
         this.submitButton.disabled = this.items.length === 0;
         this.errorMessage.hidden = true;
+        this.saveItems();
       }
 
       renderSlots() {
@@ -190,15 +212,16 @@ if (!customElements.get('bundle-builder')) {
             const { product, variant } = this.getItemData(item);
             const image = variant.image || product.image;
             const label = `${variant.option} ${this.strings.pack}`.trim();
+            slot.classList.add('bundle-slot--filled');
             slot.innerHTML = `
               <button type="button" class="bundle-slot__remove" data-bundle-remove data-index="${index}"
                 aria-label="${this.escape(this.strings.remove.replace('[title]', product.title))}">
-                <svg aria-hidden="true" focusable="false" viewBox="0 0 12 12" width="10" height="10">
-                  <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 12 12" width="11" height="11">
+                  <path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
                 </svg>
               </button>
               <div class="bundle-slot__media">
-                ${image ? `<img src="${image}" alt="${this.escape(product.title)}" loading="lazy" width="65" height="95">` : ''}
+                ${image ? `<img src="${image}" alt="${this.escape(product.title)}" width="65" height="95">` : ''}
               </div>
               <div class="bundle-slot__info">
                 <span class="bundle-slot__variant">${this.escape(label)}</span>
@@ -247,9 +270,10 @@ if (!customElements.get('bundle-builder')) {
         if (overflow > 0) container.scrollBy({ left: overflow + 8, behavior: 'smooth' });
       }
 
-      togglePanel() {
-        const collapsed = this.panel.classList.toggle('is-collapsed');
-        this.toggleButton.setAttribute('aria-expanded', String(!collapsed));
+      togglePanel(expand = this.panel.classList.contains('is-collapsed')) {
+        this.panel.classList.toggle('is-collapsed', !expand);
+        this.toggleButton.setAttribute('aria-expanded', String(expand));
+        if (this.overlay) this.overlay.hidden = !expand;
       }
 
       async addToCart() {
@@ -293,6 +317,7 @@ if (!customElements.get('bundle-builder')) {
 
           this.items = [];
           this.render();
+          this.togglePanel(false);
 
           if (cartDrawer && data.sections) {
             cartDrawer.classList.remove('is-empty');
@@ -309,9 +334,8 @@ if (!customElements.get('bundle-builder')) {
       }
 
       setLoading(isLoading) {
-        this.submitButton.classList.toggle('loading', isLoading);
         this.submitButton.setAttribute('aria-busy', String(isLoading));
-        this.submitButton.querySelector('.loading__spinner')?.classList.toggle('hidden', !isLoading);
+        this.submitButton.textContent = isLoading ? this.strings.adding || this.cartLabel : this.cartLabel;
         if (isLoading) this.submitButton.disabled = true;
         else this.submitButton.disabled = this.items.length === 0;
       }
