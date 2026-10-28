@@ -1,0 +1,33 @@
+{% doc %}
+  Renders a five star rating with a partial fill, matching the bundle reviews widget.
+
+  @param {number} rating - Rating from 0 to 5.
+  @param {string} [class] - Extra class for sizing.
+{% enddoc %}
+
+{%- liquid
+  assign fill = rating | default: 0 | times: 1.0 | divided_by: 5 | times: 100
+  if fill > 100
+    assign fill = 100
+  endif
+-%}
+
+<span class="bundle-stars {{ class }}" aria-hidden="true">
+  {%- for layer in (1..2) -%}
+    <span
+      class="bundle-stars__layer{% if layer == 2 %} bundle-stars__layer--fill{% endif %}"
+      {% if layer == 2 %}
+        style="width: {{ fill }}%;"
+      {% endif %}
+    >
+      <svg viewBox="0 0 90.667 16" focusable="false">
+        {%- for i in (0..4) -%}
+          <path
+            transform="translate({{ i | times: 18.6667 }} 0)"
+            d="M9.944 6.4L8 0L6.056 6.4H0L4.944 9.928L3.064 16L8 12.248L12.944 16L11.064 9.928L16 6.4H9.944Z"
+          />
+        {%- endfor -%}
+      </svg>
+    </span>
+  {%- endfor -%}
+</span>

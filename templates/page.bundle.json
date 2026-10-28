@@ -142,11 +142,23 @@
         "speed": 1600,
         "max_width": 1440
       }
+    },
+    "reviews": {
+      "type": "bundle-reviews",
+      "settings": {
+        "heading": "What people are saying",
+        "average_rating": "4.9",
+        "total_reviews": 12727,
+        "per_page": 5,
+        "metaobject_type": "bundle_review",
+        "container_width": 1400
+      }
     }
   },
   "order": [
     "hero",
     "builder",
-    "carousel"
+    "carousel",
+    "reviews"
   ]
 }

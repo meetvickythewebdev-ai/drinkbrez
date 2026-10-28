@@ -1,0 +1,231 @@
+{{ 'section-bundle-reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bundle-reviews.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #BundleReviews-{{ section.id }} {
+    --bundle-container-width: {{ section.settings.container_width }}px;
+  }
+
+  {% render 'bundle-fonts' %}
+{%- endstyle -%}
+
+{%- liquid
+  assign review_type = section.settings.metaobject_type | default: 'bundle_review'
+  assign total = section.settings.total_reviews
+  assign average = section.settings.average_rating | default: 0
+-%}
+
+<bundle-reviews
+  id="BundleReviews-{{ section.id }}"
+  class="bundle-reviews"
+  data-per-page="{{ section.settings.per_page }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width bundle-page-width bundle-reviews__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="bundle-reviews__title">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="bundle-reviews__widget">
+      <div class="bundle-reviews__summary">
+        <span class="bundle-reviews__average">{{ average }}</span>
+        {%- render 'bundle-review-stars', rating: average, class: 'bundle-reviews__summary-stars' -%}
+        <span class="visually-hidden">Rated {{ average }} out of 5 stars</span>
+        <span class="bundle-reviews__based-on">Based on {{ total | default: 0 | times: 100 | money_without_currency | remove: '.00' }} reviews</span>
+      </div>
+
+      <ul class="bundle-reviews__media-strip" role="list" data-reviews-strip></ul>
+
+      <div class="bundle-reviews__controls">
+        <div class="bundle-reviews__count">
+          {{- total | default: 0 | times: 100 | money_without_currency | remove: '.00' }} reviews
+        </div>
+        <div class="bundle-reviews__sort">
+          <label class="bundle-reviews__sort-label" for="BundleReviewsSort-{{ section.id }}">Sort</label>
+          <select id="BundleReviewsSort-{{ section.id }}" class="bundle-reviews__sort-select" data-reviews-sort>
+            <option value="date-desc">Most Recent</option>
+            <option value="date-asc">Oldest</option>
+            <option value="helpful-desc">Most Helpful</option>
+            <option value="media-desc">Photos &amp; Videos</option>
+            <option value="rating-desc">Highest Rating</option>
+            <option value="rating-asc">Lowest Rating</option>
+            <option value="unhelpful-desc">Least Helpful</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bundle-reviews__main">
+        <ul class="bundle-reviews__list" role="list" data-reviews-list></ul>
+      </div>
+
+      <div class="bundle-reviews__footer">
+        <button type="button" class="bundle-reviews__more" data-reviews-more hidden>Show More</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bundle-reviews__modal" data-reviews-modal hidden>
+    <div
+      class="bundle-reviews__modal-content"
+      role="dialog"
+      aria-modal="true"
+      aria-label="User media and reviews gallery"
+      tabindex="-1"
+    >
+      <button type="button" class="bundle-reviews__modal-close" data-reviews-close aria-label="Close">
+        <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false">
+          <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="bundle-reviews__gallery">
+        <div class="bundle-reviews__gallery-stage" data-gallery-stage></div>
+        <div class="bundle-reviews__gallery-review" data-gallery-review></div>
+        <div class="bundle-reviews__gallery-nav">
+          <button type="button" class="bundle-reviews__gallery-arrow" data-gallery-prev aria-label="Previous">
+            <svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true" focusable="false">
+              <path d="M8.5 1.5L2 8l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+            </svg>
+          </button>
+          <div class="bundle-reviews__gallery-thumbs">
+            <ul class="bundle-reviews__gallery-track" role="list" data-gallery-track></ul>
+          </div>
+          <button type="button" class="bundle-reviews__gallery-arrow bundle-reviews__gallery-arrow--next" data-gallery-next aria-label="Next">
+            <svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true" focusable="false">
+              <path d="M1.5 1.5L8 8l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-reviews-data>
+    [
+      {%- paginate shop.metaobjects[review_type].values by 250 -%}
+        {%- for review in shop.metaobjects[review_type].values -%}
+          {%- liquid
+            assign product = review.product.value
+            assign product_title = review.product_title.value
+            assign product_image = review.product_image.value
+            if product
+              assign product_title = product.title
+              if product.featured_image
+                assign product_image = product.featured_image
+              endif
+            endif
+          -%}
+          {
+            "id": {{ review.system.handle | json }},
+            "author": {{ review.author.value | json }},
+            "verified": {{ review.verified.value | default: false | json }},
+            "avatar": {% if review.avatar.value %}{{ review.avatar.value | image_url: width: 96 | json }}{% else %}null{% endif %},
+            "social": {{ review.social.value | json }},
+            "rating": {{ review.rating.value | default: 5 | json }},
+            "title": {{ review.title.value | json }},
+            "body": {{ review.body.value | json }},
+            "date": {{ review.created_at.value | json }},
+            "recommended": {{ review.recommended.value | default: false | json }},
+            "product": {% if product_title != blank %}{
+              "title": {{ product_title | json }},
+              "url": {% if product %}{{ product.url | json }}{% else %}null{% endif %},
+              "image": {% if product_image %}{{ product_image | image_url: width: 110 | json }}{% else %}null{% endif %}
+            }{% else %}null{% endif %},
+            "variant": {{ review.variant.value | json }},
+            "helpful": {{ review.helpful.value | default: 0 | json }},
+            "unhelpful": {{ review.unhelpful.value | default: 0 | json }},
+            "reply": {{ review.reply.value | json }},
+            "media": [
+              {%- for file in review.media.value -%}
+                {%- case file.media_type -%}
+                  {%- when 'video' -%}
+                    {
+                      "type": "video",
+                      "src": {{ file.sources | where: 'format', 'mp4' | map: 'url' | first | default: file.sources.first.url | json }},
+                      "thumb": {{ file.preview_image | image_url: width: 520 | json }},
+                      "alt": {{ file.alt | json }}
+                    }
+                  {%- when 'image' -%}
+                    {
+                      "type": "image",
+                      "src": {{ file | image_url: width: 1600 | json }},
+                      "thumb": {{ file | image_url: width: 520 | json }},
+                      "alt": {{ file.alt | json }}
+                    }
+                  {%- else -%}
+                    {
+                      "type": "video",
+                      "src": {{ file.url | json }},
+                      "thumb": null,
+                      "alt": {{ file.alt | json }}
+                    }
+                {%- endcase -%}
+                {%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          }
+          {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      {%- endpaginate -%}
+    ]
+  </script>
+</bundle-reviews>
+
+{% schema %}
+{
+  "name": "Bundle reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What people are saying"
+    },
+    {
+      "type": "text",
+      "id": "average_rating",
+      "label": "Average rating",
+      "default": "4.9",
+      "info": "Shown in the summary. Use the store-wide average."
+    },
+    {
+      "type": "number",
+      "id": "total_reviews",
+      "label": "Total review count",
+      "default": 12727
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "label": "Reviews per page",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Review metaobject type",
+      "default": "bundle_review",
+      "info": "Reviews are read from Content > Metaobjects."
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1400
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle reviews"
+    }
+  ]
+}
+{% endschema %}
