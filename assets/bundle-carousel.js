@@ -90,8 +90,9 @@ if (!customElements.get('bundle-carousel')) {
         return -matrix.m41 / this.step;
       }
 
+      // Only touch and pen can swipe; on desktop the strip just autoplays.
       onPointerDown(event) {
-        if (event.button !== 0) return;
+        if (event.pointerType === 'mouse' || event.button !== 0) return;
         this.stop();
         this.dragged = false;
         const startX = event.clientX;
@@ -119,10 +120,14 @@ if (!customElements.get('bundle-carousel')) {
           }
         };
 
-        this.viewport.setPointerCapture(event.pointerId);
         this.viewport.addEventListener('pointermove', onMove);
         this.viewport.addEventListener('pointerup', onUp);
         this.viewport.addEventListener('pointercancel', onUp);
+        try {
+          this.viewport.setPointerCapture(event.pointerId);
+        } catch (error) {
+          // The pointer is already gone; the listeners above still end the swipe.
+        }
       }
     }
   );

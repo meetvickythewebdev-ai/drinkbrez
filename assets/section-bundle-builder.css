@@ -704,6 +704,11 @@
 }
 
 @media screen and (max-width: 767px) {
+  /* Matches the reference's 40px gap below the last row on smaller screens. */
+  bundle-builder.bundle-builder {
+    padding-bottom: 40px;
+  }
+
   .bundle-panel__header {
     min-height: 40px;
   }
@@ -735,11 +740,6 @@
 }
 
 @media screen and (max-width: 749px) {
-  /* The reference runs the grid straight into the next section on phones. */
-  bundle-builder.bundle-builder {
-    padding-bottom: 0;
-  }
-
   /* Pulls the header up to the reference's tighter gap below the hero on phones. */
   .bundle-builder__header {
     margin-top: -10px;

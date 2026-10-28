@@ -47,14 +47,17 @@
   height: 100%;
 }
 
+/* Images never grow past their 430px design width; wider slides center them. */
 .bundle-carousel__link {
   display: block;
   width: 100%;
+  max-width: 430px;
 }
 
 .bundle-carousel__image {
   display: block;
   width: 100%;
+  max-width: 430px;
   height: auto;
   user-select: none;
   -webkit-user-drag: none;
