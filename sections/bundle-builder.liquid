@@ -1,0 +1,507 @@
+{{ 'section-bundle-builder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bundle-builder.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign products = section.settings.product_list
+  if products == blank and section.settings.collection != blank
+    assign products = section.settings.collection.products
+  endif
+
+  assign tiers = section.blocks | where: 'type', 'tier'
+  assign max_threshold = 0
+  for tier in tiers
+    if tier.settings.threshold > max_threshold
+      assign max_threshold = tier.settings.threshold
+    endif
+  endfor
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if section.settings.use_custom_fonts -%}
+    {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+    {{ section.settings.body_font | font_face: font_display: 'swap' }}
+  {%- endif -%}
+
+  #BundleBuilder-{{ section.id }} {
+    --bundle-accent: {{ section.settings.accent_color }};
+    --bundle-track: {{ section.settings.track_color }};
+    {%- if section.settings.use_custom_fonts %}
+      --bundle-font-heading: {{ section.settings.heading_font.family }}, {{ section.settings.heading_font.fallback_families }};
+      --bundle-font-body: {{ section.settings.body_font.family }}, {{ section.settings.body_font.fallback_families }};
+    {%- endif %}
+  }
+{%- endstyle -%}
+
+<bundle-builder
+  id="BundleBuilder-{{ section.id }}"
+  class="bundle-builder section-{{ section.id }}-padding"
+  data-section-id="{{ section.id }}"
+  data-min-slots="{{ section.settings.min_slots }}"
+  data-subscription-enabled="{{ section.settings.enable_subscription }}"
+  data-after-add="{{ section.settings.after_add }}"
+  data-money-format="{{ shop.money_format | strip_html | escape }}"
+  data-bundle-name="{{ section.settings.bundle_property | escape }}"
+>
+  <script type="application/json" data-bundle-config>
+    {
+      "tiers": [
+        {%- for tier in tiers -%}
+          {
+            "threshold": {{ tier.settings.threshold | times: 100 | round | json }},
+            "discount": {{ tier.settings.discount_amount | times: 100 | round | json }},
+            "position": {{ tier.settings.position | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      "maxThreshold": {{ max_threshold | times: 100 | round | json }},
+      "strings": {
+        "added": {{ section.settings.added_label | json }},
+        "add": {{ section.settings.add_label | json }},
+        "soldOut": {{ 'products.product.sold_out' | t | json }},
+        "pack": {{ section.settings.pack_label | json }},
+        "remove": {{ 'sections.cart.remove_title' | t: title: "[title]" | json }},
+        "error": {{ 'sections.cart.cart_error' | t | json }}
+      }
+    }
+  </script>
+
+  <div class="page-width bundle-builder__wrapper">
+    <div class="bundle-builder__main">
+      <div class="bundle-builder__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="bundle-builder__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <p class="bundle-builder__description">{{ section.settings.description | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if products.size > 0 -%}
+        <ul class="bundle-builder__grid" role="list">
+          {%- for product in products -%}
+            {%- liquid
+              assign lazy_load = true
+              if forloop.index0 < 3
+                assign lazy_load = false
+              endif
+            -%}
+            {%- render 'bundle-product-card',
+              product: product,
+              section_id: section.id,
+              selling_plan_group_name: section.settings.selling_plan_group_name,
+              add_label: section.settings.add_label,
+              lazy_load: lazy_load
+            -%}
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <p class="bundle-builder__empty">Select a collection or products for this section in the theme editor.</p>
+      {%- endif -%}
+    </div>
+
+    <aside class="bundle-panel" data-bundle-panel aria-label="{{ section.settings.panel_title | escape }}">
+      <div class="bundle-panel__inner">
+        <div class="bundle-panel__header">
+          <h2 class="bundle-panel__title">{{ section.settings.panel_title | escape }}</h2>
+          <button
+            type="button"
+            class="bundle-panel__toggle"
+            data-bundle-toggle
+            aria-expanded="true"
+            aria-controls="BundlePanelBody-{{ section.id }}"
+          >
+            <span class="visually-hidden">{{ section.settings.panel_title | escape }}</span>
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </button>
+        </div>
+        {%- if section.settings.panel_subtitle != blank -%}
+          <p class="bundle-panel__subtitle">{{ section.settings.panel_subtitle | escape }}</p>
+        {%- endif -%}
+
+        {%- if tiers.size > 0 -%}
+          <div class="bundle-progress">
+            <div class="bundle-progress__steps">
+              {%- for tier in tiers -%}
+                <div
+                  class="bundle-progress__step{% if tier.settings.highlight %} bundle-progress__step--highlight{% endif %}"
+                  style="left: {{ tier.settings.position }}%;"
+                  data-bundle-step
+                  data-threshold="{{ tier.settings.threshold | times: 100 | round }}"
+                  {{ tier.shopify_attributes }}
+                >
+                  <span class="bundle-progress__icon">{{ tier.settings.label | escape }}</span>
+                  <span class="bundle-progress__label">
+                    {{- tier.settings.threshold | times: 100 | money_without_trailing_zeros -}}
+                  </span>
+                </div>
+              {%- endfor -%}
+            </div>
+            <div
+              class="bundle-progress__meter"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+              aria-label="Bundle progress"
+            >
+              <span class="bundle-progress__fill" data-bundle-fill></span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="bundle-panel__body" id="BundlePanelBody-{{ section.id }}" data-bundle-body>
+          <div class="bundle-slots">
+            <ul class="bundle-slots__list" role="list" data-bundle-slots>
+              {%- for i in (1..section.settings.min_slots) -%}
+                <li class="bundle-slot bundle-slot--empty"></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+
+          <div class="bundle-purchase" role="radiogroup">
+            <label class="bundle-purchase__option">
+              <input
+                type="radio"
+                name="BundlePurchase-{{ section.id }}"
+                value="onetime"
+                data-bundle-purchase
+                {% unless section.settings.enable_subscription and section.settings.default_subscription %}
+                  checked
+                {% endunless %}
+              >
+              <span class="bundle-purchase__check" aria-hidden="true"></span>
+              <span class="bundle-purchase__label">{{ section.settings.one_time_label | escape }}</span>
+              <span class="bundle-purchase__price" data-bundle-price="onetime"></span>
+            </label>
+            {%- if section.settings.enable_subscription -%}
+              <label class="bundle-purchase__option" data-bundle-subscription-option>
+                <input
+                  type="radio"
+                  name="BundlePurchase-{{ section.id }}"
+                  value="subscription"
+                  data-bundle-purchase
+                  {% if section.settings.default_subscription %}
+                    checked
+                  {% endif %}
+                >
+                <span class="bundle-purchase__check" aria-hidden="true"></span>
+                <span class="bundle-purchase__label">
+                  {{- section.settings.subscription_label | escape -}}
+                  {%- if section.settings.subscription_badge != blank -%}
+                    <span class="bundle-purchase__badge">{{ section.settings.subscription_badge | escape }}</span>
+                  {%- endif -%}
+                </span>
+                <span class="bundle-purchase__price" data-bundle-price="subscription"></span>
+              </label>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="bundle-panel__cta">
+          <button type="button" class="bundle-panel__submit" data-bundle-submit disabled>
+            <span>{{ section.settings.cart_label | escape }}</span>
+            {%- render 'loading-spinner' -%}
+          </button>
+          <p class="bundle-panel__error" role="alert" data-bundle-error hidden></p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</bundle-builder>
+
+{% schema %}
+{
+  "name": "Bundle builder",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get started here"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Bundle your favorite feel-good tonics & save"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 50,
+      "info": "Takes priority over the collection."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add button label",
+      "default": "Add"
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Added button label",
+      "default": "Added to bundle"
+    },
+    {
+      "type": "text",
+      "id": "pack_label",
+      "label": "Bundle item suffix",
+      "default": "Pack",
+      "info": "Shown after the quantity in the bundle, e.g. \"8 Pack\"."
+    },
+    {
+      "type": "header",
+      "content": "Bundle panel"
+    },
+    {
+      "type": "text",
+      "id": "panel_title",
+      "label": "Title",
+      "default": "Your bundle"
+    },
+    {
+      "type": "text",
+      "id": "panel_subtitle",
+      "label": "Subtitle",
+      "default": "Add more products to save"
+    },
+    {
+      "type": "range",
+      "id": "min_slots",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "label": "Empty slots shown",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "one_time_label",
+      "label": "One-time purchase label",
+      "default": "One time purchase"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_subscription",
+      "label": "Show subscription option",
+      "default": true,
+      "info": "Only shown when the bundled products have a selling plan."
+    },
+    {
+      "type": "checkbox",
+      "id": "default_subscription",
+      "label": "Select subscription by default",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "subscription_label",
+      "label": "Subscription label",
+      "default": "Subscribe &"
+    },
+    {
+      "type": "text",
+      "id": "subscription_badge",
+      "label": "Subscription badge",
+      "default": "Save 20%"
+    },
+    {
+      "type": "text",
+      "id": "selling_plan_group_name",
+      "label": "Selling plan group name",
+      "info": "Optional. Uses the product's first selling plan when blank or not found."
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Add to cart label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "select",
+      "id": "after_add",
+      "label": "After adding to cart",
+      "options": [
+        {
+          "value": "cart",
+          "label": "Open cart drawer or go to cart"
+        },
+        {
+          "value": "checkout",
+          "label": "Go to checkout"
+        }
+      ],
+      "default": "cart"
+    },
+    {
+      "type": "text",
+      "id": "bundle_property",
+      "label": "Cart line property value",
+      "default": "Build your own bundle",
+      "info": "Saved as a hidden _bundle line item property."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#E3F98A"
+    },
+    {
+      "type": "color",
+      "id": "track_color",
+      "label": "Progress track color",
+      "default": "#DEE1F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_fonts",
+      "label": "Use custom fonts",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "cormorant_n4"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Discount tier",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Display only. Create a matching automatic discount in Shopify admin so the price is applied at checkout."
+        },
+        {
+          "type": "number",
+          "id": "threshold",
+          "label": "Minimum bundle subtotal",
+          "default": 50
+        },
+        {
+          "type": "number",
+          "id": "discount_amount",
+          "label": "Discount amount",
+          "default": 5,
+          "info": "Use 0 for a free shipping milestone."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Milestone label",
+          "default": "$5"
+        },
+        {
+          "type": "range",
+          "id": "position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position on progress bar",
+          "default": 6
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Outline milestone",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle builder",
+      "blocks": [
+        {
+          "type": "tier",
+          "settings": { "threshold": 50, "discount_amount": 5, "label": "$5", "position": 6 }
+        },
+        {
+          "type": "tier",
+          "settings": { "threshold": 125, "discount_amount": 0, "label": "Free Ship", "position": 15, "highlight": true }
+        },
+        {
+          "type": "tier",
+          "settings": { "threshold": 150, "discount_amount": 15, "label": "$15", "position": 26 }
+        },
+        {
+          "type": "tier",
+          "settings": { "threshold": 200, "discount_amount": 30, "label": "$30", "position": 36 }
+        },
+        {
+          "type": "tier",
+          "settings": { "threshold": 250, "discount_amount": 50, "label": "$50", "position": 46 }
+        },
+        {
+          "type": "tier",
+          "settings": { "threshold": 500, "discount_amount": 125, "label": "$125", "position": 96 }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,131 @@
+.bundle-hero {
+  position: relative;
+}
+
+.bundle-hero--glow::after {
+  content: '';
+  position: absolute;
+  inset: 85px 0 0;
+  background-image: var(--bundle-hero-image);
+  background-size: 85%;
+  background-repeat: no-repeat;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bundle-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding: 65px;
+  border-radius: 112px;
+  overflow: hidden;
+  background-color: #e6e9f7;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bundle-hero__inner--image {
+  background-image: var(--bundle-hero-image);
+}
+
+.bundle-hero__text {
+  width: 100%;
+  max-width: 40%;
+  color: #000;
+}
+
+.bundle-hero__heading {
+  margin: 0;
+  font-family: var(--bundle-font-heading, var(--font-heading-family));
+  font-weight: 400;
+  font-size: 72px;
+  line-height: 1;
+  letter-spacing: -1.8px;
+  color: #000;
+}
+
+.bundle-hero__body {
+  margin: 30px 0;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.bundle-hero__body p {
+  margin: 0;
+}
+
+.bundle-hero__button {
+  display: block;
+  max-width: 300px;
+  padding: 16px 30px;
+  border-radius: 130px;
+  background: #e3f98a;
+  color: #000;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 1199px) {
+  .bundle-hero__inner {
+    padding: 70px;
+  }
+
+  .bundle-hero__text {
+    max-width: 50%;
+  }
+
+  .bundle-hero__heading {
+    max-width: 300px;
+    font-size: 58px;
+  }
+
+  .bundle-hero__body {
+    margin: 20px 0;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .bundle-hero__inner {
+    padding: 50px;
+    border-radius: 56px;
+  }
+
+  .bundle-hero__heading {
+    font-size: 45px;
+  }
+
+  .bundle-hero__body {
+    margin: 15px 0;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .bundle-hero__inner {
+    padding: 90px 30px 45px;
+  }
+
+  .bundle-hero__text {
+    max-width: 75%;
+  }
+
+  .bundle-hero__heading {
+    max-width: 180px;
+    font-size: 35px;
+  }
+
+  .bundle-hero__body {
+    margin: 15px 0 0;
+  }
+
+  .bundle-hero__button {
+    display: none;
+  }
+}

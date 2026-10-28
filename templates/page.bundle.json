@@ -1,0 +1,55 @@
+{
+  "sections": {
+    "hero": {
+      "type": "bundle-hero",
+      "settings": {
+        "image": "shopify://shop_images/bundle-hero.jpg",
+        "heading": "Bundle & Save",
+        "text": "<p>Get the best price available when you build a custom bundle. Unlock free shipping and additional savings the more you add.</p>",
+        "show_glow": true,
+        "padding_top": 24,
+        "padding_bottom": 48
+      }
+    },
+    "builder": {
+      "type": "bundle-builder",
+      "blocks": {
+        "tier_5": {
+          "type": "tier",
+          "settings": { "threshold": 50, "discount_amount": 5, "label": "$5", "position": 6, "highlight": false }
+        },
+        "tier_free_ship": {
+          "type": "tier",
+          "settings": { "threshold": 125, "discount_amount": 0, "label": "Free Ship", "position": 15, "highlight": true }
+        },
+        "tier_15": {
+          "type": "tier",
+          "settings": { "threshold": 150, "discount_amount": 15, "label": "$15", "position": 26, "highlight": false }
+        },
+        "tier_30": {
+          "type": "tier",
+          "settings": { "threshold": 200, "discount_amount": 30, "label": "$30", "position": 36, "highlight": false }
+        },
+        "tier_50": {
+          "type": "tier",
+          "settings": { "threshold": 250, "discount_amount": 50, "label": "$50", "position": 46, "highlight": false }
+        },
+        "tier_125": {
+          "type": "tier",
+          "settings": { "threshold": 500, "discount_amount": 125, "label": "$125", "position": 96, "highlight": false }
+        }
+      },
+      "block_order": ["tier_5", "tier_free_ship", "tier_15", "tier_30", "tier_50", "tier_125"],
+      "settings": {
+        "heading": "Get started here",
+        "description": "Bundle your favorite feel-good tonics & save",
+        "collection": "build-your-own-bundle",
+        "min_slots": 8,
+        "enable_subscription": true,
+        "subscription_badge": "Save 20%",
+        "after_add": "cart"
+      }
+    }
+  },
+  "order": ["hero", "builder"]
+}

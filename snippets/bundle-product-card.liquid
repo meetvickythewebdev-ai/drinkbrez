@@ -1,0 +1,196 @@
+{% doc %}
+  Renders a selectable product card for the bundle builder.
+
+  Reads these optional product metafields:
+  - custom.bundle_badge (single line text): pill shown on the image, e.g. "5mg".
+  - custom.bundle_badge_icon (boolean): shows the leaf icon inside the badge.
+  - custom.bundle_unit (single line text): unit appended to option values, e.g. "can".
+  - custom.bundle_hidden_options (list of single line text): option values hidden in the builder.
+
+  @param {product} product - The product to render.
+  @param {string} section_id - The section ID used to namespace element IDs.
+  @param {string} [selling_plan_group_name] - Preferred selling plan group name for the subscription option.
+  @param {string} [add_label] - The add button label. Defaults to `Add`.
+  @param {boolean} [lazy_load] - Whether to lazy-load the image. Defaults to `true`.
+{% enddoc %}
+
+{%- liquid
+  assign badge = product.metafields.custom.bundle_badge.value
+  assign badge_icon = product.metafields.custom.bundle_badge_icon.value
+  assign unit = product.metafields.custom.bundle_unit.value | strip
+  assign hidden_options = product.metafields.custom.bundle_hidden_options.value
+  if unit != blank
+    assign unit_plural = unit | append: 's'
+  endif
+
+  assign selling_plan = nil
+  for group in product.selling_plan_groups
+    if selling_plan_group_name == blank or group.name == selling_plan_group_name
+      assign selling_plan = group.selling_plans.first
+      break
+    endif
+  endfor
+  if selling_plan == nil and product.selling_plan_groups.size > 0
+    assign selling_plan = product.selling_plan_groups.first.selling_plans.first
+  endif
+
+  if hidden_options == blank
+    assign hidden_options = '' | split: ''
+  endif
+
+  assign visible_count = 0
+  assign selected_variant = nil
+  assign first_visible_variant = nil
+  for variant in product.variants
+    if hidden_options contains variant.option1
+      continue
+    endif
+    assign visible_count = visible_count | plus: 1
+    if first_visible_variant == nil
+      assign first_visible_variant = variant
+    endif
+    if selected_variant == nil and variant.available
+      assign selected_variant = variant
+    endif
+  endfor
+  if selected_variant == nil
+    assign selected_variant = first_visible_variant
+  endif
+  assign product_available = false
+  if selected_variant.available
+    assign product_available = true
+  endif
+
+  assign loading = 'lazy'
+  if lazy_load == false
+    assign loading = 'eager'
+  endif
+
+  assign card_id = section_id | append: '-' | append: product.id
+-%}
+
+{%- if visible_count > 0 -%}
+  <li
+    class="bundle-card"
+    data-bundle-card
+    data-product-id="{{ product.id }}"
+  >
+    <script type="application/json" data-bundle-product>
+      {
+        "id": {{ product.id | json }},
+        "title": {{ product.title | json }},
+        "url": {{ product.url | json }},
+        "image": {{ product.featured_image | image_url: width: 300 | json }},
+        "sellingPlan": {% if selling_plan %}{"id": {{ selling_plan.id | json }}, "adjustments": {{ selling_plan.price_adjustments | json }}}{% else %}null{% endif %},
+        "variants": [
+          {%- assign is_first = true -%}
+          {%- for variant in product.variants -%}
+            {%- if hidden_options contains variant.option1 -%}{%- continue -%}{%- endif -%}
+            {%- unless is_first -%},{%- endunless -%}
+            {%- assign is_first = false -%}
+            {
+              "id": {{ variant.id | json }},
+              "option": {{ variant.option1 | default: variant.title | json }},
+              "price": {{ variant.price | json }},
+              "available": {{ variant.available | json }},
+              "image": {% if variant.featured_image %}{{ variant.featured_image | image_url: width: 300 | json }}{% else %}null{% endif %}
+            }
+          {%- endfor -%}
+        ]
+      }
+    </script>
+
+    <div class="bundle-card__media{% if badge_icon %} bundle-card__media--icon{% endif %}">
+      {%- if badge != blank -%}
+        <span class="bundle-card__badge">
+          {%- if badge_icon -%}
+            {%- render 'icon-bundle-leaf' -%}
+          {%- endif -%}
+          {{- badge | escape -}}
+        </span>
+      {%- endif -%}
+      <a href="{{ product.url }}" class="bundle-card__image-link" tabindex="-1" aria-hidden="true">
+        {%- if product.featured_image -%}
+          {{
+            product.featured_image
+            | image_url: width: 600
+            | image_tag:
+              loading: loading,
+              widths: '300, 450, 600',
+              sizes: '(min-width: 1200px) 282px, (min-width: 750px) 30vw, 50vw',
+              class: 'bundle-card__image'
+          }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'bundle-card__image placeholder-svg' }}
+        {%- endif -%}
+      </a>
+    </div>
+
+    <div class="bundle-card__info">
+      <h3 class="bundle-card__title">
+        <a href="{{ product.url }}">{{ product.title | escape }}</a>
+      </h3>
+      <div class="bundle-card__price">
+        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+        <span data-bundle-card-price>{{ selected_variant.price | money }}</span>
+      </div>
+    </div>
+
+    <div class="bundle-card__options">
+      <label class="visually-hidden" for="BundleVariant-{{ card_id }}">
+        {{- product.options.first | default: product.title | escape -}}
+      </label>
+      <select
+        id="BundleVariant-{{ card_id }}"
+        class="bundle-card__select"
+        data-bundle-variant-select
+        {% if visible_count == 1 %}
+          disabled
+        {% endif %}
+      >
+        {%- for variant in product.variants -%}
+          {%- if hidden_options contains variant.option1 -%}{%- continue -%}{%- endif -%}
+          {%- liquid
+            assign label = variant.option1 | default: variant.title
+            if unit != blank and label contains '+'
+              # Combined values such as "1 + 32" keep their raw label.
+            elsif unit != blank
+              assign qty = label | plus: 0
+              if qty == 1
+                assign label = label | append: ' ' | append: unit
+              elsif qty > 1
+                assign label = label | append: ' ' | append: unit_plural
+              endif
+            endif
+            unless variant.available
+              assign label = label | append: ' - OOS'
+            endunless
+          -%}
+          <option
+            value="{{ variant.id }}"
+            {% if variant.id == selected_variant.id %}
+              selected
+            {% endif %}
+          >
+            {{- label | escape -}}
+          </option>
+        {%- endfor -%}
+      </select>
+    </div>
+
+    <button
+      type="button"
+      class="bundle-card__button"
+      data-bundle-add
+      {% unless product_available %}
+        disabled
+      {% endunless %}
+    >
+      {%- if product_available -%}
+        {{ add_label | default: 'Add' | escape }}
+      {%- else -%}
+        {{ 'products.product.sold_out' | t }}
+      {%- endif -%}
+    </button>
+  </li>
+{%- endif -%}
