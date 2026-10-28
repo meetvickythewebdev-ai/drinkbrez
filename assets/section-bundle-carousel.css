@@ -1,0 +1,92 @@
+.bundle-carousel {
+  --carousel-per-view: 4;
+  --carousel-gap: 30px;
+  --carousel-height: 461px;
+  display: block;
+}
+
+.bundle-carousel__inner {
+  max-width: var(--carousel-max-width, 1440px);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* The fixed-height strip overlaps the next section by 80px, like the reference. */
+.bundle-carousel__viewport {
+  position: relative;
+  z-index: 1;
+  height: var(--carousel-height);
+  margin: 50px 0 -80px;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+/* Nothing to overlap when the carousel is the last section, so keep it clear of the footer. */
+.shopify-section:last-child > .bundle-carousel .bundle-carousel__viewport {
+  margin-bottom: 0;
+}
+
+.bundle-carousel__track {
+  display: flex;
+  gap: var(--carousel-gap);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition-property: transform;
+  transition-timing-function: ease;
+  will-change: transform;
+}
+
+.bundle-carousel__slide {
+  display: flex;
+  flex: 0 0 calc((100% - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view));
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+}
+
+.bundle-carousel__link {
+  display: block;
+  width: 100%;
+}
+
+.bundle-carousel__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.bundle-carousel__slide .placeholder-svg {
+  aspect-ratio: 430 / 512;
+  height: auto;
+  border-radius: 56px;
+  background: #eceef8;
+}
+
+@media screen and (max-width: 1024px) {
+  .bundle-carousel {
+    --carousel-per-view: 3;
+    --carousel-gap: 20px;
+    --carousel-height: 350px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .bundle-carousel {
+    --carousel-per-view: 1;
+    --carousel-gap: 0px;
+    --carousel-height: 520px;
+  }
+
+  .bundle-carousel__viewport {
+    margin: 0;
+  }
+
+  .bundle-carousel__slide {
+    padding: 0 10px;
+  }
+}

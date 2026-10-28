@@ -16,30 +16,73 @@
       "blocks": {
         "tier_5": {
           "type": "tier",
-          "settings": { "threshold": 50, "discount_amount": 5, "label": "$5", "position": 6, "highlight": false }
+          "settings": {
+            "threshold": 50,
+            "discount_amount": 5,
+            "label": "$5",
+            "position": 6,
+            "highlight": false
+          }
         },
         "tier_free_ship": {
           "type": "tier",
-          "settings": { "threshold": 125, "discount_amount": 0, "label": "Free Ship", "position": 15, "highlight": true }
+          "settings": {
+            "threshold": 125,
+            "discount_amount": 0,
+            "label": "Free Ship",
+            "position": 15,
+            "highlight": true
+          }
         },
         "tier_15": {
           "type": "tier",
-          "settings": { "threshold": 150, "discount_amount": 15, "label": "$15", "position": 26, "highlight": false }
+          "settings": {
+            "threshold": 150,
+            "discount_amount": 15,
+            "label": "$15",
+            "position": 26,
+            "highlight": false
+          }
         },
         "tier_30": {
           "type": "tier",
-          "settings": { "threshold": 200, "discount_amount": 30, "label": "$30", "position": 40, "highlight": false }
+          "settings": {
+            "threshold": 200,
+            "discount_amount": 30,
+            "label": "$30",
+            "position": 40,
+            "highlight": false
+          }
         },
         "tier_50": {
           "type": "tier",
-          "settings": { "threshold": 250, "discount_amount": 50, "label": "$50", "position": 54, "highlight": false }
+          "settings": {
+            "threshold": 250,
+            "discount_amount": 50,
+            "label": "$50",
+            "position": 54,
+            "highlight": false
+          }
         },
         "tier_125": {
           "type": "tier",
-          "settings": { "threshold": 500, "discount_amount": 125, "label": "$125", "position": 92, "highlight": false }
+          "settings": {
+            "threshold": 500,
+            "discount_amount": 125,
+            "label": "$125",
+            "position": 92,
+            "highlight": false
+          }
         }
       },
-      "block_order": ["tier_5", "tier_free_ship", "tier_15", "tier_30", "tier_50", "tier_125"],
+      "block_order": [
+        "tier_5",
+        "tier_free_ship",
+        "tier_15",
+        "tier_30",
+        "tier_50",
+        "tier_125"
+      ],
       "settings": {
         "heading": "Get started here",
         "description": "Bundle your favorite feel-good tonics & save",
@@ -47,9 +90,63 @@
         "min_slots": 8,
         "enable_subscription": true,
         "subscription_badge": "Save 20%",
-        "after_add": "cart"
+        "after_add": "cart",
+        "padding_bottom": 30
+      }
+    },
+    "carousel": {
+      "type": "bundle-carousel",
+      "blocks": {
+        "slide_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/bundle-carousel-1.png"
+          }
+        },
+        "slide_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/bundle-carousel-2.png"
+          }
+        },
+        "slide_3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/bundle-carousel-3.png"
+          }
+        },
+        "slide_4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/bundle-carousel-4.png"
+          }
+        },
+        "slide_5": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/bundle-carousel-5.png"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3",
+        "slide_4",
+        "slide_5"
+      ],
+      "settings": {
+        "heading": "BRĒZ cans",
+        "autoplay": true,
+        "autoplay_delay": 3,
+        "speed": 1600,
+        "max_width": 1440
       }
     }
   },
-  "order": ["hero", "builder"]
+  "order": [
+    "hero",
+    "builder",
+    "carousel"
+  ]
 }

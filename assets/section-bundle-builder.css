@@ -583,10 +583,6 @@
 
 /* Below 1200px the panel becomes a collapsible drawer pinned to the bottom of the screen. */
 @media screen and (max-width: 1199px) {
-  .bundle-builder {
-    padding-bottom: 190px;
-  }
-
   .bundle-builder__wrapper {
     display: block;
   }
@@ -708,10 +704,6 @@
 }
 
 @media screen and (max-width: 767px) {
-  .bundle-builder {
-    padding-bottom: 166px;
-  }
-
   .bundle-panel__header {
     min-height: 40px;
   }
@@ -743,6 +735,11 @@
 }
 
 @media screen and (max-width: 749px) {
+  /* The reference runs the grid straight into the next section on phones. */
+  bundle-builder.bundle-builder {
+    padding-bottom: 0;
+  }
+
   /* Pulls the header up to the reference's tighter gap below the hero on phones. */
   .bundle-builder__header {
     margin-top: -10px;
