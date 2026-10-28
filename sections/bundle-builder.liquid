@@ -29,12 +29,15 @@
     }
   }
 
+  {% render 'bundle-fonts' %}
+
   {%- if section.settings.use_custom_fonts -%}
     {{ section.settings.heading_font | font_face: font_display: 'swap' }}
     {{ section.settings.body_font | font_face: font_display: 'swap' }}
   {%- endif -%}
 
   #BundleBuilder-{{ section.id }} {
+    --bundle-container-width: {{ section.settings.container_width }}px;
     --bundle-accent: {{ section.settings.accent_color }};
     --bundle-track: {{ section.settings.track_color }};
     {%- if section.settings.use_custom_fonts %}
@@ -77,7 +80,7 @@
     }
   </script>
 
-  <div class="page-width bundle-builder__wrapper">
+  <div class="page-width bundle-page-width bundle-builder__wrapper">
     <div class="bundle-builder__main">
       <div class="bundle-builder__header">
         {%- if section.settings.heading != blank -%}
@@ -383,10 +386,21 @@
       "default": "#DEE1F0"
     },
     {
+      "type": "range",
+      "id": "container_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1400
+    },
+    {
       "type": "checkbox",
       "id": "use_custom_fonts",
       "label": "Use custom fonts",
-      "default": false
+      "default": false,
+      "info": "Replaces the PP Eiko / PP Fragment brand fonts loaded from Content > Files."
     },
     {
       "type": "font_picker",

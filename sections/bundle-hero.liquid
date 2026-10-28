@@ -19,38 +19,40 @@
     }
   }
 
-  {%- if bg_url -%}
-    #BundleHero-{{ section.id }} {
+  #BundleHero-{{ section.id }} {
+    --bundle-container-width: {{ section.settings.container_width }}px;
+    {%- if bg_url %}
       --bundle-hero-image: url('{{ bg_url }}');
-    }
-  {%- endif -%}
+    {%- endif %}
+  }
+
+  {% render 'bundle-fonts' %}
 {%- endstyle -%}
 
-<div
-  id="BundleHero-{{ section.id }}"
-  class="bundle-hero{% if section.settings.show_glow and bg_url %} bundle-hero--glow{% endif %} section-{{ section.id }}-padding"
->
-  <div class="page-width">
-    <div class="bundle-hero__inner{% if bg_url %} bundle-hero__inner--image{% endif %}">
-      <div class="bundle-hero__text">
-        {%- if section.settings.heading != blank -%}
-          <h1 class="bundle-hero__heading">{{ section.settings.heading | escape }}</h1>
-        {%- endif -%}
-        {%- if section.settings.text != blank -%}
-          <div class="bundle-hero__body">{{ section.settings.text }}</div>
-        {%- endif -%}
-        {%- if section.settings.button_label != blank -%}
-          <a
-            class="bundle-hero__button"
-            {% if section.settings.button_link != blank %}
-              href="{{ section.settings.button_link }}"
-            {% else %}
-              role="link" aria-disabled="true"
-            {% endif %}
-          >
-            {{- section.settings.button_label | escape -}}
-          </a>
-        {%- endif -%}
+<div id="BundleHero-{{ section.id }}" class="bundle-hero">
+  <div class="page-width bundle-page-width">
+    <div class="bundle-hero__container{% if section.settings.show_glow and bg_url %} bundle-hero--glow{% endif %} section-{{ section.id }}-padding">
+      <div class="bundle-hero__inner{% if bg_url %} bundle-hero__inner--image{% endif %}">
+        <div class="bundle-hero__text">
+          {%- if section.settings.heading != blank -%}
+            <h1 class="bundle-hero__heading">{{ section.settings.heading | escape }}</h1>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <div class="bundle-hero__body">{{ section.settings.text }}</div>
+          {%- endif -%}
+          {%- if section.settings.button_label != blank -%}
+            <a
+              class="bundle-hero__button"
+              {% if section.settings.button_link != blank %}
+                href="{{ section.settings.button_link }}"
+              {% else %}
+                role="link" aria-disabled="true"
+              {% endif %}
+            >
+              {{- section.settings.button_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
       </div>
     </div>
   </div>
@@ -94,6 +96,16 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 1400
     },
     {
       "type": "header",

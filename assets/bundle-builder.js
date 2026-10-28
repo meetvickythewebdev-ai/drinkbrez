@@ -69,7 +69,7 @@ if (!customElements.get('bundle-builder')) {
         const variant = product.variantMap.get(select.value);
         if (!variant) return;
 
-        price.textContent = this.formatMoney(variant.price);
+        price.textContent = this.formatMoney(this.getDisplayPrice(product, variant));
         button.disabled = !variant.available;
 
         const inBundle = this.items.some((item) => item.variantId === String(variant.id));
@@ -112,6 +112,10 @@ if (!customElements.get('bundle-builder')) {
           default:
             return price;
         }
+      }
+
+      getDisplayPrice(product, variant) {
+        return this.purchaseType === 'subscription' ? this.getSubscriptionPrice(product, variant.price) : variant.price;
       }
 
       getTotals() {
@@ -198,7 +202,7 @@ if (!customElements.get('bundle-builder')) {
               </div>
               <div class="bundle-slot__info">
                 <span class="bundle-slot__variant">${this.escape(label)}</span>
-                <span class="bundle-slot__price">${this.formatMoney(variant.price)}</span>
+                <span class="bundle-slot__price">${this.formatMoney(this.getDisplayPrice(product, variant))}</span>
               </div>`;
           }
           fragment.appendChild(slot);

@@ -1,22 +1,30 @@
-.bundle-hero {
+.bundle-page-width {
+  max-width: var(--bundle-container-width, var(--page-width));
+}
+
+.bundle-hero__container {
   position: relative;
 }
 
+/* Blurred copy of the banner image that bleeds into the section below. */
 .bundle-hero--glow::after {
   content: '';
   position: absolute;
-  inset: 85px 0 0;
+  top: 85px;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: var(--bundle-hero-image);
-  background-size: 85%;
+  background-position: 0 0;
+  background-size: 85% auto;
   background-repeat: no-repeat;
   filter: blur(100px);
   pointer-events: none;
-  z-index: 0;
 }
 
 .bundle-hero__inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   padding: 65px;
@@ -50,6 +58,8 @@
 
 .bundle-hero__body {
   margin: 30px 0;
+  font-family: var(--bundle-font-body, var(--font-body-family));
+  font-weight: 300;
   font-size: 18px;
   line-height: 1.4;
   letter-spacing: 0;

@@ -1,0 +1,29 @@
+{% doc %}
+  Outputs the bundle page brand fonts and exposes them as CSS variables on the bundle sections.
+
+  Loads PPEiko-Regular.woff and PPFragment-SansRegular.woff from Content > Files.
+  When the files are missing, the theme heading and body fonts are used instead.
+  Must be rendered inside a `{% style %}` tag.
+{% enddoc %}
+
+@font-face {
+  font-family: 'PP Eiko';
+  src: url('{{ 'PPEiko-Regular.woff' | file_url }}') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Fragment';
+  src: url('{{ 'PPFragment-SansRegular.woff' | file_url }}') format('woff');
+  font-weight: 300 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.bundle-hero,
+.bundle-builder {
+  --bundle-font-heading: 'PP Eiko', var(--font-heading-family);
+  --bundle-font-body: 'PP Fragment', var(--font-body-family);
+}
