@@ -26,10 +26,75 @@
         "margin_top": 0,
         "padding_top": 36,
         "padding_bottom": 36
+      },
+      "disabled": true
+    },
+    "footer-brand": {
+      "type": "footer-brand",
+      "blocks": {
+        "navigation": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Navigation",
+            "menu": "footer-navigation",
+            "split": "always",
+            "width": "wide"
+          }
+        },
+        "info": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Info",
+            "menu": "footer-info",
+            "split": "none",
+            "width": "narrow"
+          }
+        },
+        "wholesale": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Wholesale",
+            "menu": "footer-wholesale",
+            "split": "mobile",
+            "width": "narrow"
+          }
+        },
+        "address": {
+          "type": "text",
+          "settings": {
+            "heading": "Crafted in Florida",
+            "text": "<p>Feel The Brez Inc.<br>319 Clematis St, Suite 300<br>West Palm Beach, FL 33401</p>",
+            "width": "wide"
+          }
+        }
+      },
+      "block_order": [
+        "navigation",
+        "info",
+        "wholesale",
+        "address"
+      ],
+      "settings": {
+        "background_image": "shopify://shop_images/footer-background.svg",
+        "logo": "shopify://shop_images/footer-logo.svg",
+        "logo_width": 180,
+        "signup_heading": "Sign up for offers and exclusive access",
+        "signup_placeholder": "Enter your email",
+        "signup_button": "Submit",
+        "contact_image": "shopify://shop_images/footer-email-pill.svg",
+        "contact_link": "shopify://pages/contact",
+        "social_image": "shopify://shop_images/footer-instagram.png",
+        "social_image_mobile": "shopify://shop_images/footer-instagram-pill.svg",
+        "social_link": "https://www.instagram.com/drinkbrez/",
+        "disclaimer": "<p>Our products are not for use by or sale to persons under the age of 21. All THC products contain not more than 0.3% total THC. Consult your physician before use if you are pregnant, nursing, have allergies, or are taking any medication. BRĒZ is a non-alcoholic beverage. However, we use craft-extracted flavors from Italian lemons and Elderflower, which means there is a trace amount of ethanol in BRĒZ—less than a bottle of commercial kombucha. (&lt;0.5% ABV). These products have not been evaluated by the FDA for safety or efficacy. This product is not intended to diagnose, treat, cure or prevent any disease.</p>",
+        "payment_image": "shopify://shop_images/footer-payment-methods.svg",
+        "payment_caption": "Acceptable Payment Methods: VISA, AMEX, DISCOVER, MASTERCARD",
+        "copyright": "©2025, DrinkBrez LLC, All Rights Reserved"
       }
     }
   },
   "order": [
+    "footer-brand",
     "footer"
   ]
 }

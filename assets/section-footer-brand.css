@@ -1,0 +1,403 @@
+.footer-brand {
+  --footer-col-pad: 0;
+  background: #fff center / cover no-repeat;
+  color: #000;
+}
+
+.footer-brand__inner {
+  max-width: 144rem;
+  margin: 0 auto;
+  padding: 120px 20px 40px;
+}
+
+.footer-brand__logo {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  line-height: 0;
+}
+
+.footer-brand__logo img {
+  height: auto;
+}
+
+.footer-brand__heading {
+  margin: 0 0 10px;
+  padding-left: 8px;
+  font-family: var(--bundle-font-heading);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -1px;
+  color: #000;
+}
+
+/* Signup and contact pills */
+.footer-brand__top {
+  margin-top: 96px;
+}
+
+.footer-brand__signup {
+  padding-right: 16px;
+}
+
+.footer-brand__signup .footer-brand__heading {
+  margin-bottom: 0;
+}
+
+.footer-brand__form {
+  padding: 22px 0;
+}
+
+.footer-brand__field {
+  position: relative;
+  margin: 0 39px 0 11px;
+}
+
+.footer-brand__input {
+  display: block;
+  width: 100%;
+  height: 58px;
+  margin: 0;
+  padding: 0 0 0 16px;
+  border: 1px solid #949596;
+  border-radius: 30px;
+  background: #fff;
+  font-family: var(--bundle-font-body);
+  font-size: 16px;
+  font-weight: 300;
+  color: #000;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.footer-brand__input::placeholder {
+  color: #767676;
+  opacity: 1;
+}
+
+.footer-brand__input:focus {
+  outline: 3px solid #000;
+  outline-offset: 0;
+}
+
+.footer-brand__submit {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  height: 50px;
+  min-width: 74px;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 30px;
+  background: #e3f98a;
+  font-family: var(--bundle-font-body);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1;
+  color: #000;
+  cursor: pointer;
+}
+
+.footer-brand__message {
+  margin: 8px 0 0 11px;
+  font-family: var(--bundle-font-body);
+  font-size: 14px;
+  line-height: 1.3;
+  color: #000;
+}
+
+.footer-brand__pills {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.footer-brand__pill {
+  display: block;
+  line-height: 0;
+}
+
+.footer-brand__pill img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.footer-brand__pill--contact img {
+  max-width: 354px;
+}
+
+.footer-brand__social-desktop {
+  display: none !important;
+}
+
+/* Link columns */
+.footer-brand__columns {
+  display: flex;
+  flex-direction: column;
+  gap: 85px;
+  margin-top: 84px;
+}
+
+.footer-brand__column {
+  padding: 0 var(--footer-col-pad);
+}
+
+.footer-brand__column--text .footer-brand__heading {
+  padding-left: 0;
+}
+
+.footer-brand__lists {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-brand__lists--split-always,
+.footer-brand__lists--split-mobile {
+  flex-direction: row;
+  gap: 0;
+}
+
+.footer-brand__lists--split-always > .footer-brand__list,
+.footer-brand__lists--split-mobile > .footer-brand__list {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.footer-brand__lists--split-mobile > .footer-brand__list:first-child {
+  margin-top: 20px;
+}
+
+.footer-brand__lists--split-none > .footer-brand__list {
+  width: 50%;
+}
+
+.footer-brand__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-brand__link {
+  display: block;
+  width: fit-content;
+  padding-left: 8px;
+  font-family: var(--bundle-font-body);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.8;
+  letter-spacing: 0.6px;
+  color: #000;
+  text-decoration: none;
+}
+
+.footer-brand__text,
+.footer-brand__disclaimer,
+.footer-brand__copyright,
+.footer-brand__payment figcaption {
+  font-family: var(--bundle-font-body);
+  font-weight: 400;
+  letter-spacing: 0.6px;
+  color: #000;
+}
+
+.footer-brand__text {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.footer-brand__text p {
+  margin: 0;
+}
+
+/* Legal */
+.footer-brand__disclaimer {
+  margin-top: 87px;
+  padding: 0 var(--footer-col-pad);
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.footer-brand__disclaimer p {
+  margin: 0;
+}
+
+.footer-brand__bottom {
+  margin-top: 50px;
+  padding: 0 var(--footer-col-pad);
+}
+
+.footer-brand__payment {
+  margin: 0;
+  line-height: 0;
+}
+
+.footer-brand__payment img {
+  display: block;
+  width: 196px;
+  height: 32px;
+}
+
+.footer-brand__payment figcaption {
+  font-size: 8px;
+  line-height: 1.8;
+}
+
+.footer-brand__copyright {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) {
+  .footer-brand {
+    --footer-col-pad: 20px;
+  }
+
+  .footer-brand__inner {
+    padding: 100px 20px 60px;
+  }
+
+  .footer-brand__top {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 40px;
+  }
+
+  .footer-brand__signup {
+    flex: 0 0 53%;
+    padding: 20px 20px 20px 15px;
+  }
+
+  .footer-brand__form {
+    width: 100%;
+    margin-left: -20px;
+  }
+
+  .footer-brand__lists--split-none > .footer-brand__list {
+    width: auto;
+  }
+
+  .footer-brand__field {
+    margin-left: 11px;
+  }
+
+  .footer-brand__pills {
+    flex: 0 0 38%;
+    align-self: center;
+    gap: 9px;
+    margin-top: 0;
+    padding: 10px 10px 15px;
+  }
+
+  .footer-brand__pill {
+    padding-bottom: 4px;
+  }
+
+  .footer-brand__pill--contact img {
+    max-width: none;
+  }
+
+  .footer-brand__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 0;
+    margin-top: 40px;
+  }
+
+  .footer-brand__lists--split-mobile {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-brand__lists--split-mobile > .footer-brand__list:first-child {
+    margin-top: 0;
+  }
+
+  .footer-brand__disclaimer {
+    margin-top: 84px;
+  }
+
+  .footer-brand__bottom {
+    margin-top: 61px;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 1025px) {
+  .footer-brand__top {
+    display: grid;
+    grid-template-columns: 4fr 3fr 3fr;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .footer-brand__signup {
+    align-self: start;
+    padding: 0 20px;
+  }
+
+  .footer-brand__pills {
+    display: contents;
+  }
+
+  .footer-brand__pill {
+    align-self: center;
+    margin-top: -6px;
+    padding: 0 20px 4px;
+  }
+
+  .footer-brand__pill--contact img {
+    max-width: 354px;
+  }
+
+  .footer-brand__pill--social img {
+    width: 65%;
+  }
+
+  .footer-brand__social-desktop {
+    display: block !important;
+  }
+
+  .footer-brand__social-mobile {
+    display: none !important;
+  }
+
+  .footer-brand__columns {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    margin-top: 60px;
+  }
+
+  .footer-brand__column--narrow {
+    flex: 0 0 20%;
+    min-width: 0;
+  }
+
+  .footer-brand__column--wide {
+    flex: 0 0 30%;
+    min-width: 0;
+  }
+
+  .footer-brand__disclaimer {
+    margin-top: 110px;
+  }
+
+  .footer-brand__bottom {
+    margin-top: 110px;
+  }
+
+  .footer-brand__copyright {
+    margin-top: 10.6px;
+  }
+}

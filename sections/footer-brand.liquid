@@ -1,0 +1,374 @@
+{{ 'section-footer-brand.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  {% render 'bundle-fonts' %}
+{%- endstyle -%}
+
+<footer
+  class="footer-brand"
+  {% if section.settings.background_image != blank %}
+    style="background-image: url('{{ section.settings.background_image | image_url: width: 2880 }}');"
+  {% endif %}
+>
+  <div class="footer-brand__inner">
+    {%- if section.settings.logo != blank -%}
+      {%- assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio | round -%}
+      <a href="{{ routes.root_url }}" class="footer-brand__logo">
+        {{
+          section.settings.logo
+          | image_url: width: 360
+          | image_tag: width: section.settings.logo_width, height: logo_height, loading: 'lazy', alt: shop.name
+        }}
+      </a>
+    {%- endif -%}
+
+    <div class="footer-brand__top">
+      <div class="footer-brand__signup">
+        {%- if section.settings.signup_heading != blank -%}
+          <h2 class="footer-brand__heading">{{ section.settings.signup_heading | escape }}</h2>
+        {%- endif -%}
+        {%- form 'customer', id: 'FooterBrandNewsletter', class: 'footer-brand__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="footer-brand__field">
+            <input
+              id="FooterBrandNewsletter-email"
+              type="email"
+              name="contact[email]"
+              class="footer-brand__input"
+              value="{{ form.email }}"
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              {% if form.errors %}
+                autofocus
+                aria-invalid="true"
+                aria-describedby="FooterBrandNewsletter-error"
+              {% elsif form.posted_successfully? %}
+                aria-describedby="FooterBrandNewsletter-success"
+              {% endif %}
+              placeholder="{{ section.settings.signup_placeholder | escape }}"
+              required
+            >
+            <label class="visually-hidden" for="FooterBrandNewsletter-email">{{ 'newsletter.label' | t }}</label>
+            <button type="submit" class="footer-brand__submit" name="commit">
+              {{- section.settings.signup_button | escape -}}
+            </button>
+          </div>
+          {%- if form.errors -%}
+            <p class="footer-brand__message" id="FooterBrandNewsletter-error" role="alert">
+              {{- form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email -}}
+            </p>
+          {%- elsif form.posted_successfully? -%}
+            <p class="footer-brand__message" id="FooterBrandNewsletter-success" tabindex="-1" autofocus>
+              {{- 'newsletter.success' | t -}}
+            </p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+
+      <div class="footer-brand__pills">
+        {%- if section.settings.contact_image != blank -%}
+          <a href="{{ section.settings.contact_link | default: '#' }}" class="footer-brand__pill footer-brand__pill--contact">
+            {{
+              section.settings.contact_image
+              | image_url: width: 708
+              | image_tag: loading: 'lazy', alt: section.settings.contact_image.alt
+            }}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.social_image != blank or section.settings.social_image_mobile != blank -%}
+          <a
+            href="{{ section.settings.social_link | default: '#' }}"
+            class="footer-brand__pill footer-brand__pill--social"
+            {% if section.settings.social_link contains '://' %}
+              target="_blank" rel="noopener"
+            {% endif %}
+          >
+            {%- if section.settings.social_image != blank -%}
+              {{
+                section.settings.social_image
+                | image_url: width: 920
+                | image_tag: class: 'footer-brand__social-desktop', loading: 'lazy', alt: section.settings.social_image.alt
+              }}
+            {%- endif -%}
+            {%- if section.settings.social_image_mobile != blank -%}
+              {{
+                section.settings.social_image_mobile
+                | image_url: width: 716
+                | image_tag: class: 'footer-brand__social-mobile', loading: 'lazy', alt: section.settings.social_image_mobile.alt
+              }}
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="footer-brand__columns">
+      {%- for block in section.blocks -%}
+        <div class="footer-brand__column footer-brand__column--{{ block.settings.width }} footer-brand__column--{{ block.type }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.heading != blank -%}
+            <h2 class="footer-brand__heading">{{ block.settings.heading | escape }}</h2>
+          {%- endif -%}
+          {%- case block.type -%}
+            {%- when 'link_list' -%}
+              {%- liquid
+                assign links = block.settings.menu.links
+                assign half = links.size | plus: 1 | divided_by: 2
+                if block.settings.split == 'none'
+                  assign half = links.size
+                endif
+              -%}
+              <div class="footer-brand__lists footer-brand__lists--split-{{ block.settings.split }}">
+                <ul class="footer-brand__list list-unstyled" role="list">
+                  {%- for link in links limit: half -%}
+                    <li>
+                      <a href="{{ link.url }}" class="footer-brand__link">{{ link.title | escape }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                {%- if links.size > half -%}
+                  <ul class="footer-brand__list list-unstyled" role="list">
+                    {%- for link in links offset: half -%}
+                      <li>
+                        <a href="{{ link.url }}" class="footer-brand__link">{{ link.title | escape }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            {%- when 'text' -%}
+              <div class="footer-brand__text">{{ block.settings.text }}</div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.disclaimer != blank -%}
+      <div class="footer-brand__disclaimer">{{ section.settings.disclaimer }}</div>
+    {%- endif -%}
+
+    <div class="footer-brand__bottom">
+      {%- if section.settings.payment_image != blank -%}
+        <figure class="footer-brand__payment">
+          {{
+            section.settings.payment_image
+            | image_url: width: 392
+            | image_tag: width: 196, height: 32, loading: 'lazy', alt: section.settings.payment_caption
+          }}
+          {%- if section.settings.payment_caption != blank -%}
+            <figcaption>{{ section.settings.payment_caption | escape }}</figcaption>
+          {%- endif -%}
+        </figure>
+      {%- endif -%}
+      {%- if section.settings.copyright != blank -%}
+        {%- assign current_year = 'now' | date: '%Y' -%}
+        <div class="footer-brand__copyright">
+          {{- section.settings.copyright | replace: '[year]', current_year | escape -}}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Brand footer",
+  "class": "footer-brand-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 4,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 180
+    },
+    {
+      "type": "header",
+      "content": "Email signup"
+    },
+    {
+      "type": "text",
+      "id": "signup_heading",
+      "label": "Heading",
+      "default": "Sign up for offers and exclusive access"
+    },
+    {
+      "type": "text",
+      "id": "signup_placeholder",
+      "label": "Placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "signup_button",
+      "label": "Button label",
+      "default": "Submit"
+    },
+    {
+      "type": "header",
+      "content": "Contact links"
+    },
+    {
+      "type": "image_picker",
+      "id": "contact_image",
+      "label": "Contact image"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact link"
+    },
+    {
+      "type": "image_picker",
+      "id": "social_image",
+      "label": "Social image",
+      "info": "Shown on desktop."
+    },
+    {
+      "type": "image_picker",
+      "id": "social_image_mobile",
+      "label": "Social image on mobile and tablet"
+    },
+    {
+      "type": "url",
+      "id": "social_link",
+      "label": "Social link"
+    },
+    {
+      "type": "header",
+      "content": "Legal"
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer"
+    },
+    {
+      "type": "image_picker",
+      "id": "payment_image",
+      "label": "Payment methods image"
+    },
+    {
+      "type": "text",
+      "id": "payment_caption",
+      "label": "Payment methods caption",
+      "default": "Acceptable Payment Methods: VISA, AMEX, DISCOVER, MASTERCARD"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "info": "Use [year] for the current year."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        },
+        {
+          "type": "select",
+          "id": "split",
+          "label": "Split links into two columns",
+          "options": [
+            {
+              "value": "none",
+              "label": "Never"
+            },
+            {
+              "value": "mobile",
+              "label": "On mobile"
+            },
+            {
+              "value": "always",
+              "label": "Always"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Desktop width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            }
+          ],
+          "default": "narrow"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Desktop width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            }
+          ],
+          "default": "wide"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand footer"
+    }
+  ]
+}
+{% endschema %}
