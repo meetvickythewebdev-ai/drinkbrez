@@ -9,7 +9,7 @@
 
 <bundle-carousel
   id="BundleCarousel-{{ section.id }}"
-  class="bundle-carousel"
+  class="bundle-carousel bundle-carousel--{{ section.settings.layout }}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
   data-speed="{{ section.settings.speed }}"
@@ -66,6 +66,22 @@
   "max_blocks": 12,
   "settings": [
     {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "bundle",
+          "label": "Four across, overlapping the next section"
+        },
+        {
+          "value": "wide",
+          "label": "Three across, full width"
+        }
+      ],
+      "default": "bundle"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Accessible label",
@@ -80,9 +96,9 @@
     {
       "type": "range",
       "id": "autoplay_delay",
-      "min": 1,
+      "min": 0.5,
       "max": 10,
-      "step": 1,
+      "step": 0.1,
       "unit": "s",
       "label": "Time between slides",
       "default": 3
@@ -91,7 +107,7 @@
       "type": "range",
       "id": "speed",
       "min": 200,
-      "max": 3000,
+      "max": 4000,
       "step": 100,
       "unit": "ms",
       "label": "Slide speed",

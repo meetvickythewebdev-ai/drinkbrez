@@ -1,0 +1,231 @@
+{{ 'section-home-video-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  {% render 'bundle-fonts' %}
+
+  {%- if section.settings.transparent_header -%}
+    .content-for-layout {
+      margin-top: -100px !important;
+    }
+
+    .section-header .header-wrapper {
+      background-color: transparent;
+    }
+
+    .section-header.scrolled-past-header {
+      background-color: #fff;
+    }
+
+    @media screen and (max-width: 749px) {
+      .content-for-layout {
+        margin-top: -96px !important;
+      }
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- liquid
+  assign has_mobile_video = false
+  if section.settings.mobile_video != blank
+    assign has_mobile_video = true
+  endif
+-%}
+
+<home-video-hero
+  class="home-video-hero brand-section{% if has_mobile_video %} home-video-hero--has-mobile-video{% endif %}"
+>
+  <div class="home-video-hero__media" aria-hidden="true">
+    <div class="home-video-hero__image-layer">
+      {%- if section.settings.image != blank -%}
+        <picture class="home-video-hero__picture">
+          {%- if section.settings.mobile_image != blank -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ section.settings.mobile_image | image_url: width: 375 }} 375w, {{ section.settings.mobile_image | image_url: width: 750 }} 750w, {{ section.settings.mobile_image | image_url: width: 1200 }} 1200w"
+              sizes="100vw"
+            >
+          {%- endif -%}
+          {{
+            section.settings.image
+            | image_url: width: 2400
+            | image_tag:
+              widths: '1280, 1600, 1920, 2400, 3000',
+              sizes: '100vw',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: section.settings.image.alt
+          }}
+        </picture>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.video != blank -%}
+      <div class="home-video-hero__video-layer home-video-hero__video-layer--desktop" data-video-layer="desktop">
+        <video class="home-video-hero__video" data-video="desktop" muted loop playsinline preload="none">
+          {%- render 'video-sources', video: section.settings.video -%}
+        </video>
+      </div>
+    {%- endif -%}
+
+    {%- if has_mobile_video -%}
+      <div class="home-video-hero__video-layer home-video-hero__video-layer--mobile" data-video-layer="mobile">
+        <video class="home-video-hero__video" data-video="mobile" muted loop playsinline preload="none">
+          {%- render 'video-sources', video: section.settings.mobile_video -%}
+        </video>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="page-width home-video-hero__inner">
+    <div class="home-video-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="home-video-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="home-video-hero__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="home-video-hero__description">{{ section.settings.description | escape }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        {%- render 'home-arrow-button',
+          label: section.settings.button_label,
+          link: section.settings.button_link,
+          class: 'home-video-hero__button home-video-hero__button--mobile'
+        -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      {%- render 'home-arrow-button',
+        label: section.settings.button_label,
+        link: section.settings.button_link,
+        class: 'home-video-hero__button home-video-hero__button--desktop'
+      -%}
+    {%- endif -%}
+  </div>
+</home-video-hero>
+
+<script>
+  if (!customElements.get('home-video-hero')) {
+    customElements.define(
+      'home-video-hero',
+      class HomeVideoHero extends HTMLElement {
+        connectedCallback() {
+          this.layers = {
+            desktop: [this.querySelector('[data-video-layer="desktop"]'), this.querySelector('[data-video="desktop"]')],
+            mobile: [this.querySelector('[data-video-layer="mobile"]'), this.querySelector('[data-video="mobile"]')],
+          };
+          this.mobileQuery = window.matchMedia('(max-width: 749px)');
+          this.sync = this.sync.bind(this);
+          this.mobileQuery.addEventListener('change', this.sync);
+          this.sync();
+        }
+
+        disconnectedCallback() {
+          this.mobileQuery.removeEventListener('change', this.sync);
+        }
+
+        sync() {
+          const useMobile = this.mobileQuery.matches && this.layers.mobile[1];
+          const [layer, video] = useMobile ? this.layers.mobile : this.layers.desktop;
+          [this.layers.desktop[1], this.layers.mobile[1]].forEach((other) => {
+            if (other && other !== video && !other.paused) other.pause();
+          });
+          if (!layer || !video || layer.dataset.videoState === 'error') return;
+
+          video.muted = true;
+          video.preload = 'auto';
+          const show = () => {
+            const attempt = video.play();
+            if (attempt && attempt.then) {
+              attempt.then(() => layer.classList.add('is-ready')).catch(() => {
+                layer.dataset.videoState = 'error';
+              });
+            } else {
+              layer.classList.add('is-ready');
+            }
+          };
+
+          if (layer.classList.contains('is-ready') || video.readyState >= 2) {
+            show();
+            return;
+          }
+          video.addEventListener('canplay', show, { once: true });
+          video.addEventListener('error', () => (layer.dataset.videoState = 'error'), { once: true });
+          video.load();
+        }
+      }
+    );
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Video hero",
+  "class": "home-video-hero-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "label": "Show header over the hero",
+      "info": "Use on the first section of a page only.",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Shown until the video plays."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile video"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Now introducing"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Video hero"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Experience now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video hero"
+    }
+  ]
+}
+{% endschema %}

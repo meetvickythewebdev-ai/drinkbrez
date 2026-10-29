@@ -1,0 +1,186 @@
+.bundle-banner {
+  margin-bottom: 40px;
+}
+
+.bundle-banner__hero {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 5rem 1rem 5rem 5rem;
+  border-radius: 50px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
+  color: inherit;
+  text-decoration: none;
+}
+
+.bundle-banner__hero--no-link,
+.bundle-banner__card--no-link {
+  pointer-events: none;
+  cursor: default;
+}
+
+.bundle-banner__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: unset;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+}
+
+.bundle-banner__image--mobile {
+  display: none;
+}
+
+.bundle-banner__text {
+  z-index: 0;
+  flex: 1;
+  max-width: 60%;
+}
+
+.bundle-banner__text h2,
+.bundle-banner__card-text h3 {
+  margin: 0 0 2rem;
+  font-family: var(--bundle-font-heading);
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -1px;
+  text-align: start;
+  color: #000;
+}
+
+.bundle-banner__text p {
+  max-width: 60%;
+  margin: 0;
+  font-family: var(--bundle-font-body);
+  font-size: 16px;
+  line-height: 1.1em;
+  letter-spacing: -0.3px;
+  text-align: start;
+  color: #333;
+}
+
+.bundle-banner__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.bundle-banner__card {
+  display: flex;
+  flex: 1 1 30%;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  background: linear-gradient(180deg, #def3fa 0%, #eaccff 100%),
+    linear-gradient(180deg, #eaebf7 0%, #eeeff8 40%, #dadeec 100%);
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.bundle-banner__card:hover {
+  transform: scale(1.02);
+}
+
+.bundle-banner__card img {
+  max-width: 100px;
+  height: auto;
+  margin-right: 2rem;
+  transform: scale(1.14);
+}
+
+.bundle-banner__card-text {
+  text-align: left;
+}
+
+.bundle-banner__card-text h3 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.bundle-banner__card p {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: 8px 0 0;
+  font-family: var(--bundle-font-body);
+  font-size: 1.5rem;
+  letter-spacing: -0.3px;
+  color: #000;
+}
+
+.bundle-banner__card p .bundle-banner__arrow {
+  display: flex;
+  margin-inline-start: 10px;
+}
+
+.bundle-banner__arrow svg {
+  width: 9px;
+  height: 17px;
+}
+
+@media (max-width: 900px) {
+  .bundle-banner__cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bundle-banner__card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .bundle-banner__hero {
+    flex-direction: column;
+    padding: 4rem 1.5rem 4rem 2.5rem;
+    text-align: center;
+  }
+
+  .bundle-banner__image--desktop {
+    display: none;
+  }
+
+  .bundle-banner__image--mobile {
+    display: block;
+  }
+
+  .bundle-banner__text {
+    max-width: 65%;
+  }
+
+  .bundle-banner__text h2 {
+    font-size: 32px;
+  }
+
+  .bundle-banner__text p {
+    max-width: unset;
+    font-size: 13px;
+  }
+
+  .bundle-banner__card {
+    flex-direction: row;
+    padding: 0 1rem 0 2rem;
+  }
+
+  .bundle-banner__card img {
+    max-width: 80px;
+    margin: 0 1.5rem 0 0;
+  }
+}
+
+/* Home sections use the reference 1400px page width. */
+.brand-section.page-width,
+.brand-section .page-width {
+  max-width: 140rem;
+}

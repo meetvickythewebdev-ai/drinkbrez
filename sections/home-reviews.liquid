@@ -1,0 +1,137 @@
+{{ 'section-home-reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'home-reviews.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign review_type = section.settings.metaobject_type | default: 'bundle_review'
+-%}
+
+<div class="home-reviews brand-section">
+  <div class="home-reviews__top page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="home-reviews__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.pill_image != blank -%}
+      <a
+        {% if section.settings.pill_link != blank %}
+          href="{{ section.settings.pill_link }}"
+        {% endif %}
+        class="home-reviews__pill home-reviews__pill--desktop"
+      >
+        {{
+          section.settings.pill_image
+          | image_url: width: 1284
+          | image_tag: width: section.settings.pill_image.width, loading: 'lazy', alt: section.settings.pill_image.alt
+        }}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <home-reviews-carousel class="home-reviews__carousel" data-limit="{{ section.settings.limit }}">
+    <button type="button" class="home-reviews__arrow home-reviews__arrow--prev" data-prev aria-label="Previous reviews">
+      <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M17.5 5.5L9 14l8.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="home-reviews__viewport" data-viewport>
+      <div class="home-reviews__track" data-track role="list"></div>
+    </div>
+    <button type="button" class="home-reviews__arrow home-reviews__arrow--next" data-next aria-label="Next reviews">
+      <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M10.5 5.5L19 14l-8.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <script type="application/json" data-reviews>
+      [
+      {%- paginate shop.metaobjects[review_type].values by 250 -%}
+        {%- for review in shop.metaobjects[review_type].values -%}
+          {%- liquid
+            assign product = review.product.value
+            assign product_title = review.product_title.value | default: product.title
+            assign product_image = review.product_image.value | default: product.featured_image
+            assign product_url = product.url | default: ''
+          -%}
+          {
+            "id": {{ review.system.handle | json }},
+            "author": {{ review.author.value | json }},
+            "verified": {{ review.verified.value | default: false | json }},
+            "rating": {{ review.rating.value | default: 5 | json }},
+            "title": {{ review.title.value | json }},
+            "body": {{ review.body.value | json }},
+            "date": {{ review.created_at.value | json }},
+            "product": {{ product_title | json }},
+            "url": {{ product_url | json }},
+            "image": {% if product_image %}{{ product_image | image_url: width: 96 | json }}{% else %}null{% endif %},
+            "helpful": {{ review.helpful.value | default: 0 | json }},
+            "unhelpful": {{ review.unhelpful.value | default: 0 | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      {%- endpaginate -%}
+      ]
+    </script>
+  </home-reviews-carousel>
+
+  {%- if section.settings.pill_image_mobile != blank or section.settings.pill_image != blank -%}
+    <a
+      {% if section.settings.pill_link != blank %}
+        href="{{ section.settings.pill_link }}"
+      {% endif %}
+      class="home-reviews__pill home-reviews__pill--mobile page-width"
+    >
+      <picture>
+        {%- if section.settings.pill_image_mobile != blank -%}
+          <source media="(max-width: 767px)" srcset="{{ section.settings.pill_image_mobile | image_url: width: 1000 }}">
+        {%- endif -%}
+        {%- assign pill = section.settings.pill_image | default: section.settings.pill_image_mobile -%}
+        {{ pill | image_url: width: 1284 | image_tag: width: pill.width, loading: 'lazy', alt: pill.alt }}
+      </picture>
+    </a>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Reviews carousel",
+  "class": "home-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What people are saying"
+    },
+    {
+      "type": "image_picker",
+      "id": "pill_image",
+      "label": "Rating image",
+      "info": "Shown above the reviews on desktop and below them on tablet."
+    },
+    {
+      "type": "image_picker",
+      "id": "pill_image_mobile",
+      "label": "Rating image on mobile"
+    },
+    {
+      "type": "url",
+      "id": "pill_link",
+      "label": "Rating image link"
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Review metaobject type",
+      "default": "bundle_review"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Reviews to show",
+      "min": 3,
+      "max": 30,
+      "step": 1,
+      "default": 25
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews carousel"
+    }
+  ]
+}
+{% endschema %}

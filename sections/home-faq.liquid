@@ -1,0 +1,104 @@
+{{ 'section-home-faq.css' | asset_url | stylesheet_tag }}
+
+<home-faq
+  class="home-faq brand-section page-width"
+  style="margin-top: {{ section.settings.margin_top }}px; margin-bottom: {{ section.settings.margin_bottom }}px;"
+>
+  <div class="home-faq__grid">
+    {%- for block in section.blocks -%}
+      <div class="home-faq__item" {{ block.shopify_attributes }}>
+        <button
+          class="home-faq__toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="FaqAnswer-{{ block.id }}"
+        >
+          <span class="home-faq__question">{{ block.settings.question | escape }}</span>
+          <span class="home-faq__icon" aria-hidden="true">
+            <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L9 8.29289L16.6464 0.646447C16.8417 0.451184 17.1583 0.451184 17.3536 0.646447C17.5488 0.841709 17.5488 1.15829 17.3536 1.35355L9.35355 9.35355C9.15829 9.54882 8.84171 9.54882 8.64645 9.35355L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z" fill="black"/>
+            </svg>
+          </span>
+        </button>
+        <div class="home-faq__content" id="FaqAnswer-{{ block.id }}" role="region">
+          <div class="home-faq__answer">{{ block.settings.answer }}</div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</home-faq>
+
+<script>
+  if (!customElements.get('home-faq')) {
+    customElements.define(
+      'home-faq',
+      class HomeFaq extends HTMLElement {
+        connectedCallback() {
+          this.addEventListener('click', (event) => {
+            const toggle = event.target.closest('.home-faq__toggle');
+            if (!toggle) return;
+            const item = toggle.closest('.home-faq__item');
+            const content = item.querySelector('.home-faq__content');
+            const open = !item.classList.contains('is-open');
+            item.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', open);
+            content.style.maxHeight = open ? `${content.scrollHeight}px` : null;
+          });
+        }
+      }
+    );
+  }
+</script>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "class": "home-faq-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ"
+    }
+  ]
+}
+{% endschema %}

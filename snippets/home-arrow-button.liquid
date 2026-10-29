@@ -1,0 +1,26 @@
+{% doc %}
+  Renders the lime pill button with a circled arrow used across the home page.
+
+  @param {string} label - Button text.
+  @param {string} [link] - Destination URL. Renders a disabled button when blank.
+  @param {string} [class] - Extra classes for the button.
+
+  @example
+  {% render 'home-arrow-button', label: 'Experience now', link: '/products/og' %}
+{% enddoc %}
+
+<a
+  class="home-arrow-button {{ class }}{% if link == blank %} home-arrow-button--disabled{% endif %}"
+  {% if link != blank %}
+    href="{{ link }}"
+  {% else %}
+    role="link" aria-disabled="true"
+  {% endif %}
+>
+  <span>{{ label | escape }}</span>
+  <span class="home-arrow-button__icon" aria-hidden="true">
+    <svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10.1465 0.146447C10.3417 -0.0488155 10.6583 -0.0488155 10.8535 0.146447L18.8535 8.14645C18.8874 8.1803 18.9134 8.21887 18.9355 8.25875C18.9601 8.30296 18.98 8.3502 18.9902 8.40133C19.0032 8.46607 19.0031 8.53286 18.9902 8.59762C18.9801 8.6488 18.96 8.69593 18.9355 8.7402C18.9134 8.78035 18.8876 8.81942 18.8535 8.85348L10.8535 16.8535C10.6583 17.0487 10.3417 17.0487 10.1465 16.8535C9.95123 16.6582 9.95124 16.3417 10.1465 16.1464L17.293 8.99996H0.5C0.22387 8.99996 2.06145e-05 8.77609 0 8.49996C2.41411e-08 8.22382 0.223858 7.99996 0.5 7.99996H17.293L10.1465 0.853478C9.95123 0.658222 9.95124 0.34171 10.1465 0.146447Z" fill="black"/>
+    </svg>
+  </span>
+</a>

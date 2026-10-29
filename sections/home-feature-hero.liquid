@@ -1,0 +1,280 @@
+{{ 'section-home-feature-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #FeatureHero-{{ section.id }} {
+    --feature-margin-top-mobile: {{ section.settings.margin_top_mobile }}px;
+    --feature-margin-top-desktop: {{ section.settings.margin_top_desktop }}px;
+    --feature-video-width-mobile: {{ section.settings.video_width_mobile }}%;
+    --feature-video-width-desktop: {{ section.settings.video_width_desktop }}%;
+    --feature-video-offset-mobile: {{ section.settings.video_offset_mobile }}px;
+    --feature-video-offset-desktop: {{ section.settings.video_offset_desktop }}px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<feature-hero
+  id="FeatureHero-{{ section.id }}"
+  class="feature-hero brand-section feature-hero--media-{{ section.settings.media_position }}"
+>
+  <div class="page-width feature-hero__grid">
+    <div class="feature-hero__media">
+      {%- if section.settings.video != blank -%}
+        <div class="feature-hero__video-wrap" data-video-wrap>
+          <video
+            class="feature-hero__video"
+            data-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            {% if section.settings.image != blank %}
+              poster="{{ section.settings.image | image_url: width: 1400 }}"
+            {% endif %}
+          >
+            {%- render 'video-sources', video: section.settings.video -%}
+          </video>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.image != blank -%}
+        <div class="feature-hero__picture" data-fallback {% if section.settings.video != blank %}hidden{% endif %}>
+          {{
+            section.settings.image
+            | image_url: width: 2100
+            | image_tag:
+              widths: '480, 800, 1100, 1400, 1700, 2100',
+              sizes: '(min-width: 1200px) 50vw, 90vw',
+              loading: 'lazy',
+              alt: section.settings.image.alt
+          }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="feature-hero__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="feature-hero__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="feature-hero__body">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="feature-hero__features">
+          {%- for block in section.blocks -%}
+            <div class="feature-hero__feature" {{ block.shopify_attributes }}>
+              <div class="feature-hero__icon">
+                {%- if block.settings.icon != blank -%}
+                  {{ block.settings.icon | image_url: width: 120 | image_tag: loading: 'lazy', alt: block.settings.text }}
+                {%- endif -%}
+              </div>
+              <div class="feature-hero__feature-text">{{ block.settings.text | escape }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</feature-hero>
+
+<script>
+  if (!customElements.get('feature-hero')) {
+    customElements.define(
+      'feature-hero',
+      class FeatureHero extends HTMLElement {
+        connectedCallback() {
+          this.video = this.querySelector('[data-video]');
+          this.fallback = this.querySelector('[data-fallback]');
+          if (!this.video) return;
+          if (!('IntersectionObserver' in window)) return this.start();
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              if (!entries.some((entry) => entry.isIntersecting)) return;
+              this.observer.disconnect();
+              this.start();
+            },
+            { rootMargin: '300px 0px' }
+          );
+          this.observer.observe(this);
+        }
+
+        disconnectedCallback() {
+          if (this.observer) this.observer.disconnect();
+        }
+
+        start() {
+          const fail = () => this.showFallback();
+          this.video.muted = true;
+          this.video.preload = 'auto';
+          this.video.addEventListener('error', fail, { once: true });
+          const attempt = this.video.play();
+          if (attempt && attempt.catch) attempt.catch(fail);
+        }
+
+        showFallback() {
+          if (!this.fallback) return;
+          this.querySelector('[data-video-wrap]').hidden = true;
+          this.fallback.hidden = false;
+        }
+      }
+    );
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Feature hero",
+  "class": "feature-hero-section",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Used as the video poster and when the video can't play."
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position on desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Feature hero"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Media size"
+    },
+    {
+      "type": "range",
+      "id": "video_width_desktop",
+      "label": "Video width on desktop",
+      "min": 80,
+      "max": 160,
+      "step": 2,
+      "unit": "%",
+      "default": 126
+    },
+    {
+      "type": "range",
+      "id": "video_width_mobile",
+      "label": "Video width on mobile",
+      "min": 100,
+      "max": 200,
+      "step": 1,
+      "unit": "%",
+      "default": 155
+    },
+    {
+      "type": "range",
+      "id": "video_offset_desktop",
+      "label": "Video offset on desktop",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": -28
+    },
+    {
+      "type": "range",
+      "id": "video_offset_mobile",
+      "label": "Video offset on mobile",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": -58
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Overlap above on desktop",
+      "min": -100,
+      "max": 0,
+      "step": 2,
+      "unit": "px",
+      "default": -30
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "label": "Overlap above on mobile",
+      "min": -100,
+      "max": 0,
+      "step": 2,
+      "unit": "px",
+      "default": -14
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Feature"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature hero"
+    }
+  ]
+}
+{% endschema %}

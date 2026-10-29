@@ -1,0 +1,378 @@
+.home-reviews {
+  padding: 60px 0 0;
+  color: #000;
+}
+
+.home-reviews__heading {
+  margin: 0;
+  font-family: var(--bundle-font-heading);
+  font-size: 58px;
+  font-weight: 400;
+  line-height: 0.9em;
+  letter-spacing: -2px;
+  text-align: left;
+  color: #000;
+}
+
+.home-reviews__top.page-width {
+  padding-inline: 16px;
+}
+
+.home-reviews__pill {
+  display: flex;
+  justify-content: center;
+  line-height: 0;
+}
+
+.home-reviews__pill img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.home-reviews__pill--desktop {
+  display: none;
+}
+
+.home-reviews__pill--mobile {
+  margin-top: 42px;
+  margin-bottom: 0;
+}
+
+.home-reviews__pill--mobile img {
+  width: 100%;
+}
+
+/* Carousel */
+.home-reviews__carousel {
+  position: relative;
+  display: block;
+  max-width: 1200px;
+  margin: 46px auto 0;
+  padding: 1px 56px;
+}
+
+.home-reviews__viewport {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.home-reviews__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.home-reviews__track {
+  --per-view: 1;
+  display: grid;
+  grid-auto-columns: calc((100% - (var(--per-view) - 1) * 16px) / var(--per-view));
+  grid-auto-flow: column;
+  gap: 16px;
+}
+
+.home-reviews__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #848484;
+  cursor: pointer;
+}
+
+.home-reviews__arrow svg {
+  width: 28px;
+  height: 28px;
+}
+
+.home-reviews__arrow:hover {
+  color: #000;
+}
+
+.home-reviews__arrow--prev {
+  left: 0;
+}
+
+.home-reviews__arrow--next {
+  right: 0;
+}
+
+/* Card */
+.home-review {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 20px;
+  scroll-snap-align: start;
+  font-family: var(--bundle-font-body);
+  letter-spacing: 0.6px;
+  color: #000;
+}
+
+.home-review__main {
+  flex: 1;
+}
+
+.home-review__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.home-review__stars {
+  position: relative;
+  display: inline-block;
+  width: 102px;
+  height: 18px;
+}
+
+.home-review__stars-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.home-review__stars-layer svg {
+  display: block;
+  width: 102px;
+  height: 18px;
+  fill: #fff;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.home-review__stars-layer--fill svg {
+  fill: #000;
+}
+
+.home-review__date {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.home-review__title {
+  margin-top: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.home-review__body {
+  display: -webkit-box;
+  margin: 9px 0 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  white-space: pre-line;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+.home-review.is-expanded .home-review__body {
+  display: block;
+}
+
+.home-review__more {
+  display: none;
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 300;
+  color: #000;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.home-review.is-clamped .home-review__more {
+  display: inline-block;
+}
+
+.home-review__foot {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e5eb;
+}
+
+.home-review__author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 11px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.home-review__author strong {
+  font-weight: 400;
+}
+
+.home-review__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.home-review__verified svg {
+  width: 12px;
+  height: 12px;
+}
+
+.home-review__product {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.home-review__thumb {
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+.home-review__thumb img {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #e2e2e2;
+  object-fit: cover;
+}
+
+.home-review__product-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.home-review__product-name {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #000;
+  text-decoration: none;
+}
+
+.home-review__product-name:hover {
+  text-decoration: underline;
+}
+
+.home-review__helpful {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.home-review__vote {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: #000;
+  cursor: pointer;
+}
+
+.home-review__vote svg {
+  width: 12px;
+  height: 12px;
+  color: #848484;
+}
+
+.home-review__vote.is-voted svg,
+.home-review__vote:hover svg {
+  color: #000;
+}
+
+@media screen and (min-width: 640px) {
+  .home-reviews__track {
+    --per-view: 2;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .home-reviews {
+    padding-top: 40px;
+  }
+
+  .home-reviews__top.page-width {
+    padding-inline: 20px;
+  }
+
+  .home-reviews__heading {
+    letter-spacing: -0.5px;
+    line-height: 0.92em;
+    text-align: center;
+  }
+
+  .home-reviews__carousel {
+    margin-top: 40px;
+  }
+
+  .home-reviews__pill--mobile {
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+
+  .home-reviews__pill--mobile img {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .home-reviews__track {
+    --per-view: 3;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .home-reviews {
+    padding-top: 110px;
+    padding-bottom: 61px;
+  }
+
+  .home-reviews__heading {
+    font-size: 90px;
+  }
+
+  .home-reviews__pill--desktop {
+    display: flex;
+    margin-top: 60px;
+  }
+
+  .home-reviews__pill--mobile {
+    display: none;
+  }
+
+  .home-reviews__carousel {
+    margin-top: 41px;
+  }
+}
+
+/* Home sections use the reference 1400px page width. */
+.brand-section.page-width,
+.brand-section .page-width {
+  max-width: 140rem;
+}

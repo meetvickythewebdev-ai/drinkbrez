@@ -1,0 +1,61 @@
+{{ 'section-home-closing-text.css' | asset_url | stylesheet_tag }}
+
+<div class="closing-text brand-section">
+  <div class="closing-text__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="closing-text__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="closing-text__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+  {%- if section.settings.button_image != blank -%}
+    <a
+      {% if section.settings.button_link != blank %}
+        href="{{ section.settings.button_link }}"
+      {% endif %}
+      class="closing-text__button"
+    >
+      {{
+        section.settings.button_image
+        | image_url: width: 508
+        | image_tag: width: 254, height: 52, loading: 'lazy', alt: section.settings.button_image.alt
+      }}
+    </a>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Closing text",
+  "class": "closing-text-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pure fun formulated"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "button_image",
+      "label": "Button image"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Closing text"
+    }
+  ]
+}
+{% endschema %}

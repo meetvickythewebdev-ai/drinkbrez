@@ -1,0 +1,127 @@
+{{ 'section-home-bundle-banner.css' | asset_url | stylesheet_tag }}
+
+{%- capture chevron -%}
+  <svg width="9" height="17" viewBox="0 0 9 17" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.146447 0.146447C0.341709 -0.0488155 0.658291 -0.0488155 0.853553 0.146447L8.85355 8.14645C9.04882 8.34171 9.04882 8.65829 8.85355 8.85355L0.853553 16.8536C0.658291 17.0488 0.341709 17.0488 0.146447 16.8536C-0.0488155 16.6583 -0.0488155 16.3417 0.146447 16.1464L7.79289 8.5L0.146447 0.853553C-0.0488155 0.658291 -0.0488155 0.341709 0.146447 0.146447Z" fill="black"/>
+  </svg>
+{%- endcapture -%}
+
+<div class="bundle-banner brand-section page-width">
+  <a
+    {% if section.settings.link != blank %}
+      href="{{ section.settings.link }}"
+    {% endif %}
+    class="bundle-banner__hero{% if section.settings.link == blank %} bundle-banner__hero--no-link{% endif %}"
+  >
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2400 | image_tag: class: 'bundle-banner__image bundle-banner__image--desktop', widths: '1200, 1600, 2400', sizes: '(min-width: 1400px) 1300px, 100vw', loading: 'lazy', alt: '' }}
+    {%- endif -%}
+    {%- if section.settings.image_mobile != blank -%}
+      {{ section.settings.image_mobile | image_url: width: 1200 | image_tag: class: 'bundle-banner__image bundle-banner__image--mobile', widths: '600, 900, 1200', sizes: '100vw', loading: 'lazy', alt: '' }}
+    {%- endif -%}
+    <div class="bundle-banner__text">
+      <h2>
+        {{ section.settings.heading | escape }}
+        <span class="bundle-banner__arrow">{{ chevron }}</span>
+      </h2>
+      {%- if section.settings.text != blank -%}
+        <p>{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+  </a>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="bundle-banner__cards">
+      {%- for block in section.blocks -%}
+        <a
+          {% if block.settings.link != blank %}
+            href="{{ block.settings.link }}"
+          {% endif %}
+          class="bundle-banner__card{% if block.settings.link == blank %} bundle-banner__card--no-link{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: block.settings.title }}
+          {%- endif -%}
+          <div class="bundle-banner__card-text">
+            <h3>{{ block.settings.title | escape }}</h3>
+            <p>
+              <span>{{ block.settings.link_label | escape }}</span>
+              <span class="bundle-banner__arrow">{{ chevron }}</span>
+            </p>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Bundle banner",
+  "class": "bundle-banner-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build a bundle & save"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Bundle"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle banner"
+    }
+  ]
+}
+{% endschema %}

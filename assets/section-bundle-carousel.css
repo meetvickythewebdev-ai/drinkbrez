@@ -93,3 +93,69 @@
     padding: 0 10px;
   }
 }
+
+/* Wide layout: three slides across a 1600px strip. */
+.bundle-carousel--wide {
+  --carousel-per-view: 3;
+  --carousel-gap: 16px;
+  margin: 70px 0 30px;
+}
+
+.bundle-carousel--wide .bundle-carousel__inner {
+  padding: 0;
+}
+
+.bundle-carousel--wide .bundle-carousel__viewport {
+  height: auto;
+  margin: 50px 0 40px;
+}
+
+.bundle-carousel--wide .bundle-carousel__slide {
+  height: auto;
+}
+
+.bundle-carousel--wide .bundle-carousel__link,
+.bundle-carousel--wide .bundle-carousel__image {
+  max-width: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .bundle-carousel--wide {
+    --carousel-per-view: 2;
+    --carousel-gap: 16px;
+    margin-top: 10px;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__inner {
+    padding: 14px;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__viewport {
+    height: 420px;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__slide {
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .bundle-carousel--wide {
+    --carousel-per-view: 1;
+    --carousel-gap: 16px;
+    margin: 50px 0 -1px;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__inner {
+    padding: 0;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__viewport {
+    height: 435px;
+    margin: 0;
+  }
+
+  .bundle-carousel--wide .bundle-carousel__slide {
+    padding: 16px;
+  }
+}
