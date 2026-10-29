@@ -29,7 +29,24 @@
     <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
       <div class="menu-drawer__inner-container">
         <div class="menu-drawer__navigation-container">
+          {%- liquid
+            assign panel_link = null
+            assign panel_block = section.blocks | where: 'type', 'shop_panel' | first
+            if panel_block.settings.parent_title != blank
+              for link in section.settings.menu.links
+                if link.title == panel_block.settings.parent_title and link.links != blank
+                  assign panel_link = link
+                  break
+                endif
+              endfor
+            endif
+          -%}
           <nav class="menu-drawer__navigation">
+            {%- if panel_link -%}
+              <div class="menu-drawer__menu menu-drawer__panel">
+                {%- render 'header-shop-panel', link: panel_link, panel: panel_block -%}
+              </div>
+            {%- else -%}
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
               {%- for link in section.settings.menu.links -%}
                 <li>
@@ -144,8 +161,23 @@
                 </li>
               {%- endfor -%}
             </ul>
+            {%- endif -%}
           </nav>
           <div class="menu-drawer__utility-links">
+            {%- if shop.customer_accounts_enabled -%}
+              <a
+                href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"
+                rel="nofollow"
+              >
+                {{- 'icon-account.svg' | inline_asset_content -}}
+                {%- if customer -%}
+                  {{ 'customer.account.title' | t }}
+                {%- else -%}
+                  {{ 'customer.log_in' | t }}
+                {%- endif -%}
+              </a>
+            {%- endif -%}
             {%- if show_country_selector or show_language_selector -%}
               <div class="menu-drawer__localization header-localization">
                 {%- if show_country_selector -%}

@@ -8,6 +8,8 @@
   onload="this.media='all'"
 >
 
+{{ 'section-header-brand.css' | asset_url | stylesheet_tag }}
+
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
@@ -101,6 +103,8 @@
 </style>
 
 {%- style -%}
+  {% render 'bundle-fonts' %}
+
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
   }
@@ -164,11 +168,15 @@
       assign language_selector = true
     endif
   -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if country_selector or language_selector %} header--has-localizations{% endif %}">
+  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% unless section.settings.show_search %} header--no-search{% endunless %}{% if country_selector or language_selector %} header--has-localizations{% endif %}">
     {%- liquid
       assign render_search_left = false
       if section.settings.logo_position == 'top-center' or section.settings.menu == blank or shop.customer_accounts_enabled
         assign render_search_left = true
+      endif
+
+      if section.settings.show_search == false
+        assign render_search_left = false
       endif
 
       if section.settings.menu != blank
@@ -280,12 +288,41 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+      {%- assign secondary_menu_block = section.blocks | where: 'type', 'secondary_menu' | first -%}
+      {%- if secondary_menu_block.settings.menu != blank -%}
+        <nav class="header__right-menu small-hide" {{ secondary_menu_block.shopify_attributes }}>
+          <ul class="list-menu list-menu--inline" role="list">
+            {%- for link in secondary_menu_block.settings.menu.links -%}
+              <li>
+                <a
+                  href="{{ link.url }}"
+                  class="header__menu-item list-menu__item link link--text focus-inset"
+                  {% if link.current %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  <span
+                    {%- if link.current %}
+                      class="header__active-menu-item"
+                    {% endif %}
+                  >
+                    {{- link.title | escape -}}
+                  </span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+      {%- if section.settings.show_search -%}
+        {% render 'header-search', input_id: 'Search-In-Modal' %}
+      {%- endif -%}
 
       {%- if shop.customer_accounts_enabled -%}
         <shopify-account
           menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
-          class="header__icon header__icon--account link focus-inset"
+          class="header__icon header__icon--account link focus-inset small-hide"
         >
           <span slot="signed-out-avatar" class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
           <span slot="signed-out-avatar" class="visually-hidden">{{ 'customer.log_in' | t }}</span>
@@ -300,11 +337,7 @@
       {%- endfor -%}
 
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-        {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-        {% endif %}
+        <span class="svg-wrapper">{{ 'icon-bag.svg' | inline_asset_content }}</span>
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
         {%- if cart != empty -%}
           <div class="cart-count-bubble">
@@ -502,7 +535,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 3,
+  "max_blocks": 24,
   "settings": [
     {
       "type": "select",
@@ -550,6 +583,12 @@
       "id": "menu",
       "default": "main-menu",
       "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search icon"
     },
     {
       "type": "select",
@@ -681,6 +720,103 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "secondary_menu",
+      "name": "Right menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "info": "Shown before the account and cart icons on tablet and desktop."
+        }
+      ]
+    },
+    {
+      "type": "shop_panel",
+      "name": "Shop panel",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Replaces the dropdown of the matching menu item with quick links and product cards. Add cards with Menu card blocks."
+        },
+        {
+          "type": "text",
+          "id": "parent_title",
+          "label": "Menu item title",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "mobile_menu",
+          "label": "Mobile quick links",
+          "info": "Replaces the menu item's links below 990px."
+        },
+        {
+          "type": "text",
+          "id": "column_1_heading",
+          "label": "Column 1 heading",
+          "default": "THC-Infused"
+        },
+        {
+          "type": "text",
+          "id": "column_2_heading",
+          "label": "Column 2 heading",
+          "default": "Functional"
+        }
+      ]
+    },
+    {
+      "type": "menu_card",
+      "name": "Menu card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "column",
+          "label": "Column",
+          "options": [
+            {
+              "value": "1",
+              "label": "Column 1"
+            },
+            {
+              "value": "2",
+              "label": "Column 2"
+            }
+          ],
+          "default": "1"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Product"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover background"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag",
+          "info": "Optional pill shown under the label, such as Limited Edition."
+        }
+      ]
     }
   ]
 }

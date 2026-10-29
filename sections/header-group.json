@@ -17,8 +17,8 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
-            "link": ""
+            "text": "OGX IS BACK | SHOP NOW",
+            "link": "shopify://products/og-extra-strength"
           }
         }
       },
@@ -28,8 +28,8 @@
       "settings": {
         "auto_rotate": false,
         "change_slides_speed": 5,
-        "color_scheme": "scheme-1",
-        "show_line_separator": true,
+        "color_scheme": "scheme-7",
+        "show_line_separator": false,
         "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false
@@ -38,20 +38,138 @@
     "header": {
       "type": "header",
       "settings": {
-        "logo_position": "middle-left",
+        "logo_position": "middle-center",
         "mobile_logo_position": "center",
         "menu": "main-menu",
         "menu_type_desktop": "dropdown",
-        "sticky_header_type": "on-scroll-up",
-        "show_line_separator": true,
-        "color_scheme": "scheme-1",
-        "menu_color_scheme": "scheme-1",
-        "enable_country_selector": true,
-        "enable_language_selector": true,
+        "sticky_header_type": "always",
+        "show_line_separator": false,
+        "color_scheme": "scheme-6",
+        "menu_color_scheme": "scheme-6",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
         "margin_bottom": 0,
-        "padding_top": 20,
-        "padding_bottom": 20
-      }
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "show_search": false
+      },
+      "blocks": {
+        "secondary_menu": {
+          "type": "secondary_menu",
+          "settings": {
+            "menu": "header-right-menu"
+          }
+        },
+        "shop_panel": {
+          "type": "shop_panel",
+          "settings": {
+            "parent_title": "Shop",
+            "mobile_menu": "shop-mobile-menu",
+            "column_1_heading": "THC-Infused",
+            "column_2_heading": "Functional"
+          }
+        },
+        "menu_card_1": {
+          "type": "menu_card",
+          "settings": {
+            "column": "1",
+            "label": "OG",
+            "link": "/products/og",
+            "image": "shopify://shop_images/nav-Image_1_6.jpg",
+            "hover_image": "shopify://shop_images/nav-Rectangle_91_4.png",
+            "tag": ""
+          }
+        },
+        "menu_card_2": {
+          "type": "menu_card",
+          "settings": {
+            "column": "1",
+            "label": "OG X Cherry",
+            "link": "/products/black-cherry-lemonade-10mg",
+            "image": "shopify://shop_images/nav-OGX_Black_Cherry_Lemonade_2.jpg",
+            "hover_image": "shopify://shop_images/nav-OG_X_Black_Cherry_Visual_5.jpg",
+            "tag": "Limited Edition"
+          }
+        },
+        "menu_card_3": {
+          "type": "menu_card",
+          "settings": {
+            "column": "1",
+            "label": "SHOTS",
+            "link": "/products/shots",
+            "image": "shopify://shop_images/nav-Image_1_857658e4-c2f2-4ed6-b7e9-1a6eca4b2a60.jpg",
+            "hover_image": "shopify://shop_images/nav-Shots_2.webp",
+            "tag": ""
+          }
+        },
+        "menu_card_4": {
+          "type": "menu_card",
+          "settings": {
+            "column": "1",
+            "label": "AMPLIFY",
+            "link": "/products/amplify",
+            "image": "shopify://shop_images/nav-Image_1_3.jpg",
+            "hover_image": "shopify://shop_images/nav-Image_2_871aec3a-c79c-4a47-8b99-5dc460467b40.jpg",
+            "tag": ""
+          }
+        },
+        "menu_card_5": {
+          "type": "menu_card",
+          "settings": {
+            "column": "2",
+            "label": "FLOW",
+            "link": "/products/flow",
+            "image": "shopify://shop_images/nav-Image_5_f504e07e-b344-4f72-abae-4cea085ef7bf.jpg",
+            "hover_image": "shopify://shop_images/nav-9_1.webp",
+            "tag": ""
+          }
+        },
+        "menu_card_6": {
+          "type": "menu_card",
+          "settings": {
+            "column": "2",
+            "label": "ELEVATE",
+            "link": "/products/elevate",
+            "image": "shopify://shop_images/nav-Image_1_5.jpg",
+            "hover_image": "shopify://shop_images/nav-Image_3_f6461ae1-8591-4c8b-9e8a-5e41e0e840a1.jpg",
+            "tag": ""
+          }
+        },
+        "menu_card_7": {
+          "type": "menu_card",
+          "settings": {
+            "column": "2",
+            "label": "DREAM",
+            "link": "/products/dream",
+            "image": "shopify://shop_images/nav-Image_1_2.jpg",
+            "hover_image": "shopify://shop_images/nav-Image_4_6ed5776f-d236-4b71-a699-7915b1def377.jpg",
+            "tag": ""
+          }
+        },
+        "menu_card_8": {
+          "type": "menu_card",
+          "settings": {
+            "column": "2",
+            "label": "Functional Trio",
+            "link": "/products/adaptogen-trio",
+            "image": "shopify://shop_images/nav-AdaptogenTrio.jpg",
+            "hover_image": "shopify://shop_images/nav-Image_8_f1a07403-cf7a-4653-ac1c-5f02e6215e3e.jpg",
+            "tag": ""
+          }
+        }
+      },
+      "block_order": [
+        "secondary_menu",
+        "shop_panel",
+        "menu_card_1",
+        "menu_card_2",
+        "menu_card_3",
+        "menu_card_4",
+        "menu_card_5",
+        "menu_card_6",
+        "menu_card_7",
+        "menu_card_8"
+      ]
     }
   },
   "order": [

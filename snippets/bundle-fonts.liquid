@@ -1,5 +1,5 @@
 {% doc %}
-  Outputs the bundle page brand fonts and exposes them as CSS variables on the bundle sections.
+  Outputs the brand fonts and exposes them as CSS variables on the bundle sections, header and announcement bar.
 
   Loads PPEiko-Regular.woff and PPFragment-SansRegular.woff from Content > Files.
   When the files are missing, the theme heading and body fonts are used instead.
@@ -24,7 +24,9 @@
 
 .bundle-hero,
 .bundle-builder,
-.bundle-reviews {
+.bundle-reviews,
+.section-header,
+.announcement-bar-section {
   --bundle-font-heading: 'PP Eiko', var(--font-heading-family);
   --bundle-font-body: 'PP Fragment', var(--font-body-family);
 }

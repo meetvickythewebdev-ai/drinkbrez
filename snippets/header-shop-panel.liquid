@@ -1,0 +1,77 @@
+{% doc %}
+  Renders the featured shop panel: quick links on top and product cards in two columns.
+
+  Desktop shows the parent link's child links in a three-column grid. Below 990px the
+  mobile menu replaces that grid and moves under the product cards.
+
+  @param {object} link - The parent menu link whose child links fill the desktop grid.
+  @param {object} panel - The header's `shop_panel` block, for the mobile menu and column headings.
+  @param {object} [section] - The header section, supplied implicitly, for its `menu_card` blocks.
+
+  @example
+  {% render 'header-shop-panel', link: link, panel: panel_block %}
+{% enddoc %}
+
+<div class="header-shop-panel" {{ panel.shopify_attributes }}>
+  <div class="header-shop-panel__grid header-shop-panel__grid--desktop">
+    {%- for childlink in link.links -%}
+      <a href="{{ childlink.url }}" class="header-shop-panel__item focus-inset">
+        {{- childlink.title | escape -}}
+      </a>
+    {%- endfor -%}
+  </div>
+
+  {%- if panel.settings.mobile_menu != blank -%}
+    <div class="header-shop-panel__grid header-shop-panel__grid--mobile">
+      {%- for mobilelink in panel.settings.mobile_menu.links -%}
+        <a href="{{ mobilelink.url }}" class="header-shop-panel__item focus-inset">
+          {{- mobilelink.title | escape -}}
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="header-shop-panel__columns">
+    {%- for column in (1..2) -%}
+      {%- liquid
+        assign heading_key = 'column_' | append: column | append: '_heading'
+        assign column_value = column | append: ''
+      -%}
+      <div class="header-shop-panel__column">
+        {%- if panel.settings[heading_key] != blank -%}
+          <span class="header-shop-panel__title">{{ panel.settings[heading_key] | escape }}</span>
+        {%- endif -%}
+        <ul class="header-shop-panel__cards list-unstyled" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'menu_card' and block.settings.column == column_value -%}
+              <li {{ block.shopify_attributes }}>
+                <a
+                  href="{{ block.settings.link | default: '#' }}"
+                  class="header-shop-panel__card focus-inset"
+                  {% if block.settings.hover_image != blank %}
+                    style="--hover-bg: url('{{ block.settings.hover_image | image_url: width: 600 }}');"
+                  {% endif %}
+                >
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 140
+                      | image_tag: class: 'header-shop-panel__image', width: 70, height: 80, loading: 'lazy', alt: ''
+                    }}
+                  {%- endif -%}
+                  <div class="header-shop-panel__overlay"></div>
+                  <div class="header-shop-panel__text">
+                    <span>{{ block.settings.label | escape }}</span>
+                    {%- if block.settings.tag != blank -%}
+                      <span class="header-shop-panel__tag">{{ block.settings.tag | escape }}</span>
+                    {%- endif -%}
+                  </div>
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

@@ -1,12 +1,13 @@
 {% doc %}
   Renders the header menu in the dropdown style.
 
-  @param {object} [section] - The current header section context, supplied implicitly when rendered from that section and used for menu settings.
+  @param {object} [section] - The current header section context, supplied implicitly when rendered from that section and used for menu settings and the `shop_panel` block.
 
   @example
   {% render 'header-dropdown-menu' %}
 {% enddoc %}
 
+{%- assign panel_block = section.blocks | where: 'type', 'shop_panel' | first -%}
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
@@ -19,7 +20,7 @@
                 class="header__menu-item list-menu__item link focus-inset"
               >
                 <span
-                  {%- if link.child_active %}
+                  {%- if link.child_active and link.title != panel_block.settings.parent_title %}
                     class="header__active-menu-item"
                   {% endif %}
                 >
@@ -27,6 +28,15 @@
                 </span>
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
+              {%- if panel_block.settings.parent_title != blank and link.title == panel_block.settings.parent_title -%}
+                <div
+                  id="HeaderMenu-MenuList-{{ forloop.index }}"
+                  class="header__submenu header__submenu--panel list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
+                  tabindex="-1"
+                >
+                  {%- render 'header-shop-panel', link: link, panel: panel_block -%}
+                </div>
+              {%- else -%}
               <ul
                 id="HeaderMenu-MenuList-{{ forloop.index }}"
                 class="header__submenu list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
@@ -79,6 +89,7 @@
                   </li>
                 {%- endfor -%}
               </ul>
+              {%- endif -%}
             </details>
           </header-menu>
         {%- else -%}
