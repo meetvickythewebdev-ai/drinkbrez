@@ -1,0 +1,172 @@
+/* Brand product cards for collection grids, matching the reference Shop All page. */
+.collection-hero__inner.page-width,
+.collection-brand .page-width {
+  max-width: 140rem;
+}
+
+.collection-hero__title {
+  margin: 25px 0 5px;
+  font-family: var(--bundle-font-heading, var(--font-heading-family));
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: normal;
+  color: #000;
+}
+
+.collection-brand .product-grid {
+  column-gap: 8px;
+  row-gap: 8px;
+}
+
+.collection-brand .grid__item {
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.collection-brand .card-wrapper,
+.collection-brand .card {
+  height: 100%;
+}
+
+.collection-brand .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.collection-brand .card > .card__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.collection-brand .card__inner {
+  position: relative;
+}
+
+.collection-brand .card__information {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  font-family: var(--bundle-font-body);
+}
+
+.collection-brand .card__heading {
+  margin-top: 0;
+  font-family: var(--bundle-font-heading);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -1px;
+  color: #000;
+}
+
+.collection-brand .card__heading a {
+  text-decoration: none;
+}
+
+.collection-brand .card__headline {
+  margin-top: 0.98rem;
+  font-family: var(--bundle-font-body);
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.collection-brand .card-information {
+  font-family: var(--bundle-font-body);
+}
+
+.collection-brand .card-wrapper .rating-star {
+  letter-spacing: 0.3rem;
+}
+
+.collection-brand .rating-count {
+  font-family: var(--bundle-font-body);
+  font-size: 12px;
+  color: #000;
+}
+
+.collection-brand .price {
+  display: none;
+}
+
+.collection-brand .card__thc-icon {
+  line-height: 0;
+}
+
+.collection-brand .badge--new {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #e3f98a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: var(--bundle-font-body);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #000;
+  pointer-events: none;
+}
+
+.collection-brand .card__cta {
+  --buttons-radius: 30px;
+  --buttons-radius-outset: 31px;
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.collection-brand .card__cta .button {
+  min-height: 4.7rem;
+  border-radius: var(--buttons-radius-outset);
+  padding: 0.8rem 1rem;
+  font-family: var(--bundle-font-body);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.1rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  transition: all 0.2s ease;
+}
+
+.collection-brand .card__cta .button:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+@media screen and (min-width: 750px) {
+  .collection-brand .card > .card__content .card__information {
+    padding: 20px;
+    font-size: 0.8em;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .collection-hero__title {
+    font-size: 30px;
+  }
+
+  .collection-brand .product-grid {
+    row-gap: 4px;
+  }
+
+  .collection-brand .card > .card__content .card__information {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}

@@ -1,6 +1,12 @@
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.brand_cards -%}
+  {{ 'section-collection-brand.css' | asset_url | stylesheet_tag }}
+  {%- style -%}
+    {% render 'bundle-fonts' %}
+  {%- endstyle -%}
+{%- endif -%}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -40,7 +46,7 @@
   view-event-payload="{{ collection | standard_event_data: 'view' | escape }}"
   data-collection-id="{{ collection.id }}"
 >
-  <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.brand_cards %} collection-brand brand-section{% endif %}">
     {%- paginate collection.products by section.settings.products_per_page -%}
       {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
       {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
@@ -175,6 +181,7 @@
                       show_secondary_image: section.settings.show_secondary_image,
                       show_vendor: section.settings.show_vendor,
                       show_rating: section.settings.show_rating,
+                      brand_details: section.settings.brand_cards,
                       lazy_load: lazy_load,
                       skip_styles: skip_card_product_styles,
                       quick_add: section.settings.quick_add,
@@ -328,6 +335,13 @@
       "default": false,
       "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
       "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "brand_cards",
+      "default": false,
+      "label": "Use brand product cards",
+      "info": "Bordered cards with a headline (custom.card_headline metafield), a View product button, a NEW badge for products tagged New and a leaf icon for products tagged THC. Prices are hidden."
     },
     {
       "type": "select",

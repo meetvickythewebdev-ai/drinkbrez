@@ -16,6 +16,7 @@
   @param {boolean} [horizontal_quick_add] - Whether to use horizontal quick-add styles. Defaults to `false`.
   @param {string} [placeholder_image] - The placeholder SVG name. Defaults to `product-apparel-2`.
   @param {string} [product_view_context] - The analytics context for the product-card view event, such as `collection`, `search`, or `recommendation`.
+  @param {boolean} [brand_details] - Whether to show the brand extras: the `custom.card_headline` metafield, a "View product" button, a NEW badge for products tagged `New` and a leaf icon for products tagged `THC`. Defaults to `false`.
   @param {block} [block] - The current section block, used for optional card description content.
   @param {object} [section] - The current section context, supplied implicitly when rendered from a section and used by quick-add controls.
 
@@ -110,7 +111,13 @@
               </div>
             </div>
           {%- endif -%}
+          {%- if brand_details and card_product.tags contains 'New' -%}
+            <span class="badge badge--new">{{ 'products.product.new_badge' | t }}</span>
+          {%- endif -%}
           <div class="card__content">
+            {%- if brand_details and card_product.tags contains 'THC' -%}
+              {%- render 'card-thc-icon' -%}
+            {%- endif -%}
             <div class="card__information">
               <h3
                 class="card__heading"
@@ -164,6 +171,11 @@
                 {{ card_product.title | escape }}
               </a>
             </h3>
+            {%- if brand_details and card_product.metafields.custom.card_headline != blank -%}
+              <div class="card__headline caption-with-letter-spacing light">
+                {{ card_product.metafields.custom.card_headline | escape }}
+              </div>
+            {%- endif -%}
             <div class="card-information">
               {%- if show_vendor -%}
                 <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
@@ -291,6 +303,13 @@
                 {% endif %}
               {%- endif -%}
             </div>
+            {%- if brand_details -%}
+              <div class="card__cta">
+                <a href="{{ card_product.url }}" class="button button--secondary button--full-width" tabindex="-1" aria-hidden="true">
+                  {{- 'products.product.view_product' | t -}}
+                </a>
+              </div>
+            {%- endif -%}
           </div>
           {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
           {% if quick_add == 'standard' %}
