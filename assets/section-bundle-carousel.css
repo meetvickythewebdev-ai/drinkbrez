@@ -159,3 +159,8 @@
     padding: 16px;
   }
 }
+
+/* Compact layout: the four-across strip without the overlap into the next section. */
+.bundle-carousel--compact .bundle-carousel__viewport {
+  margin: 0;
+}

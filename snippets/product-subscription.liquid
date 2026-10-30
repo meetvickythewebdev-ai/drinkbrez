@@ -1,0 +1,113 @@
+{% doc %}
+  Renders the purchase choice between a subscription and a one-time purchase.
+  It writes the chosen selling plan into the product form and keeps the prices, per-unit prices,
+  savings and the Add to cart total in step with the selected variant.
+
+  @param {product} product - The current product.
+  @param {block} block - The `subscription` block.
+  @param {string} product_form_id - The ID of the product form the selling plan belongs to.
+
+  @example
+  {% render 'product-subscription', product: product, block: block, product_form_id: product_form_id %}
+{% enddoc %}
+
+{%- liquid
+  assign selling_plan = product.selling_plan_groups.first.selling_plans.first
+  assign variant = product.selected_or_first_available_variant
+  assign allocation = null
+  for item_allocation in variant.selling_plan_allocations
+    if item_allocation.selling_plan.id == selling_plan.id
+      assign allocation = item_allocation
+    endif
+  endfor
+  assign subscribe_default = block.settings.default_subscription
+  if product.requires_selling_plan
+    assign subscribe_default = true
+  endif
+-%}
+{%- if selling_plan -%}
+  <product-subscription
+    class="product-subscription"
+    data-unit="{{ block.settings.unit_label | escape }}"
+    data-form="{{ product_form_id }}"
+    {{ block.shopify_attributes }}
+  >
+    <input
+      type="hidden"
+      name="selling_plan"
+      value="{% if subscribe_default %}{{ selling_plan.id }}{% endif %}"
+      form="{{ product_form_id }}"
+      data-selling-plan="{{ selling_plan.id }}"
+    >
+    <div class="product-subscription__options">
+      <label class="product-subscription__option{% if subscribe_default %} is-selected{% endif %}" data-option="subscription">
+        <span class="product-subscription__row">
+          <span class="product-subscription__name">
+            <input type="radio" name="PurchaseType-{{ product_form_id }}" value="subscription" {% if subscribe_default %}checked{% endif %}>
+            <span>{{ block.settings.subscription_label | escape }}</span>
+            <span class="product-subscription__save">
+              {{- block.settings.save_label | escape }}
+              <span data-percent>{{ selling_plan.price_adjustments.first.value | default: 0 }}%</span>
+            </span>
+          </span>
+          <span class="product-subscription__price" data-price="subscription">
+            <span class="product-subscription__amount">{{ allocation.price | default: variant.price | money }}</span>
+            <span class="product-subscription__unit"></span>
+          </span>
+        </span>
+        <span class="product-subscription__benefits">
+          <span class="product-subscription__benefit">
+            {{- 'icon-subscription-delivery.svg' | inline_asset_content -}}
+            <span>{{ block.settings.benefit_1 | escape }}</span>
+          </span>
+          <span class="product-subscription__benefit">
+            {{- 'icon-subscription-savings.svg' | inline_asset_content -}}
+            <span>
+              {{- block.settings.benefit_2_before | escape }}
+              <span class="product-subscription__savings" data-savings></span>
+              {{ block.settings.benefit_2_after | escape -}}
+            </span>
+          </span>
+          <span class="product-subscription__benefit">
+            {{- 'icon-subscription-pause.svg' | inline_asset_content -}}
+            <span>{{ block.settings.benefit_3 | escape }}</span>
+          </span>
+        </span>
+      </label>
+      {%- unless product.requires_selling_plan -%}
+        <label class="product-subscription__option{% unless subscribe_default %} is-selected{% endunless %}" data-option="onetime">
+          <span class="product-subscription__row">
+            <span class="product-subscription__name">
+              <input type="radio" name="PurchaseType-{{ product_form_id }}" value="onetime" {% unless subscribe_default %}checked{% endunless %}>
+              <span>{{ block.settings.onetime_label | escape }}</span>
+            </span>
+            <span class="product-subscription__price" data-price="onetime">
+              <span class="product-subscription__amount">{{ variant.price | money }}</span>
+              <span class="product-subscription__unit"></span>
+            </span>
+          </span>
+        </label>
+      {%- endunless -%}
+    </div>
+    <script type="application/json" data-variants>
+      [
+        {%- for item in product.variants -%}
+          {%- liquid
+            assign subscription_price = item.price
+            for item_allocation in item.selling_plan_allocations
+              if item_allocation.selling_plan.id == selling_plan.id
+                assign subscription_price = item_allocation.price
+              endif
+            endfor
+          -%}
+          {
+            "id": {{ item.id }},
+            "option": {{ item.option1 | json }},
+            "price": {{ item.price }},
+            "subscription_price": {{ subscription_price }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+  </product-subscription>
+{%- endif -%}

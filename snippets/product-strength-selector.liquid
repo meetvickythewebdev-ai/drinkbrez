@@ -1,0 +1,54 @@
+{% doc %}
+  Renders buttons that switch between related products, such as different strengths of the same drink.
+  The products come from the current product's `custom.strength_products` metafield. Each product supplies
+  its own `custom.strength_label`, `custom.strength_icon` and optional `custom.strength_tag`.
+  The current product's button is highlighted, and switching keeps the selected pack size when the other product has it.
+
+  @param {product} product - The current product.
+  @param {block} block - The `strength_selector` block.
+
+  @example
+  {% render 'product-strength-selector', product: product, block: block %}
+{% enddoc %}
+
+{%- assign options = product.metafields.custom.strength_products.value -%}
+{%- if options != blank -%}
+  <div class="product-strength" data-strength-selector {{ block.shopify_attributes }}>
+    <h2 class="product-strength__title">
+      {{- 'icon-strength-leaf.svg' | inline_asset_content -}}
+      <span>{{ block.settings.title | escape }}</span>
+    </h2>
+    <ul class="product-strength__list" role="list">
+      {%- for option in options -%}
+        {%- liquid
+          assign is_current = false
+          if option.id == product.id
+            assign is_current = true
+          endif
+          assign icon = option.metafields.custom.strength_icon.value
+          assign tag = option.metafields.custom.strength_tag.value
+        -%}
+        <li class="product-strength__item">
+          <a
+            href="{{ option.url }}"
+            class="product-strength__button{% if is_current %} is-active{% endif %}"
+            {% if is_current %}
+              aria-current="page"
+            {% else %}
+              data-options="{{ option.variants | map: 'option1' | join: '|' | escape }}"
+              data-variant-ids="{{ option.variants | map: 'id' | join: '|' }}"
+            {% endif %}
+          >
+            {%- if icon != blank -%}
+              {{ icon | image_url: width: 66 | image_tag: class: 'product-strength__icon', loading: 'lazy', alt: '' }}
+            {%- endif -%}
+            <span>{{ option.metafields.custom.strength_label.value | default: option.title | escape }}</span>
+            {%- if tag != blank -%}
+              <span class="product-strength__tag">{{ tag | escape }}</span>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

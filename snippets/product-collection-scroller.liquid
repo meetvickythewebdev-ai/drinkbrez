@@ -1,0 +1,31 @@
+{% doc %}
+  Renders a horizontal strip of small product thumbnails from a collection, leaving out the current product.
+
+  @param {product} product - The current product.
+  @param {block} block - The `collection_scroller` block, with `title`, `collection` and `limit` settings.
+
+  @example
+  {% render 'product-collection-scroller', product: product, block: block %}
+{% enddoc %}
+
+{%- assign collection = block.settings.collection -%}
+{%- if collection != blank -%}
+  <div class="product-collection-scroller" {{ block.shopify_attributes }}>
+    {%- if block.settings.title != blank -%}
+      <h2 class="product-collection-scroller__title">{{ block.settings.title | escape }}</h2>
+    {%- endif -%}
+    <div class="product-collection-scroller__list">
+      {%- for item in collection.products limit: block.settings.limit -%}
+        {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+        <a href="{{ item.url }}" class="product-collection-scroller__item">
+          <span class="product-collection-scroller__image">
+            {%- if item.featured_image -%}
+              {{ item.featured_image | image_url: width: 180, height: 180, crop: 'center' | image_tag: loading: 'lazy', width: 70, height: 78, alt: item.title }}
+            {%- endif -%}
+          </span>
+          <span class="product-collection-scroller__name">{{ item.title | escape }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

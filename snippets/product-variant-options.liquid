@@ -74,6 +74,22 @@
       additional_props: input_dataset
     %}
   {%- elsif picker_type == 'button' -%}
+    {%- liquid
+      assign hidden_values = section.settings.hidden_option_values | split: ','
+      assign option_hidden = false
+      for hidden_value in hidden_values
+        if hidden_value == value
+          assign option_hidden = true
+        endif
+      endfor
+      assign option_classes = ''
+      if option_disabled
+        assign option_classes = 'disabled'
+      endif
+      if option_hidden
+        assign option_classes = option_classes | append: ' is-hidden-option'
+      endif
+    -%}
     <input
       type="radio"
       id="{{ input_id }}"
@@ -83,13 +99,16 @@
       {% if value.selected %}
         checked
       {% endif %}
-      {% if option_disabled %}
-        class="disabled"
+      {% if option_classes != blank %}
+        class="{{ option_classes | strip }}"
       {% endif %}
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
       {{ value -}}
+      {%- if section.settings.option_suffix != blank %}
+        <span class="option-suffix">{{ section.settings.option_suffix | escape }}</span>
+      {%- endif -%}
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}

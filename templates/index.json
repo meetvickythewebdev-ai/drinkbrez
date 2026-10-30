@@ -367,7 +367,8 @@
       ],
       "settings": {
         "margin_top": 40,
-        "margin_bottom": 40
+        "margin_bottom": 40,
+        "margin_bottom_mobile": 40
       }
     },
     "carousel": {

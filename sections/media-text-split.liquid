@@ -1,0 +1,301 @@
+{{ 'section-media-text-split.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #MediaTextSplit-{{ section.id }} {
+    --split-media-width: {{ section.settings.media_width }}px;
+    --split-media-overhang: {{ section.settings.media_overhang }}px;
+    --split-text-width: {{ section.settings.text_width }}px;
+    --split-text-offset: {{ section.settings.text_offset }}px;
+    --split-margin-bottom: {{ section.settings.margin_bottom }}px;
+    --split-margin-bottom-mobile: {{ section.settings.mobile_margin_bottom }}px;
+    {%- if section.settings.media_height > 0 %}
+      --split-media-height: {{ section.settings.media_height }}px;
+    {%- endif %}
+    {%- if section.settings.mobile_media_height > 0 %}
+      --split-mobile-media-height: {{ section.settings.mobile_media_height }}px;
+    {%- endif %}
+    --split-mobile-media-width: {{ section.settings.mobile_media_width }}%;
+    --split-mobile-media-x: {{ section.settings.mobile_media_x }}px;
+    --split-mobile-media-y: {{ section.settings.mobile_media_y }}px;
+    --split-mobile-text-y: {{ section.settings.mobile_text_y }}px;
+  }
+{%- endstyle -%}
+
+{%- capture review_button -%}
+  {%- if section.settings.button_label != blank -%}
+    <a href="{{ section.settings.button_link | default: '#reviews' }}" class="media-text-split__button" data-scroll-link>
+      <span class="media-text-split__button-text">
+        <span>{{ section.settings.button_stars | escape }} {{ section.settings.button_count | escape }}</span>
+        <span>{{ section.settings.button_label | escape }}</span>
+      </span>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M5 8.5L11 14.5L17 8.5" stroke="#111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  {%- endif -%}
+{%- endcapture -%}
+
+<div
+  id="MediaTextSplit-{{ section.id }}"
+  class="media-text-split brand-section media-text-split--media-{{ section.settings.media_position }}"
+>
+  {%- if section.settings.mobile_button_on_top and review_button != blank -%}
+    <div class="media-text-split__mobile-button">{{ review_button }}</div>
+  {%- endif -%}
+  <div class="media-text-split__inner page-width">
+    <div class="media-text-split__media">
+      {%- if section.settings.video != blank -%}
+        <video class="media-text-split__video" autoplay muted loop playsinline preload="metadata">
+          {%- render 'video-sources', video: section.settings.video -%}
+        </video>
+      {%- elsif section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'media-text-split__image',
+            widths: '500, 800, 1100, 1600',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            loading: 'lazy',
+            alt: section.settings.image.alt
+        }}
+      {%- endif -%}
+    </div>
+    <div class="media-text-split__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="media-text-split__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="media-text-split__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if review_button != blank -%}
+        <div class="media-text-split__desktop-button{% if section.settings.mobile_button_on_top %} small-hide{% endif %}">{{ review_button }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('.media-text-split [data-scroll-link]');
+    if (!link) return;
+    const target = document.querySelector(link.getAttribute('href')) || document.querySelector('.bundle-reviews');
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Media with text",
+  "class": "media-text-split-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Plays instead of the image when set."
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position on desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Media with text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Review button"
+    },
+    {
+      "type": "text",
+      "id": "button_stars",
+      "label": "Stars",
+      "default": "★★★★★"
+    },
+    {
+      "type": "text",
+      "id": "button_count",
+      "label": "Review count"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link",
+      "info": "Leave blank to scroll to the reviews section."
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_button_on_top",
+      "label": "Show the button above the media on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "range",
+      "id": "media_width",
+      "label": "Media width",
+      "min": 400,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 720
+    },
+    {
+      "type": "range",
+      "id": "media_overhang",
+      "label": "Media overhang toward the text",
+      "min": -200,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "media_height",
+      "label": "Video height",
+      "info": "0 keeps the video's own proportions.",
+      "min": 0,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "label": "Text width",
+      "min": 300,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "text_offset",
+      "label": "Text vertical offset",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "range",
+      "id": "mobile_media_width",
+      "label": "Media width",
+      "min": 80,
+      "max": 160,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "mobile_media_height",
+      "label": "Video height",
+      "info": "0 keeps the video's own proportions.",
+      "min": 0,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_media_x",
+      "label": "Media horizontal offset",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_media_y",
+      "label": "Media vertical offset",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_y",
+      "label": "Text overlap with media",
+      "min": -150,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text"
+    }
+  ]
+}
+{% endschema %}

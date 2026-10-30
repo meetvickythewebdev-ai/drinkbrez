@@ -7,6 +7,8 @@
   @param {number} [limit] - The maximum number of media items to render. Defaults to all media.
   @param {model} [first_3d_model] - The first 3D model, used to render the gallery's Shopify XR button.
 
+  Products tagged `pdp-skip-first-image` leave their first image out of the gallery, so it can stay the collection card image.
+
   @example
   {% render 'product-media-gallery', product: product, variant_images: variant_images, first_3d_model: first_3d_model, limit: 1 %}
 {%- enddoc -%}
@@ -21,6 +23,13 @@
   endif
 
   assign media_count = product.media.size
+  assign skip_first = false
+  assign first_index = 1
+  if product.tags contains 'pdp-skip-first-image' and media_count > 1 and product.selected_or_first_available_variant.featured_media == null
+    assign skip_first = true
+    assign first_index = 2
+    assign media_count = media_count | minus: 1
+  endif
   if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
     assign media_count = media_count | minus: variant_images.size | plus: 1
   endif
@@ -86,6 +95,7 @@
         </li>
       {%- endif -%}
       {%- for media in product.media -%}
+        {%- if skip_first and forloop.first -%}{%- continue -%}{%- endif -%}
         {% if media_position >= limit
           or media_position >= 1
           and section.settings.hide_variants
@@ -97,7 +107,7 @@
         {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
           <li
             id="Slide-{{ section.id }}-{{ media.id }}"
-            class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == first_index %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
             data-media-id="{{ section.id }}-{{ media.id }}"
           >
             {%- liquid
@@ -125,7 +135,17 @@
         {%- endunless -%}
       {%- endfor -%}
     </ul>
-    <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
+    {%- if section.settings.gallery_arrows and media_count > 1 -%}
+      <div class="product-gallery-arrows quick-add-hidden" data-gallery-arrows>
+        <button type="button" class="product-gallery-arrows__button product-gallery-arrows__button--prev" data-gallery-prev aria-label="{{ 'general.slider.previous_slide' | t }}">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </button>
+        <button type="button" class="product-gallery-arrows__button product-gallery-arrows__button--next" data-gallery-next aria-label="{{ 'general.slider.next_slide' | t }}">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </button>
+      </div>
+    {%- endif -%}
+    <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}{% if section.settings.gallery_arrows %} hidden{% endif %}">
       <button
         type="button"
         class="slider-button slider-button--prev"
@@ -252,6 +272,7 @@
           </li>
         {%- endif -%}
         {%- for media in product.media -%}
+          {%- if skip_first and forloop.first -%}{%- continue -%}{%- endif -%}
           {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
             {%- liquid
               capture media_index
@@ -292,7 +313,7 @@
                 aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: media_index }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: media_index }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: media_index }}{%- endif -%}"
                 {% if media == product.selected_or_first_available_variant.featured_media
                   or product.selected_or_first_available_variant.featured_media == null
-                  and forloop.index == 1
+                  and forloop.index == first_index
                 %}
                   aria-current="true"
                 {% endif %}

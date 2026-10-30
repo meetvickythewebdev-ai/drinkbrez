@@ -1,0 +1,52 @@
+{% doc %}
+  Renders the star rating and review count shown above the product title, linking to the reviews section.
+
+  @param {product} product - The product whose `reviews.rating` and `reviews.rating_count` metafields are shown.
+  @param {block} block - The `review_summary` block.
+
+  @example
+  {% render 'product-review-summary', product: product, block: block %}
+{% enddoc %}
+
+{%- liquid
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_value = rating.rating | default: 0
+  assign rating_max = rating.scale_max | default: 5
+  assign fill = rating_value | times: 100.0 | divided_by: rating_max
+  assign count = product.metafields.reviews.rating_count.value | default: 0
+  assign count_label = count | append: ''
+  if count >= 1000
+    assign thousands = count | divided_by: 1000
+    assign rest = count | modulo: 1000 | prepend: '00' | slice: -3, 3
+    assign count_label = thousands | append: ',' | append: rest
+  endif
+-%}
+{%- if rating -%}
+  <a
+    href="#{{ block.settings.reviews_anchor | default: 'reviews' }}"
+    class="product-review-summary"
+    data-review-summary
+    {{ block.shopify_attributes }}
+  >
+    <span class="product-review-summary__stars" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: rating_max }}">
+      {%- for layer in (1..2) -%}
+        <span
+          class="product-review-summary__layer{% if layer == 2 %} product-review-summary__layer--fill{% endif %}"
+          {% if layer == 2 %}
+            style="width: {{ fill }}%;"
+          {% endif %}
+        >
+          <svg viewBox="0 0 92 16" aria-hidden="true" focusable="false">
+            {%- for i in (0..4) -%}
+              <path transform="translate({{ i | times: 19 }} 0)" d="M9.944 6.4L8 0L6.056 6.4H0L4.944 9.928L3.064 16L8 12.248L12.944 16L11.064 9.928L16 6.4H9.944Z"/>
+            {%- endfor -%}
+          </svg>
+        </span>
+      {%- endfor -%}
+    </span>
+    <span class="product-review-summary__count">
+      {{- count_label }}
+      {{ block.settings.label | escape -}}
+    </span>
+  </a>
+{%- endif -%}

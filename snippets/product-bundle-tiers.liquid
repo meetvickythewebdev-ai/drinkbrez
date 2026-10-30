@@ -1,0 +1,55 @@
+{% doc %}
+  Renders the "Bundle and Save" spend tiers card, with an optional animated Unicorn Studio background.
+
+  @param {block} block - The `bundle_tiers` block, with `tier_N_amount`, `tier_N_reward` and `tier_N_truck` settings for tiers 1–6.
+
+  @example
+  {% render 'product-bundle-tiers', block: block %}
+{% enddoc %}
+
+<bundle-tiers
+  class="bundle-tiers"
+  {% if block.settings.animated_background %}
+    data-scene="{{ 'bundle-tiers-scene.json' | asset_url }}"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.animated_background -%}
+    <div class="bundle-tiers__webgl" aria-hidden="true">
+      <div class="bundle-tiers__scene" id="BundleTiersScene-{{ block.id }}"></div>
+    </div>
+  {%- endif -%}
+  <div class="bundle-tiers__overlay" aria-hidden="true"></div>
+  <div class="bundle-tiers__content">
+    <div class="bundle-tiers__header">
+      <h2 class="bundle-tiers__title">
+        {{- block.settings.title | escape }}
+        {% if block.settings.title_emphasis != blank %}<em>{{ block.settings.title_emphasis | escape }}</em>{% endif -%}
+      </h2>
+      {%- if block.settings.badge != blank -%}
+        <span class="bundle-tiers__badge">{{ block.settings.badge | escape }}</span>
+      {%- endif -%}
+    </div>
+    <div class="bundle-tiers__offers">
+      {%- for i in (1..6) -%}
+        {%- liquid
+          assign amount_key = 'tier_' | append: i | append: '_amount'
+          assign reward_key = 'tier_' | append: i | append: '_reward'
+          assign truck_key = 'tier_' | append: i | append: '_truck'
+        -%}
+        {%- if block.settings[amount_key] != blank -%}
+          <div class="bundle-tiers__offer">
+            <div class="bundle-tiers__pack">{{ block.settings[amount_key] | escape }}</div>
+            <div class="bundle-tiers__save">
+              {{- block.settings[reward_key] | escape -}}
+              {%- if block.settings[truck_key] %} <span class="bundle-tiers__truck" aria-label="{{ 'products.product.free_shipping' | t }}">{{ 'icon-bundle-truck.svg' | inline_asset_content }}</span>{% endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if block.settings.note != blank -%}
+      <p class="bundle-tiers__note">{{ block.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</bundle-tiers>

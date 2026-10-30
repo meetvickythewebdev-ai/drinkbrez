@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.brand_styles %} product-brand brand-section{% endif %}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -15,6 +15,15 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {%- if section.settings.brand_styles -%}
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap">
+    {{ 'section-product-brand.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'product-brand.js' | asset_url }}" defer="defer"></script>
+    {%- style -%}
+      {% render 'bundle-fonts' %}
+    {%- endstyle -%}
+  {%- endif -%}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -211,6 +220,16 @@
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
                 {%- when 'collapsible_tab' -%}
+                  {%- liquid
+                    assign tab_metafield = null
+                    if block.settings.content_metafield != blank
+                      assign tab_key = block.settings.content_metafield | split: '.'
+                      assign tab_metafield = product.metafields[tab_key[0]][tab_key[1]].value
+                      if tab_metafield == blank and block.settings.content == blank and block.settings.page == blank
+                        continue
+                      endif
+                    endif
+                  -%}
                   <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
                     <details id="Details-{{ block.id }}-{{ section.id }}">
                       <summary>
@@ -223,8 +242,12 @@
                         {{- 'icon-caret.svg' | inline_asset_content -}}
                       </summary>
                       <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
-                        {{ block.settings.content }}
-                        {{ block.settings.page.content }}
+                        {%- if tab_metafield != blank -%}
+                          {{ tab_metafield }}
+                        {%- else -%}
+                          {{ block.settings.content }}
+                          {{ block.settings.page.content }}
+                        {%- endif -%}
                       </div>
                     </details>
                   </div>
@@ -683,6 +706,18 @@
                       <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                     {%- endif -%}
                   </product-recommendations>
+                {%- when 'review_summary' -%}
+                  {%- render 'product-review-summary', product: product, block: block -%}
+                {%- when 'icon_grid' -%}
+                  {%- render 'product-icon-grid', block: block -%}
+                {%- when 'strength_selector' -%}
+                  {%- render 'product-strength-selector', product: product, block: block -%}
+                {%- when 'bundle_tiers' -%}
+                  {%- render 'product-bundle-tiers', block: block -%}
+                {%- when 'subscription' -%}
+                  {%- render 'product-subscription', product: product, block: block, product_form_id: product_form_id -%}
+                {%- when 'collection_scroller' -%}
+                  {%- render 'product-collection-scroller', product: product, block: block -%}
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
               {%- endcase -%}
@@ -748,6 +783,14 @@
       </script>
     </div>
   </product-component>
+  {%- if section.settings.sticky_mobile_bar -%}
+    <div class="product-sticky-bar" data-sticky-bar data-button="ProductSubmitButton-{{ section.id }}">
+      <button type="button" class="product-sticky-bar__button button button--full-width">
+        <span data-sticky-label>{{ 'products.product.add_to_cart' | t }}</span>
+        <span class="product-form__final-price" data-final-price></span>
+      </button>
+    </div>
+  {%- endif -%}
 </product-info>
 
 {% schema %}
@@ -756,6 +799,338 @@
   "tag": "section",
   "class": "section",
   "blocks": [
+    {
+      "type": "review_summary",
+      "name": "Review summary",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Reviews"
+        },
+        {
+          "type": "text",
+          "id": "reviews_anchor",
+          "label": "Reviews section ID",
+          "default": "reviews",
+          "info": "The page element the link scrolls to."
+        }
+      ]
+    },
+    {
+      "type": "icon_grid",
+      "name": "Icon grid",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_1",
+          "label": "Icon 1"
+        },
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "Text 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_2",
+          "label": "Icon 2"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Text 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_3",
+          "label": "Icon 3"
+        },
+        {
+          "type": "text",
+          "id": "text_3",
+          "label": "Text 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_4",
+          "label": "Icon 4"
+        },
+        {
+          "type": "text",
+          "id": "text_4",
+          "label": "Text 4"
+        }
+      ]
+    },
+    {
+      "type": "strength_selector",
+      "name": "Strength selector",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Lists the products in the custom.strength_products metafield. Each product supplies its own custom.strength_label, custom.strength_icon and custom.strength_tag."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Strength"
+        }
+      ]
+    },
+    {
+      "type": "bundle_tiers",
+      "name": "Bundle tiers",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Bundle and"
+        },
+        {
+          "type": "text",
+          "id": "title_emphasis",
+          "label": "Title emphasis",
+          "default": "Save"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Limited time"
+        },
+        {
+          "type": "checkbox",
+          "id": "animated_background",
+          "label": "Animated background",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Tier 1"
+        },
+        {
+          "type": "text",
+          "id": "tier_1_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_1_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_1_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Tier 2"
+        },
+        {
+          "type": "text",
+          "id": "tier_2_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_2_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_2_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Tier 3"
+        },
+        {
+          "type": "text",
+          "id": "tier_3_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_3_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_3_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Tier 4"
+        },
+        {
+          "type": "text",
+          "id": "tier_4_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_4_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_4_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Tier 5"
+        },
+        {
+          "type": "text",
+          "id": "tier_5_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_5_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_5_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Tier 6"
+        },
+        {
+          "type": "text",
+          "id": "tier_6_amount",
+          "label": "Spend"
+        },
+        {
+          "type": "text",
+          "id": "tier_6_reward",
+          "label": "Reward"
+        },
+        {
+          "type": "checkbox",
+          "id": "tier_6_truck",
+          "label": "Show free shipping icon",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Note",
+          "default": "Applies to one-time and first subscription orders"
+        }
+      ]
+    },
+    {
+      "type": "subscription",
+      "name": "Subscription options",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Uses the product's first selling plan. Place this block above the buy buttons."
+        },
+        {
+          "type": "checkbox",
+          "id": "default_subscription",
+          "label": "Select subscription by default",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "subscription_label",
+          "label": "Subscription label",
+          "default": "Subscribe &"
+        },
+        {
+          "type": "text",
+          "id": "save_label",
+          "label": "Savings label",
+          "default": "Save"
+        },
+        {
+          "type": "text",
+          "id": "onetime_label",
+          "label": "One-time label",
+          "default": "One Time Purchase"
+        },
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Unit for per-unit prices",
+          "default": "can"
+        },
+        {
+          "type": "text",
+          "id": "benefit_1",
+          "label": "Benefit 1",
+          "default": "Delivered to your door every 1 month"
+        },
+        {
+          "type": "text",
+          "id": "benefit_2_before",
+          "label": "Benefit 2 before savings",
+          "default": "Save"
+        },
+        {
+          "type": "text",
+          "id": "benefit_2_after",
+          "label": "Benefit 2 after savings",
+          "default": "with each delivery"
+        },
+        {
+          "type": "text",
+          "id": "benefit_3",
+          "label": "Benefit 3",
+          "default": "Pause, skip, or cancel anytime"
+        }
+      ]
+    },
+    {
+      "type": "collection_scroller",
+      "name": "Collection scroller",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Explore Our Complete Collection"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "limit",
+          "label": "Products to show",
+          "min": 2,
+          "max": 20,
+          "step": 1,
+          "default": 12
+        }
+      ]
+    },
     {
       "type": "@app"
     },
@@ -926,6 +1301,12 @@
       "settings": [
         {
           "type": "checkbox",
+          "id": "show_price",
+          "default": false,
+          "label": "Show price in the Add to cart button"
+        },
+        {
+          "type": "checkbox",
           "id": "show_dynamic_checkout",
           "default": true,
           "label": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
@@ -1017,6 +1398,12 @@
       "type": "collapsible_tab",
       "name": "t:sections.main-product.blocks.collapsible_tab.name",
       "settings": [
+        {
+          "type": "text",
+          "id": "content_metafield",
+          "label": "Product metafield for the content",
+          "info": "For example custom.ingredients. Its text or HTML replaces the content below when the product has it."
+        },
         {
           "type": "text",
           "id": "heading",
@@ -2317,6 +2704,40 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Brand layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "brand_styles",
+      "label": "Use brand styling",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "gallery_arrows",
+      "label": "Show arrows under the main image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_mobile_bar",
+      "label": "Show sticky Add to cart bar on mobile",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "option_suffix",
+      "label": "Text after button option values",
+      "info": "For example \"pack\" shows the 4 option as 4 pack."
+    },
+    {
+      "type": "text",
+      "id": "hidden_option_values",
+      "label": "Button option values to hide",
+      "info": "Comma-separated, without spaces. A hidden value that is selected moves to the next visible one."
     }
   ]
 }

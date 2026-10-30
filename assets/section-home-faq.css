@@ -1,5 +1,37 @@
 .home-faq {
+  position: relative;
   display: block;
+  margin-top: var(--faq-margin-top, 40px);
+  margin-bottom: var(--faq-margin-bottom, 40px);
+}
+
+.home-faq .home-faq__background {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.home-faq__heading {
+  margin: 0 0 64px;
+  font-family: var(--bundle-font-heading);
+  font-size: 90px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -1px;
+  text-align: center;
+  color: #000;
+}
+
+.home-faq--with-background {
+  isolation: isolate;
+}
+
+.home-faq--with-background .home-faq__item {
+  background: #fff;
 }
 
 .home-faq__grid {
@@ -79,6 +111,21 @@
 }
 
 @media (max-width: 767px) {
+  .home-faq {
+    margin-bottom: var(--faq-margin-bottom-mobile, var(--faq-margin-bottom, 40px));
+  }
+
+  .home-faq .home-faq__background {
+    background-size: cover;
+  }
+
+  .home-faq__heading {
+    margin-bottom: 35px;
+    font-size: 42px;
+    line-height: 0.9em;
+    text-align: start;
+  }
+
   .home-faq__grid {
     grid-template-columns: 1fr;
     gap: 8px;

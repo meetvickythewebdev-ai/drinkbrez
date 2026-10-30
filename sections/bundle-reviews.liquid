@@ -13,8 +13,15 @@
   assign review_type = section.settings.metaobject_type | default: 'bundle_review'
   assign total = section.settings.total_reviews
   assign average = section.settings.average_rating | default: 0
+  if product and product.metafields.reviews.rating.value != blank
+    assign average = product.metafields.reviews.rating.value.rating
+    assign total = product.metafields.reviews.rating_count.value | default: total
+  endif
 -%}
 
+{%- if section.settings.anchor != blank -%}
+  <span id="{{ section.settings.anchor | escape }}" class="bundle-reviews__anchor"></span>
+{%- endif -%}
 <bundle-reviews
   id="BundleReviews-{{ section.id }}"
   class="bundle-reviews"
@@ -193,7 +200,14 @@
       "type": "number",
       "id": "total_reviews",
       "label": "Total review count",
-      "default": 12727
+      "default": 12727,
+      "info": "On product pages, the product's reviews.rating and reviews.rating_count metafields are used when set."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor ID",
+      "info": "Lets links such as #reviews scroll to this section."
     },
     {
       "type": "range",

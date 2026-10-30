@@ -37,7 +37,9 @@
     <h2 class="product-row__heading">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
 
-  <div class="product-row__layout">
+  {%- if section.blocks.size > 0 -%}
+  <div class="product-row__layout{% if section.settings.title == blank %} product-row__layout--no-title{% endif %}">
+    {%- if section.settings.title != blank -%}
     <div class="product-row__intro">
       <div class="product-row__glow" aria-hidden="true">
         {%- if section.settings.glow_image != blank -%}
@@ -57,8 +59,9 @@
         <div class="product-row__subtitle">{{ section.settings.subtitle | escape }}</div>
       {%- endif -%}
     </div>
+    {%- endif -%}
 
-    <div class="product-row__grid">
+    <div class="product-row__grid product-row__grid--{{ section.settings.columns_desktop }}">
       {%- for block in section.blocks -%}
         <div class="product-row__item product-row__item--{{ block.settings.visibility }}" {{ block.shopify_attributes }}>
           <a href="{{ block.settings.link | default: '#' }}" class="product-row__link">
@@ -128,6 +131,7 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
 </div>
 
 <script>
@@ -159,9 +163,26 @@
       "label": "Heading above the row"
     },
     {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Cards per row on desktop",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
       "type": "image_picker",
       "id": "icon",
-      "label": "Category icon"
+      "label": "Category icon",
+      "info": "Leave the category title blank to show the cards without the category column."
     },
     {
       "type": "text",

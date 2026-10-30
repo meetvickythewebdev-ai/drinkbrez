@@ -219,6 +219,14 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
+
+  .product-row__grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .product-row__layout--no-title {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 1200px) {

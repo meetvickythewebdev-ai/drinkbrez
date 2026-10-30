@@ -94,6 +94,11 @@
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
             </span>
+            {%- if block.settings.show_price -%}
+              <span class="product-form__final-price" data-final-price>
+                {{- product.selected_or_first_available_variant.price | money -}}
+              </span>
+            {%- endif -%}
             {%- render 'loading-spinner' -%}
           </button>
           {%- if show_dynamic_checkout -%}
