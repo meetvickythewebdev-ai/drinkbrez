@@ -44,9 +44,7 @@
             onclick="this.closest('cart-drawer').close()"
             aria-label="{{ 'accessibility.close' | t }}"
           >
-            <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" focusable="false">
-              <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            </svg>
+            {{- 'icon-cart-close.svg' | inline_asset_content -}}
           </button>
         </div>
         <div class="cart-drawer__progress">
@@ -61,10 +59,9 @@
       >
         {%- if cart == empty -%}
           <div class="drawer__inner-empty cart-drawer__empty">
-            <p class="cart-drawer__empty-text">{{ 'sections.cart.empty' | t }}</p>
-            <a href="{{ routes.all_products_collection_url }}" class="cart-drawer__empty-button">
-              {{ 'general.continue_shopping' | t }}
-            </a>
+            {%- if settings.cart_empty_text != blank -%}
+              <div class="cart-drawer__empty-text">{{ settings.cart_empty_text }}</div>
+            {%- endif -%}
           </div>
         {%- endif -%}
 
@@ -85,9 +82,7 @@
           <div id="CartDrawer-CartErrors" class="cart-drawer__errors" role="alert"></div>
         </form>
 
-        {%- if cart != empty -%}
-          {%- render 'cart-drawer-upsells' -%}
-        {%- endif -%}
+        {%- render 'cart-drawer-upsells' -%}
       </cart-drawer-items>
 
       <div class="drawer__footer">
@@ -123,7 +118,8 @@
             </ul>
           {%- endif -%}
 
-          <div class="cart-drawer__subtotal" role="status">
+          {%- if cart != empty -%}
+            <div class="cart-drawer__subtotal" role="status">
             <span>
               {{- 'customer.order.subtotal' | t }} ({{ cart.item_count }}
               {{ cart.item_count | pluralize: 'item', 'items' -}}
@@ -132,23 +128,23 @@
             <span class="visually-hidden">{{ 'sections.cart.estimated_total' | t }}</span>
             <span>{{ cart.total_price | money }}</span>
           </div>
+          {%- endif -%}
 
           {%- if settings.cart_legal_text != blank -%}
             <p class="cart-drawer__legal">{{ settings.cart_legal_text }}</p>
           {%- endif -%}
 
+          {%- if cart != empty -%}
           <button
             type="submit"
             id="CartDrawer-Checkout"
             class="cart-drawer__checkout"
             name="checkout"
             form="CartDrawer-Form"
-            {% if cart == empty %}
-              disabled
-            {% endif %}
           >
             {{ settings.cart_checkout_label | default: 'Checkout' | escape }} | {{ cart.total_price | money }}
           </button>
+          {%- endif -%}
         </div>
       </div>
     </div>

@@ -51,9 +51,7 @@
             aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
             data-variant-id="{{ item.variant.id }}"
           >
-            <svg viewBox="0 0 14 16" width="14" height="16" aria-hidden="true" focusable="false">
-              <path d="M5 1.5h4M1.5 3.5h11M3 3.5l.7 10.2a1 1 0 0 0 1 .9h4.6a1 1 0 0 0 1-.9L11 3.5M5.6 6.5v5M8.4 6.5v5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            {{- 'icon-cart-remove.svg' | inline_asset_content -}}
           </button>
         </cart-remove-button>
       {%- endunless -%}
@@ -86,9 +84,7 @@
             <span class="visually-hidden">
               {{- 'products.product.quantity.decrease' | t: product: item.product.title | escape -}}
             </span>
-            <svg viewBox="0 0 10 2" width="10" height="2" aria-hidden="true" focusable="false">
-              <path d="M0 1h10" stroke="currentColor" stroke-width="1.4"/>
-            </svg>
+            {{- 'icon-cart-minus.svg' | inline_asset_content -}}
           </button>
           <input
             class="quantity__input"
@@ -122,18 +118,17 @@
             <span class="visually-hidden">
               {{- 'products.product.quantity.increase' | t: product: item.product.title | escape -}}
             </span>
-            <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true" focusable="false">
-              <path d="M0 5h10M5 0v10" stroke="currentColor" stroke-width="1.4"/>
-            </svg>
+            {{- 'icon-cart-plus.svg' | inline_asset_content -}}
           </button>
         </quantity-input>
       </div>
 
       <div class="cart-drawer-item__price">
         {%- render 'loading-spinner' -%}
-        {%- if item.original_line_price != item.final_line_price -%}
+        {%- assign full_line_price = item.variant.price | times: item.quantity -%}
+        {%- if item.final_line_price < full_line_price -%}
           <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
-          <s class="cart-drawer-item__compare">{{ item.original_line_price | money }}</s>
+          <s class="cart-drawer-item__compare">{{ full_line_price | money }}</s>
           <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
           <span class="cart-drawer-item__sale">{{ item.final_line_price | money }}</span>
         {%- else -%}
@@ -159,36 +154,23 @@
           data-quantity="{{ item.quantity }}"
           data-plan-select
         >
+          {%- unless item.product.requires_selling_plan -%}
+            <optgroup label="Pay Full Price">
+              <option value="">One-time only</option>
+            </optgroup>
+          {%- endunless -%}
           <optgroup label="Subscribe and Save {{ upgrade_percent }}%">
             {%- for allocation in item.variant.selling_plan_allocations -%}
-              {%- liquid
-                assign plan_name = allocation.selling_plan.name
-                case plan_name
-                  when 'Daily'
-                    assign plan_name = '1 day'
-                  when 'Weekly'
-                    assign plan_name = '1 week'
-                  when 'Monthly'
-                    assign plan_name = '1 month'
-                  when 'Yearly', 'Annually'
-                    assign plan_name = '1 year'
-                endcase
-              -%}
               <option
                 value="{{ allocation.selling_plan.id }}"
                 {% if allocation.selling_plan.id == item.selling_plan_allocation.selling_plan.id %}
                   selected
                 {% endif %}
               >
-                Delivers every {{ plan_name | escape }}
+                {{ allocation.selling_plan.name | escape }}
               </option>
             {%- endfor -%}
           </optgroup>
-          {%- unless item.product.requires_selling_plan -%}
-            <optgroup label="Pay Full Price">
-              <option value="">One-time only</option>
-            </optgroup>
-          {%- endunless -%}
         </select>
       {%- elsif upgrade_plan -%}
         <button

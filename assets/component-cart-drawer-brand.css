@@ -22,6 +22,7 @@
 
 cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   display: flex;
+  align-items: stretch;
   padding: 0;
 }
 
@@ -121,6 +122,12 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   margin-left: 8px;
   border-radius: 5px;
   color: var(--cart-ink);
+}
+
+.cart-drawer-brand .cart-drawer__close svg {
+  width: 11.25px;
+  height: 18px;
+  pointer-events: none;
 }
 
 .cart-drawer__progress:empty {
@@ -339,8 +346,8 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
 }
 
 .cart-drawer-item__remove svg {
-  width: 13px;
-  height: 15px;
+  width: 12.25px;
+  height: 14px;
   pointer-events: none;
 }
 
@@ -376,6 +383,7 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
 
 .cart-drawer-item__stepper .quantity__button svg {
   width: 9px;
+  height: 12px;
   pointer-events: none;
 }
 
@@ -481,19 +489,21 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
 .cart-drawer-item__plan {
   display: block;
   width: 100%;
+  height: 40px;
   padding: 8px 32px 8px 16px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  background-color: #fff;
+  border: 2px solid #f3f3f3;
+  border-radius: 50px;
+  background-color: #f3f3f3;
   background-image:
-    linear-gradient(45deg, transparent 50%, #919191 50%),
-    linear-gradient(135deg, #919191 50%, transparent 50%),
-    linear-gradient(to right, #919191, #919191);
-  background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+    linear-gradient(45deg, transparent 50%, #ccc 50%),
+    linear-gradient(135deg, #ccc 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 20px) 16px, calc(100% - 15px) 16px, calc(100% - 40px) 6px;
   background-repeat: no-repeat;
-  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-size: 5px 5px, 5px 5px, 1px 24px;
   font-family: inherit;
   font-size: 16px;
+  font-weight: 300;
   line-height: 20px;
   color: var(--cart-ink);
   -webkit-appearance: none;
@@ -551,6 +561,14 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   align-items: center;
   padding: 20px;
   scroll-snap-align: start;
+}
+
+.cart-drawer-upsell__info {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .cart-drawer-upsell__media {
@@ -614,33 +632,23 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   cursor: progress;
 }
 
-/* Empty cart */
+/* Empty cart: a blank gap above the recommendations, as on the reference, with an optional message. */
 .cart-drawer-brand .cart-drawer__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  display: block;
   height: auto;
-  padding: 40px 16px;
+  min-height: 156px;
+  margin-bottom: 11px;
+  padding: 0 16px;
   text-align: center;
 }
 
 .cart-drawer__empty-text {
-  margin: 0;
   font-size: 16px;
-  font-weight: 700;
   color: var(--cart-ink);
 }
 
-.cart-drawer__empty-button {
-  padding: 10px 24px;
-  border-radius: 50px;
-  background: var(--cart-accent);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  color: #000;
-  text-decoration: none;
+.cart-drawer-brand cart-drawer-items.is-empty + .drawer__footer {
+  display: block;
 }
 
 /* Footer: subtotal, legal note and checkout */
@@ -719,6 +727,43 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   padding: 0 16px 10px;
 }
 
+/* Below tablet size the recommendations become full-width rows: image, details, then the button. */
+@media screen and (max-width: 767px) {
+  .cart-drawer__upsell-list {
+    display: block;
+    padding: 0 16px 21px;
+    overflow: visible;
+  }
+
+  .cart-drawer-upsell {
+    flex-direction: row;
+    padding: 20px 0;
+    text-align: left;
+  }
+
+  .cart-drawer-upsell__media {
+    flex: 0 0 30%;
+    width: 30%;
+  }
+
+  .cart-drawer-upsell__info {
+    flex: 1 1 0;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 0 15px;
+  }
+
+  .cart-drawer-upsell__price {
+    margin-bottom: 0;
+  }
+
+  .cart-drawer-upsell__add {
+    flex: 0 0 33.5%;
+    width: 33.5%;
+    margin-top: 0;
+  }
+}
+
 /* Phones: the cart fills the screen and slides up from the bottom. */
 @media screen and (max-width: 480px) {
   .cart-drawer-brand .drawer__inner {
@@ -733,5 +778,9 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
 
   .cart-drawer-brand.active .drawer__inner {
     transform: translateY(0);
+  }
+
+  .cart-drawer-brand .cart-drawer__empty {
+    min-height: 161px;
   }
 }

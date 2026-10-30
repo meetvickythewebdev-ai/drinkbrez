@@ -210,7 +210,8 @@
       "cart_color_scheme": "scheme-1",
       "cart_upsell_products": [
         "shots",
-        "og-extra-strength"
+        "og-extra-strength",
+        "og"
       ],
       "sections": {
         "main-password-header": {

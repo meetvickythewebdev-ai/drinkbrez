@@ -247,7 +247,7 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
               ? trapFocus(cartDrawerWrapper, lineItem.querySelector(`[name="${name}"]`))
               : lineItem.querySelector(`[name="${name}"]`).focus();
           } else if (parsedState.item_count === 0 && cartDrawerWrapper?.querySelector('.drawer__inner-empty')) {
-            trapFocus(cartDrawerWrapper.querySelector('.drawer__inner-empty'), cartDrawerWrapper.querySelector('a'));
+            trapFocus(cartDrawerWrapper, cartDrawerWrapper.querySelector('a, button'));
           } else if (document.querySelector('.cart-item') && cartDrawerWrapper) {
             trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
           }

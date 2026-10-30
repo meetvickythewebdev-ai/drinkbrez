@@ -1467,6 +1467,12 @@
         "default": "Taxes and <a href=\"/policies/shipping-policy\">shipping</a> calculated at checkout. By checking out, I certify I'm 21+ and have read and agreed to BRĒZ’s <a href=\"/policies/terms-of-service\">Terms</a> and <a href=\"/policies/privacy-policy\">Privacy Policy</a>"
       },
       {
+        "type": "richtext",
+        "id": "cart_empty_text",
+        "label": "Message when the cart is empty",
+        "info": "Leave blank to show only the rewards bar and recommendations."
+      },
+      {
         "type": "text",
         "id": "cart_checkout_label",
         "label": "Checkout button label",
