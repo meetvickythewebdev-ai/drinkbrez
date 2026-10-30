@@ -9,7 +9,7 @@ if (!customElements.get('image-marquee')) {
         this.initialized = true;
 
         this.speed = parseInt(this.dataset.speed, 10) || 0;
-        this.loopWidth = this.track.scrollWidth;
+        this.count = this.track.children.length;
         [...this.track.children].forEach((card) => {
           const clone = card.cloneNode(true);
           clone.setAttribute('aria-hidden', 'true');
@@ -31,13 +31,20 @@ if (!customElements.get('image-marquee')) {
         cancelAnimationFrame(this.frame);
       }
 
+      // The distance from a card to its clone, so the wrap lands on an identical frame.
+      loopWidth() {
+        const { children } = this.track;
+        return children[this.count].offsetLeft - children[0].offsetLeft;
+      }
+
       // Position is kept as a float because scrollLeft rounds away sub-pixel steps in Safari.
       step(time) {
         const elapsed = this.lastTime ? time - this.lastTime : 0;
         this.lastTime = time;
         if (!this.dragging) {
           this.position += (this.speed * elapsed) / 1000;
-          if (this.position >= this.loopWidth) this.position -= this.loopWidth;
+          const loopWidth = this.loopWidth();
+          if (this.position >= loopWidth) this.position -= loopWidth;
           this.viewport.scrollLeft = this.position;
         }
         this.frame = requestAnimationFrame((next) => this.step(next));

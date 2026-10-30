@@ -84,6 +84,10 @@
   height: 26px !important;
 }
 
+.image-marquee--tall .image-marquee__track {
+  gap: 12px;
+}
+
 .image-marquee--tall .image-marquee__card {
   aspect-ratio: 0.76;
   border-radius: 60px;
