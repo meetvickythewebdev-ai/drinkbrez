@@ -42,12 +42,15 @@
   position: relative;
 }
 
+/* Sized like the reference's text-height buttons, with the caret 4px from the top. */
 .product-gallery-arrows__button {
   position: absolute;
   bottom: 10px;
   z-index: 1;
   display: flex;
-  padding: 0 20px;
+  align-items: flex-start;
+  height: 29px;
+  padding: 4px 20px 0;
   border: 0;
   background: none;
   color: #000;
@@ -272,6 +275,7 @@
   font-size: 7px;
   font-weight: 600;
   line-height: 1;
+  letter-spacing: normal;
   white-space: nowrap;
   color: #fff;
   pointer-events: none;
@@ -732,6 +736,19 @@
   color: #000;
 }
 
+/* The reference's warning follows its body text: 15px on phones and 14px on tablets. */
+@media screen and (max-width: 763px) {
+  .product-brand .product-warning p {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 764px) and (max-width: 1199px) {
+  .product-brand .product-warning p {
+    font-size: 14px;
+  }
+}
+
 /* Collection scroller */
 .product-collection-scroller__title {
   margin: 0 0 1.25rem;
@@ -745,6 +762,7 @@
 
 .product-collection-scroller__list {
   display: flex;
+  align-items: flex-start;
   gap: 0.8rem;
   padding-bottom: 0.5rem;
   overflow-x: auto;
@@ -757,7 +775,11 @@
 }
 
 .product-collection-scroller__item {
-  flex: 0 0 auto;
+  display: flex;
+  flex: 0 0 70px;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
   scroll-snap-align: start;
   text-align: center;
   color: #000;
@@ -769,7 +791,10 @@
   justify-content: center;
 }
 
+/* The cans keep their portrait shape at 78px tall, about 62px wide, centered in the 70px column. */
 .product-collection-scroller__image img {
+  display: block;
+  width: auto;
   max-width: 70px;
   height: 78px;
   object-fit: cover;
@@ -917,6 +942,8 @@
 
   .product-gallery-arrows__button {
     bottom: 24px;
+    height: 27px;
+    padding-top: 3px;
   }
 }
 
@@ -926,6 +953,17 @@
   }
 }
 
+
+/* Swiped slides snap to their centers with no padding, so the arrows and swipes land on the same spot. */
+@media screen and (max-width: 749px) {
+  .product-brand .product__media-list.slider {
+    scroll-padding: 0;
+  }
+
+  .product-brand .product__media-list .slider__slide {
+    scroll-snap-align: center;
+  }
+}
 
 /* Mobile layout: full-width gallery under the header, as on the reference. */
 @media screen and (max-width: 600px) {

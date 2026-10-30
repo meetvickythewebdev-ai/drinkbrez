@@ -35,8 +35,11 @@
   {%- if section.settings.button_label != blank -%}
     <a href="{{ section.settings.button_link | default: '#reviews' }}" class="media-text-split__button" data-scroll-link>
       <span class="media-text-split__button-text">
-        <span>{{ section.settings.button_stars | escape }} {{ section.settings.button_count | escape }}</span>
-        <span>{{ section.settings.button_label | escape }}</span>
+        <span class="media-text-split__button-rating">
+          <span class="media-text-split__button-stars">{{ section.settings.button_stars | escape }}</span>
+          <span class="media-text-split__button-count">{{ section.settings.button_count | escape }}</span>
+        </span>
+        <span class="media-text-split__button-label">{{ section.settings.button_label | escape }}</span>
       </span>
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M5 8.5L11 14.5L17 8.5" stroke="#111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>

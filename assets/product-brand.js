@@ -114,6 +114,8 @@ if (!customElements.get('bundle-tiers')) {
             )
             .then((scene) => {
               this.instance = scene;
+              // Unicorn caches the scene's position for mouse effects; refresh it now, as the reference does.
+              scene?.resize?.();
               this.onResize = () => {
                 clearTimeout(this.resizeTimer);
                 this.resizeTimer = setTimeout(() => scene?.resize?.(), 120);
@@ -195,16 +197,22 @@ document.querySelectorAll('[data-gallery-arrows]').forEach((arrows) => {
   const activate = (step) => {
     const list = slides();
     if (!list.length) return;
-    const current = Math.max(0, list.findIndex((slide) => slide.classList.contains('is-active')));
-    const next = list[(current + step + list.length) % list.length];
     const mediaGallery = gallery.closest('media-gallery');
-    const mediaId = next.dataset.mediaId;
     if (mediaGallery?.setActiveMedia && window.innerWidth >= 750) {
-      mediaGallery.setActiveMedia(mediaId, false);
-    } else {
-      list.forEach((slide) => slide.classList.toggle('is-active', slide === next));
-      slider.scrollTo({ left: next.offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+      const current = Math.max(0, list.findIndex((slide) => slide.classList.contains('is-active')));
+      const next = list[(current + step + list.length) % list.length];
+      mediaGallery.setActiveMedia(next.dataset.mediaId, false);
+      return;
     }
+    // On phones the visitor may have swiped, so start from the slide nearest the scroll position.
+    const current = list.reduce(
+      (nearest, slide, index) =>
+        Math.abs(slide.offsetLeft - slider.scrollLeft) < Math.abs(list[nearest].offsetLeft - slider.scrollLeft) ? index : nearest,
+      0
+    );
+    const next = list[(current + step + list.length) % list.length];
+    list.forEach((slide) => slide.classList.toggle('is-active', slide === next));
+    slider.scrollTo({ left: next.offsetLeft, behavior: 'smooth' });
   };
   arrows.querySelector('[data-gallery-prev]')?.addEventListener('click', () => activate(-1));
   arrows.querySelector('[data-gallery-next]')?.addEventListener('click', () => activate(1));

@@ -122,7 +122,26 @@
   }
 
   .media-text-split__mobile-button .media-text-split__button-text {
-    line-height: 25px;
+    line-height: 27px;
+  }
+
+  /* Stars and count sit larger on their own line, as on the reference. */
+  .media-text-split__mobile-button .media-text-split__button-rating {
+    font-size: 17px;
+    line-height: 23px;
+  }
+
+  .media-text-split__mobile-button .media-text-split__button-count {
+    font-weight: 200;
+  }
+
+  .media-text-split__mobile-button .media-text-split__button-label {
+    font-weight: 300;
+  }
+
+  .media-text-split__mobile-button .media-text-split__button svg {
+    width: 22px;
+    height: 22px;
   }
 }
 

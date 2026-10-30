@@ -23,6 +23,8 @@
     {%- style -%}
       {% render 'bundle-fonts' %}
     {%- endstyle -%}
+    {%- capture accent_scope %}#MainProduct-{{ section.id }}{% endcapture -%}
+    {%- render 'product-accent-styles', product: product, scope: accent_scope -%}
   {%- endif -%}
 
   {% unless product.has_only_default_variant %}

@@ -1,0 +1,112 @@
+{% doc %}
+  Recolors a brand product page with the product's accent color (the `custom.accent_color` metafield):
+  pack pills, strength buttons, the selected purchase option and the Add to cart buttons. The
+  "Limited Edition" tag turns lime so it stands out against the accent. Renders nothing without a color.
+
+  @param {product} product - The product whose accent color to use.
+  @param {string} scope - The CSS selector of the product section to recolor.
+
+  @example
+  {% render 'product-accent-styles', product: product, scope: '#MainProduct-template--1__main' %}
+{% enddoc %}
+
+{%- assign accent = product.metafields.custom.accent_color.value -%}
+{%- if accent != blank -%}
+  {%- liquid
+    assign accent_text = '#000000'
+    assign brightness = accent | color_brightness
+    if brightness < 170
+      assign accent_text = '#ffffff'
+    endif
+    assign accent_hover = accent | color_darken: 6
+    assign accent_active = accent | color_darken: 12
+    assign accent_disabled = accent | color_lighten: 12
+  -%}
+  {%- style -%}
+    {{ scope }} .product-strength__button:hover,
+    {{ scope }} .product-strength__button.is-active,
+    {{ scope }} .product-strength__button:hover *,
+    {{ scope }} .product-strength__button.is-active * {
+      background: {{ accent }};
+      color: {{ accent_text }};
+    }
+
+    {{ scope }} .product-strength__button .product-strength__tag,
+    {{ scope }} .product-strength__button:hover .product-strength__tag,
+    {{ scope }} .product-strength__button.is-active .product-strength__tag {
+      background: #e3f98a;
+      color: #000;
+    }
+
+    {{ scope }} variant-selects .product-form__input--pill input[type='radio'] + label:hover,
+    {{ scope }} variant-selects .product-form__input--pill input[type='radio']:checked + label {
+      border-color: {{ accent }};
+      background: {{ accent }};
+      color: {{ accent_text }};
+    }
+
+    {{ scope }} .product-subscription__option.is-selected,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__name > span,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__amount,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__unit,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__benefits {
+      background-color: {{ accent }};
+      color: {{ accent_text }};
+    }
+
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__name > span,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__amount,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__unit,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__benefits {
+      background-color: transparent;
+    }
+
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__benefit svg [fill='black'] {
+      fill: {{ accent_text }};
+    }
+
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__benefit svg [fill='white'] {
+      fill: {{ accent }};
+    }
+
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__name > .product-subscription__save,
+    {{ scope }} .product-subscription__option.is-selected .product-subscription__savings {
+      background: #fff;
+      color: #000;
+    }
+
+    {{ scope }} .product-subscription__option.is-selected input[type='radio'] {
+      accent-color: #000;
+    }
+
+    {{ scope }} .product-form__submit,
+    {{ scope }} .product-sticky-bar__button {
+      background-color: {{ accent }};
+      color: {{ accent_text }};
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    {{ scope }} .product-form__submit:hover,
+    {{ scope }} .product-sticky-bar__button:hover {
+      background-color: {{ accent_hover }};
+    }
+
+    {{ scope }} .product-form__submit:focus-visible,
+    {{ scope }} .product-sticky-bar__button:focus-visible {
+      background-color: {{ accent_hover }};
+      box-shadow: 0 0 0 0.3rem {{ accent | color_lighten: 20 }};
+      outline: none;
+    }
+
+    {{ scope }} .product-form__submit:active {
+      background-color: {{ accent_active }};
+    }
+
+    {{ scope }} .product-form__submit:disabled,
+    {{ scope }} .product-sticky-bar__button:disabled {
+      background-color: {{ accent_disabled }};
+      color: {{ accent_text }};
+      opacity: 1;
+    }
+  {%- endstyle -%}
+{%- endif -%}
