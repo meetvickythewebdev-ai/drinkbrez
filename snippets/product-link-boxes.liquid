@@ -1,0 +1,21 @@
+{% comment %}
+  Renders the row of small image links on bundle product pages.
+
+  @param {block} block - The `link_boxes` block.
+
+  @example
+  {% render 'product-link-boxes', block: block %}
+{% endcomment %}
+<div class="product-link-boxes" {{ block.shopify_attributes }}>
+  {%- for index in (1..5) -%}
+    {%- capture image_key -%}image_{{ index }}{%- endcapture -%}
+    {%- capture label_key -%}label_{{ index }}{%- endcapture -%}
+    {%- capture link_key -%}link_{{ index }}{%- endcapture -%}
+    {%- if block.settings[image_key] != blank -%}
+      <a href="{{ block.settings[link_key] | default: '#' }}" class="product-link-boxes__item">
+        {{ block.settings[image_key] | image_url: width: 140 | image_tag: loading: 'lazy', alt: block.settings[label_key] }}
+        <span>{{ block.settings[label_key] | escape }}</span>
+      </a>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

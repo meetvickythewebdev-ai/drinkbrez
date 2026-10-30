@@ -1061,3 +1061,174 @@
     font-size: 14px;
   }
 }
+
+.product-brand .product-intro {
+  margin: 20px 0 0;
+  font-family: var(--bundle-font-body);
+  font-size: 16px;
+  line-height: 1.35;
+  color: #000;
+}
+
+.product-brand .product-intro p {
+  margin: 0;
+}
+
+.product-brand .product-intro ul {
+  margin: 0;
+  padding-left: 20px;
+  letter-spacing: 0.6px;
+}
+
+.product-brand .product__media-list {
+  cursor: grab;
+}
+
+.product-brand .product__media-list:active {
+  cursor: grabbing;
+}
+
+.product-link-boxes {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.product-link-boxes::-webkit-scrollbar {
+  display: none;
+}
+
+.product-link-boxes__item {
+  flex: 0 0 70px;
+  font-family: var(--bundle-font-body);
+  font-size: 11px;
+  font-weight: 300;
+  text-align: center;
+  color: #000;
+  text-decoration: none;
+}
+
+.product-link-boxes__item img {
+  display: block;
+  width: 70px;
+  height: 78px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.product-link-boxes__item span {
+  display: block;
+  margin-top: 3px;
+}
+
+/* Simple purchase style: small quantity pills and a plain one-time / subscribe list. */
+.product-brand--simple variant-selects fieldset.product-form__input--pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.product-brand--simple variant-selects fieldset.product-form__input--pill legend {
+  width: 100%;
+  margin-bottom: 2px;
+  font-size: 13px;
+}
+
+.product-brand--simple variant-selects .product-form__input--pill input[type='radio'] + label {
+  width: 55px;
+  padding: 9px 0;
+  border: 1px solid #000;
+  border-radius: 40px;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.product-brand--simple variant-selects .product-form__input--pill input[type='radio']:checked + label {
+  border-radius: 20px;
+  background: #e3f98a;
+}
+
+.product-brand--simple .product-subscription__options {
+  gap: 5px;
+}
+
+.product-brand--simple .product-subscription__option {
+  margin: 0;
+  padding: 2px 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  outline: none;
+  line-height: 1.8;
+}
+
+.product-brand--simple .product-subscription__option[data-option='onetime'] {
+  order: -1;
+}
+
+.product-brand--simple .product-subscription__name {
+  font-weight: 400;
+}
+
+.product-brand--simple .product-subscription__save {
+  padding: 2px 13px;
+  background: #e3f98a;
+  font-weight: 400;
+}
+
+.product-brand--simple .product-subscription__benefits {
+  display: block;
+  margin: 5px 0 0 30px;
+  padding: 0 0 0 10px;
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.product-brand--simple .product-subscription__option:not(.is-selected) .product-subscription__benefits {
+  display: none;
+}
+
+.product-brand--simple .product-subscription__benefit {
+  display: list-item;
+  max-width: none;
+  text-align: start;
+}
+
+.product-brand--simple .product-subscription__benefit svg {
+  display: none;
+}
+
+.product-brand--simple .product-subscription__benefit:nth-child(2) {
+  position: relative;
+  top: 20px;
+}
+
+.product-brand--simple .product-subscription__benefit:nth-child(3) {
+  position: relative;
+  top: -20px;
+}
+
+.product-brand--simple .product-subscription__savings {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  letter-spacing: normal;
+  color: #0fa573;
+}
+
+.product-brand--simple .product-subscription__option .product-subscription__save {
+  background: #e3f98a;
+}
+
+.product-brand--simple .product-subscription__benefit {
+  list-style: disc;
+}
+
+.product-brand--simple .product-form__submit:not(.product-sticky-bar *) .product-form__final-price {
+  display: none;
+}

@@ -19,6 +19,11 @@
   margin: 50px 0 -80px;
   overflow: hidden;
   touch-action: pan-y;
+  cursor: grab;
+}
+
+.bundle-carousel__viewport:active {
+  cursor: grabbing;
 }
 
 /* Nothing to overlap when the carousel is the last section, so keep it clear of the footer. */
@@ -175,4 +180,19 @@
     height: auto;
     margin: calc(174px - (100% - 40px) * 0.1983) 0 calc(144px - (100% - 40px) * 0.1983);
   }
+}
+
+/* Full width: the strip runs edge to edge while slides keep the size they have at 1440px. */
+.bundle-carousel--full .bundle-carousel__inner {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.bundle-carousel--full .bundle-carousel__track {
+  --carousel-strip: calc(min(100vw, 1440px) - 32px);
+  margin-left: calc((100vw - min(100vw, 1440px)) / 2 + 16px);
+}
+
+.bundle-carousel--full .bundle-carousel__slide {
+  flex-basis: calc((var(--carousel-strip) - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view));
 }

@@ -115,7 +115,13 @@
     display: block;
   }
 
-  .media-text-split__mobile-button .media-text-split__button {
+  .media-text-split__desktop-button .media-text-split__button {
+    display: flex;
+    gap: 16px;
+  }
+
+  .media-text-split__mobile-button .media-text-split__button,
+  .media-text-split__desktop-button .media-text-split__button {
     justify-content: space-between;
     width: 100%;
     padding: 14px 20px 14px 40px;
@@ -123,25 +129,30 @@
     font-size: 15px;
   }
 
-  .media-text-split__mobile-button .media-text-split__button-text {
+  .media-text-split__mobile-button .media-text-split__button-text,
+  .media-text-split__desktop-button .media-text-split__button-text {
     line-height: 27px;
   }
 
   /* Stars and count sit larger on their own line, as on the reference. */
-  .media-text-split__mobile-button .media-text-split__button-rating {
+  .media-text-split__mobile-button .media-text-split__button-rating,
+  .media-text-split__desktop-button .media-text-split__button-rating {
     font-size: 17px;
     line-height: 23px;
   }
 
-  .media-text-split__mobile-button .media-text-split__button-count {
+  .media-text-split__mobile-button .media-text-split__button-count,
+  .media-text-split__desktop-button .media-text-split__button-count {
     font-weight: 200;
   }
 
-  .media-text-split__mobile-button .media-text-split__button-label {
+  .media-text-split__mobile-button .media-text-split__button-label,
+  .media-text-split__desktop-button .media-text-split__button-label {
     font-weight: 300;
   }
 
-  .media-text-split__mobile-button .media-text-split__button svg {
+  .media-text-split__mobile-button .media-text-split__button svg,
+  .media-text-split__desktop-button .media-text-split__button svg {
     width: 22px;
     height: 22px;
   }

@@ -1,0 +1,126 @@
+.store-locator-banner {
+  padding: 12px 0 36px;
+}
+
+.store-locator-banner__container {
+  max-width: 140rem;
+  padding-inline: 70px;
+}
+
+.store-locator-banner__wrapper {
+  padding: 60px;
+  border-radius: 55px;
+  background: var(--locator-background) center / cover no-repeat;
+}
+
+.store-locator-banner__content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.store-locator-banner__heading {
+  max-width: 360px;
+  margin: 0 0 56px;
+  font-family: var(--bundle-font-heading);
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 0.8;
+  color: #000;
+}
+
+.store-locator-banner__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 40px;
+  border-radius: 50px;
+  background: #e3f98a;
+  font-family: var(--bundle-font-body);
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.store-locator-banner__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.store-locator-banner__button svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.store-locator-banner__image {
+  position: absolute;
+  top: -130px;
+  right: 0;
+  bottom: -30px;
+}
+
+.store-locator-banner__image img {
+  display: block;
+  width: auto;
+  height: 100%;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+}
+
+@media screen and (max-width: 1024px) {
+  .store-locator-banner__container {
+    padding-inline: 40px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .store-locator-banner__wrapper {
+    padding: 30px 20px;
+  }
+
+  .store-locator-banner__content {
+    flex-direction: column;
+    align-items: start;
+    padding-top: 130px;
+    text-align: start;
+  }
+
+  .store-locator-banner__heading {
+    max-width: 285px;
+    margin-bottom: 30px;
+    font-size: 42px;
+  }
+
+  .store-locator-banner__button {
+    padding: 14px 32px;
+    font-size: 1.6rem;
+  }
+
+  .store-locator-banner__image {
+    top: -35%;
+    right: 10%;
+    bottom: auto;
+    width: 50%;
+    max-width: 300px;
+  }
+
+  .store-locator-banner__image img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .store-locator-banner__container {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .store-locator-banner__wrapper {
+    background-image: var(--locator-background-mobile);
+  }
+}

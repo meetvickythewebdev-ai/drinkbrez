@@ -216,6 +216,19 @@ document.querySelectorAll('[data-gallery-arrows]').forEach((arrows) => {
   };
   arrows.querySelector('[data-gallery-prev]')?.addEventListener('click', () => activate(-1));
   arrows.querySelector('[data-gallery-next]')?.addEventListener('click', () => activate(1));
+
+  // Desktop has no scroll to swipe, so a mouse drag past the threshold steps the gallery.
+  slider.addEventListener('dragstart', (event) => event.preventDefault());
+  slider.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || window.innerWidth < 750) return;
+    const startX = event.clientX;
+    const onUp = (upEvent) => {
+      window.removeEventListener('pointerup', onUp);
+      const delta = upEvent.clientX - startX;
+      if (Math.abs(delta) > 40) activate(delta < 0 ? 1 : -1);
+    };
+    window.addEventListener('pointerup', onUp);
+  });
 });
 
 // Sticky Add to cart bar on mobile, shown once the visitor scrolls past the first screen.

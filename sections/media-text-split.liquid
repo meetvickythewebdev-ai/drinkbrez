@@ -61,6 +61,8 @@
         <video class="media-text-split__video" autoplay muted loop playsinline preload="metadata">
           {%- render 'video-sources', video: section.settings.video -%}
         </video>
+      {%- elsif section.settings.video_file != blank -%}
+        <video class="media-text-split__video" autoplay muted loop playsinline preload="metadata" src="{{ section.settings.video_file | asset_url }}"></video>
       {%- elsif section.settings.image != blank -%}
         {{
           section.settings.image
@@ -114,6 +116,12 @@
       "id": "video",
       "label": "Video",
       "info": "Plays instead of the image when set."
+    },
+    {
+      "type": "text",
+      "id": "video_file",
+      "label": "Video file in theme assets",
+      "info": "Filename of an mp4 in the theme's assets folder. Used when no video is picked above."
     },
     {
       "type": "select",
@@ -204,7 +212,7 @@
       "id": "media_overhang",
       "label": "Media shift from the column's left edge",
       "info": "Negative values move the media left.",
-      "min": -200,
+      "min": -300,
       "max": 200,
       "step": 10,
       "unit": "px",
@@ -358,8 +366,8 @@
       "type": "range",
       "id": "mobile_media_width",
       "label": "Media width",
-      "min": 80,
-      "max": 160,
+      "min": 100,
+      "max": 200,
       "step": 1,
       "unit": "%",
       "default": 100
@@ -379,9 +387,9 @@
       "type": "range",
       "id": "mobile_media_x",
       "label": "Media horizontal offset",
-      "min": -100,
+      "min": -300,
       "max": 100,
-      "step": 2,
+      "step": 4,
       "unit": "px",
       "default": 0
     },

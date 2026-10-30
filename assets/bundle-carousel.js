@@ -90,9 +90,9 @@ if (!customElements.get('bundle-carousel')) {
         return -matrix.m41 / this.step;
       }
 
-      // Only touch and pen can swipe; on desktop the strip just autoplays.
       onPointerDown(event) {
-        if (event.pointerType === 'mouse' || event.button !== 0) return;
+        if (event.button !== 0) return;
+        if (event.pointerType === 'mouse') event.preventDefault();
         this.stop();
         this.dragged = false;
         const startX = event.clientX;

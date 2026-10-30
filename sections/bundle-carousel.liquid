@@ -9,7 +9,7 @@
 
 <bundle-carousel
   id="BundleCarousel-{{ section.id }}"
-  class="bundle-carousel bundle-carousel--{{ section.settings.layout }}{% if section.settings.hide_mobile %} small-hide{% endif %}"
+  class="bundle-carousel bundle-carousel--{{ section.settings.layout }}{% if section.settings.full_width %} bundle-carousel--full{% endif %}{% if section.settings.hide_mobile %} small-hide{% endif %}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-delay="{{ section.settings.autoplay_delay | times: 1000 }}"
   data-speed="{{ section.settings.speed }}"
@@ -84,6 +84,13 @@
         }
       ],
       "default": "bundle"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "info": "Runs the strip edge to edge. Slides keep their size, so wider screens show more of them.",
+      "default": false
     },
     {
       "type": "checkbox",

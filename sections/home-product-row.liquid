@@ -34,7 +34,7 @@
 
 <div id="ProductRow-{{ section.id }}" class="product-row brand-section page-width">
   {%- if section.settings.heading != blank -%}
-    <h2 class="product-row__heading">{{ section.settings.heading | escape }}</h2>
+    <h2 class="product-row__heading{% if section.settings.large_cards %} product-row__heading--large{% endif %}">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
 
   {%- if section.blocks.size > 0 -%}
@@ -61,7 +61,7 @@
     </div>
     {%- endif -%}
 
-    <div class="product-row__grid product-row__grid--{{ section.settings.columns_desktop }}">
+    <div class="product-row__grid product-row__grid--{{ section.settings.columns_desktop }}{% if section.settings.large_cards %} product-row__grid--large{% endif %}">
       {%- for block in section.blocks -%}
         <div class="product-row__item product-row__item--{{ block.settings.visibility }}" {{ block.shopify_attributes }}>
           <a href="{{ block.settings.link | default: '#' }}" class="product-row__link">
@@ -230,10 +230,16 @@
       "content": "Spacing"
     },
     {
+      "type": "checkbox",
+      "id": "large_cards",
+      "label": "Use large heading and cards",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "margin_top_desktop",
       "label": "Top margin on desktop",
-      "min": 0,
+      "min": -80,
       "max": 120,
       "step": 2,
       "unit": "px",

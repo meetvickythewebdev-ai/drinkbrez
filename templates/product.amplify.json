@@ -1,0 +1,413 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "headline": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.metafields.custom.card_headline.value }}",
+            "text_style": "uppercase"
+          }
+        },
+        "review_summary": {
+          "type": "review_summary",
+          "settings": {
+            "label": "Reviews",
+            "reviews_anchor": "reviews"
+          }
+        },
+        "intro": {
+          "type": "product_intro",
+          "settings": {}
+        },
+        "icon_grid": {
+          "type": "icon_grid",
+          "settings": {
+            "icon_1": "shopify://shop_images/pdp-icon-no-hangovers.svg",
+            "text_1": "no hangovers & no regrets",
+            "icon_2": "shopify://shop_images/pdp-icon-stackable.svg",
+            "text_2": "Approachable & Stackable",
+            "icon_3": "shopify://shop_images/pdp-icon-fast-acting.svg",
+            "text_3": "fast acting & short lasting",
+            "icon_4": "shopify://shop_images/pdp-icon-usa.svg",
+            "text_4": "Hemp-Derived. Legal in Most States."
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "subscription": {
+          "type": "subscription",
+          "settings": {
+            "default_subscription": true,
+            "subscription_label": "Subscribe &",
+            "save_label": "Save",
+            "onetime_label": "One Time Purchase",
+            "unit_label": "can",
+            "benefit_1": "Delivered monthly",
+            "benefit_2_before": "Save",
+            "benefit_2_after": "with each delivery",
+            "benefit_3": "Pause, skip, or cancel anytime"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_price": true,
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true
+          }
+        },
+        "ingredients": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Full Ingredients",
+            "content_metafield": "custom.ingredients",
+            "icon": "none",
+            "content": ""
+          }
+        },
+        "warning": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- if product.tags contains 'THC' -%}<div class=\"product-warning\" data-geo-region=\"CA\"><p>⚠️ <strong>WARNING</strong>: Consuming this product during pregnancy exposes your child to delta-9 THC, which can affect your child's behavior and learning ability. For more information go to <a href=\"https://www.P65Warnings.ca.gov/cannabis\" target=\"_blank\" rel=\"noopener\">www.P65Warnings.ca.gov/cannabis</a>.</p></div>{%- endif -%}"
+          }
+        },
+        "collection_scroller": {
+          "type": "collection_scroller",
+          "settings": {
+            "title": "Explore Our Complete Collection",
+            "collection": "pdp-complete-collection",
+            "limit": 12
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "headline",
+        "review_summary",
+        "intro",
+        "icon_grid",
+        "variant_picker",
+        "subscription",
+        "buy_buttons",
+        "ingredients",
+        "warning",
+        "collection_scroller"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "none",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 20,
+        "padding_bottom": 0,
+        "brand_styles": true,
+        "gallery_arrows": true,
+        "sticky_mobile_bar": true,
+        "option_suffix": "",
+        "hidden_option_values": "4",
+        "purchase_style": "simple"
+      }
+    },
+    "faq": {
+      "type": "home-faq",
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "question": "How is this legal?",
+            "answer": "<p>In 2018, Congress passed the Farm Bill, making a form of cannabis known as hemp federally legal. We extract our THC from hemp, which allows us to be legally sold in most states to adults 21+.</p>"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "What does it feel like?",
+            "answer": "<p>Most feel a quick, uplifting euphoria followed by a wave of relief and relaxation—perfect for socializing, without losing control, hangovers, or next-day regret. Unlike traditional edibles, our fast-acting micronized extracts kick in within 5 minutes and fade gently after about 1.5 hours.</p>"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "question": "Is it like an edible?",
+            "answer": "<p>No—In fact, we call it the antidote to the bad edible experience. Thanks to our nano-emulsification process, the THC effect is lighter, clearer, faster-acting, shorter-lasting, social, and predictable—more like your favorite adult beverage than a traditional edible, with adverse reactions being very rare.</p>"
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "question": "Will I get anxious or paranoid?",
+            "answer": "<p>Highly unlikely. Thanks to our soothing ingredients, microdosed approach, and our rapid-absorption nano-emulsification process, adverse reactions are very rare.</p>"
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "question": "What does microdosed mean?",
+            "answer": "<p>We use just the right amount in each can to help you feel elevated and happy without overwhelming. This also means you have full control over how many you decide to consume, creating the experience perfect for you.</p>"
+          }
+        },
+        "question_6": {
+          "type": "question",
+          "settings": {
+            "question": "Where do you ship?",
+            "answer": "<p>We ship our THC-free blends to all 50 states and most major countries. Our THC-infused blends are available in most U.S. states for adults 21 and over.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "question_6"
+      ],
+      "settings": {
+        "heading": "Microdosed cannabis & mushrooms in a can",
+        "background_image": "shopify://shop_images/pdp-faq-background.jpg",
+        "margin_top": 40,
+        "margin_bottom": 28,
+        "margin_bottom_mobile": 60
+      }
+    },
+    "first": {
+      "type": "media-text-split",
+      "settings": {
+        "media_position": "right",
+        "heading": "A better way to turn up",
+        "text": "<p>Cannabis, functional mushrooms & adaptogens harmonize to deliver a euphoric lift without the crash. A bright, intentional buzz made for moments of feeling awake, activated & tuned in.</p>",
+        "button_stars": "★★★★★",
+        "button_count": "4.9 (1500+)",
+        "button_label": "Read reviews",
+        "button_link": "",
+        "mobile_button_on_top": false,
+        "media_width": 760,
+        "media_scale": 105,
+        "media_overhang": -40,
+        "text_width": 600,
+        "text_padding": 60,
+        "text_trim": 120,
+        "tablet_media_scale": 100,
+        "tablet_media_extra": 43,
+        "tablet_media_shift": 22,
+        "tablet_text_scale": 100,
+        "tablet_text_trim": 60,
+        "tablet_text_padding": 40,
+        "mobile_media_width": 145,
+        "mobile_media_x": -64,
+        "mobile_media_y": 16,
+        "mobile_text_y": 8,
+        "margin_bottom": 20,
+        "text_offset": 0,
+        "mobile_margin_bottom": 0,
+        "video": "shopify://files/videos/pdp-amplify-video-1.mp4"
+      }
+    },
+    "carousel": {
+      "type": "bundle-carousel",
+      "blocks": {
+        "slide_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/pdp-c-image_3.jpg"
+          }
+        },
+        "slide_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/pdp-c-image_1.jpg"
+          }
+        },
+        "slide_3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/pdp-c-image_2.jpg"
+          }
+        },
+        "slide_4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/pdp-c-image.jpg"
+          }
+        },
+        "slide_5": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/pdp-c-image_4.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3",
+        "slide_4",
+        "slide_5"
+      ],
+      "settings": {
+        "layout": "compact",
+        "hide_mobile": true,
+        "heading": "BRĒZ cans",
+        "autoplay": true,
+        "autoplay_delay": 3,
+        "speed": 1600,
+        "max_width": 1440,
+        "full_width": true
+      }
+    },
+    "second": {
+      "type": "media-text-split",
+      "settings": {
+        "video": "shopify://files/videos/pdp-amplify-video-2.mp4",
+        "media_position": "left",
+        "heading": "Unlock your heightened state",
+        "text": "<p>Pure euphoric lift without the crash. Each sip delivers bright, inspiring energy that makes colors more vivid, connections deeper, and every moment feel more alive.</p>",
+        "button_label": "",
+        "media_width": 950,
+        "media_scale": 132,
+        "media_overhang": -240,
+        "text_width": 580,
+        "text_padding": 20,
+        "text_trim": 40,
+        "tablet_media_scale": 132,
+        "tablet_media_extra": 96,
+        "tablet_media_shift": -110,
+        "tablet_text_scale": 90,
+        "tablet_text_trim": 60,
+        "tablet_text_padding": 40,
+        "tablet_text_offset": -20,
+        "mobile_media_width": 180,
+        "mobile_media_x": -256,
+        "mobile_media_y": 0,
+        "mobile_text_y": -72,
+        "media_height": 0,
+        "mobile_media_height": 700,
+        "margin_bottom": 0,
+        "text_offset": 0,
+        "mobile_margin_bottom": 30
+      }
+    },
+    "choose": {
+      "type": "home-product-row",
+      "blocks": {
+        "og": {
+          "type": "product_card",
+          "settings": {
+            "title": "OG",
+            "link": "shopify://products/og",
+            "image": "shopify://shop_images/pdp-choose-og.png",
+            "visibility": "all",
+            "show_leaf": false,
+            "show_star": false,
+            "badge": "",
+            "badge_background": "#ff4f8b",
+            "badge_text_color": "#ffffff",
+            "strength_1_label": "2.5mg",
+            "strength_1_link": "shopify://products/og-micro",
+            "strength_2_label": "5mg",
+            "strength_2_link": "shopify://products/og",
+            "strength_3_label": "10mg",
+            "strength_3_link": "shopify://products/og-extra-strength"
+          }
+        },
+        "flow": {
+          "type": "product_card",
+          "settings": {
+            "title": "Flow",
+            "link": "shopify://products/flow",
+            "image": "shopify://shop_images/pdp-choose-flow.png",
+            "visibility": "all",
+            "show_leaf": false,
+            "show_star": false,
+            "badge": "",
+            "badge_background": "#ff4f8b",
+            "badge_text_color": "#ffffff"
+          }
+        },
+        "bundles": {
+          "type": "product_card",
+          "settings": {
+            "title": "Bundles",
+            "link": "shopify://pages/build-your-own-bundle",
+            "image": "shopify://shop_images/pdp-choose-bundles.png",
+            "visibility": "all",
+            "show_leaf": false,
+            "show_star": false,
+            "badge": "",
+            "badge_background": "#ff4f8b",
+            "badge_text_color": "#ffffff"
+          }
+        },
+        "spirit": {
+          "type": "product_card",
+          "settings": {
+            "title": "Spirit",
+            "link": "shopify://products/spirit",
+            "image": "shopify://shop_images/pdp-choose-spirit.png",
+            "visibility": "all",
+            "show_leaf": false,
+            "show_star": false,
+            "badge": "",
+            "badge_background": "#ff4f8b",
+            "badge_text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "og",
+        "flow",
+        "spirit",
+        "bundles"
+      ],
+      "settings": {
+        "heading": "Choose your experience",
+        "title": "",
+        "subtitle": "",
+        "columns_desktop": "4",
+        "margin_top_desktop": -60,
+        "margin_bottom_desktop": 60,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0,
+        "large_cards": true
+      }
+    },
+    "locator": {
+      "type": "store-locator-banner",
+      "settings": {
+        "heading": "Find us at a store near you",
+        "button_label": "Store locator",
+        "button_link": "/pages/storelocator",
+        "background": "shopify://shop_images/store-locator-background.jpg",
+        "background_mobile": "shopify://shop_images/store-locator-background-mobile.jpg",
+        "image": "shopify://shop_images/store-locator-bag.png"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq",
+    "first",
+    "carousel",
+    "second",
+    "choose",
+    "locator"
+  ]
+}

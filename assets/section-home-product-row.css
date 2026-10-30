@@ -345,3 +345,45 @@
 .brand-section .page-width {
   max-width: 140rem;
 }
+
+/* Large variant: a bigger heading over four portrait cards, as on the product templates. */
+.product-row__heading--large {
+  margin-bottom: 75px;
+  font-size: 90px;
+  line-height: 81px;
+  letter-spacing: -1px;
+}
+
+@media (min-width: 768px) {
+  .product-row__grid--large.product-row__grid--4 {
+    gap: 30px;
+    width: 100%;
+    max-width: 141rem;
+    margin-inline: auto;
+    padding-inline: 75px;
+  }
+
+  .product-row__grid--large .product-row__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .product-row__grid--large .product-row__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-row__grid--large .product-row__product-title {
+    margin-top: 15px;
+    font-size: 24px;
+    letter-spacing: -1px;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-row__heading--large {
+    margin-bottom: 46px;
+    font-size: 44px;
+    line-height: 40px;
+  }
+}

@@ -1,0 +1,90 @@
+{{ 'section-store-locator-banner.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #StoreLocatorBanner-{{ section.id }} {
+    {%- if section.settings.background != blank %}
+      --locator-background: url('{{ section.settings.background | image_url: width: 2000 }}');
+    {%- endif %}
+    {%- if section.settings.background_mobile != blank %}
+      --locator-background-mobile: url('{{ section.settings.background_mobile | image_url: width: 900 }}');
+    {%- endif %}
+  }
+{%- endstyle -%}
+
+<div id="StoreLocatorBanner-{{ section.id }}" class="store-locator-banner brand-section">
+  <div class="store-locator-banner__container page-width">
+    <div class="store-locator-banner__wrapper">
+      <div class="store-locator-banner__content">
+        <div class="store-locator-banner__text">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="store-locator-banner__heading">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.button_label != blank -%}
+            <a href="{{ section.settings.button_link | default: '#' }}" class="store-locator-banner__button">
+              {{ section.settings.button_label | escape }}
+              <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10">
+                <path d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1a.5.5 0 010-1h10.793L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.image != blank -%}
+          <div class="store-locator-banner__image">
+            {{
+              section.settings.image
+              | image_url: width: 1100
+              | image_tag: widths: '550, 750, 1100', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy'
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Store locator banner",
+  "class": "store-locator-banner-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find us at a store near you"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Store locator"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_mobile",
+      "label": "Mobile background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Sits over the banner's top edge."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store locator banner"
+    }
+  ]
+}
+{% endschema %}

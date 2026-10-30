@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.brand_styles %} product-brand brand-section{% endif %}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.brand_styles %} product-brand brand-section{% endif %}{% if section.settings.purchase_style == 'simple' %} product-brand--simple{% endif %}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -710,6 +710,14 @@
                   </product-recommendations>
                 {%- when 'review_summary' -%}
                   {%- render 'product-review-summary', product: product, block: block -%}
+                {%- when 'product_intro' -%}
+                  {%- if product.metafields.custom.intro != blank -%}
+                    <div class="product-intro rte" {{ block.shopify_attributes }}>
+                      {{- product.metafields.custom.intro.value -}}
+                    </div>
+                  {%- endif -%}
+                {%- when 'link_boxes' -%}
+                  {%- render 'product-link-boxes', block: block -%}
                 {%- when 'icon_grid' -%}
                   {%- render 'product-icon-grid', block: block -%}
                 {%- when 'strength_selector' -%}
@@ -818,6 +826,99 @@
           "label": "Reviews section ID",
           "default": "reviews",
           "info": "The page element the link scrolls to."
+        }
+      ]
+    },
+    {
+      "type": "product_intro",
+      "name": "Product intro",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows the product's custom.intro metafield."
+        }
+      ]
+    },
+    {
+      "type": "link_boxes",
+      "name": "Link boxes",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Box 1 image"
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Box 1 label"
+        },
+        {
+          "type": "url",
+          "id": "link_1",
+          "label": "Box 1 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Box 2 image"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Box 2 label"
+        },
+        {
+          "type": "url",
+          "id": "link_2",
+          "label": "Box 2 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Box 3 image"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Box 3 label"
+        },
+        {
+          "type": "url",
+          "id": "link_3",
+          "label": "Box 3 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Box 4 image"
+        },
+        {
+          "type": "text",
+          "id": "label_4",
+          "label": "Box 4 label"
+        },
+        {
+          "type": "url",
+          "id": "link_4",
+          "label": "Box 4 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Box 5 image"
+        },
+        {
+          "type": "text",
+          "id": "label_5",
+          "label": "Box 5 label"
+        },
+        {
+          "type": "url",
+          "id": "link_5",
+          "label": "Box 5 link"
         }
       ]
     },
@@ -2716,6 +2817,22 @@
       "id": "brand_styles",
       "label": "Use brand styling",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "purchase_style",
+      "label": "Quantity and subscription style",
+      "options": [
+        {
+          "value": "card",
+          "label": "Cards"
+        },
+        {
+          "value": "simple",
+          "label": "Simple"
+        }
+      ],
+      "default": "card"
     },
     {
       "type": "checkbox",
