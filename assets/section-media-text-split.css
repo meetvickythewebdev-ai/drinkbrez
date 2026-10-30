@@ -1,6 +1,8 @@
 .media-text-split {
   margin-bottom: var(--split-margin-bottom-mobile, 0);
-  overflow: hidden;
+  /* Clip sideways only, so the review button can rise into the space above the section. */
+  overflow-x: clip;
+  overflow-y: visible;
   color: #000;
 }
 
