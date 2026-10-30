@@ -300,3 +300,19 @@
     margin: 0;
   }
 }
+
+.recipe-detail__title,
+.recipe-detail__section-title {
+  letter-spacing: -1px;
+}
+
+.recipe-detail__rich-text li,
+.recipe-detail__rich-text p,
+.recipe-detail__product-description li,
+.recipe-detail__product-description p {
+  font-weight: 300;
+}
+
+.recipe-detail__thumb-arrow {
+  font-family: var(--bundle-font-heading);
+}
