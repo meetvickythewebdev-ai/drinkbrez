@@ -206,18 +206,18 @@
         "text_padding": 60,
         "text_trim": 120,
         "tablet_media_scale": 100,
-        "tablet_media_extra": 43,
-        "tablet_media_shift": 22,
+        "tablet_media_extra": 66,
+        "tablet_media_shift": 24,
         "tablet_text_scale": 100,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
-        "mobile_media_width": 145,
-        "mobile_media_x": -64,
+        "mobile_media_width": 158,
+        "mobile_media_x": -68,
         "mobile_media_y": 16,
         "mobile_text_y": 8,
         "margin_bottom": 20,
         "text_offset": 0,
-        "mobile_margin_bottom": 0,
+        "mobile_margin_bottom": 22,
         "video": "shopify://files/videos/pdp-amplify-video-1.mp4"
       }
     },
@@ -289,12 +289,12 @@
         "text_trim": 40,
         "tablet_media_scale": 132,
         "tablet_media_extra": 96,
-        "tablet_media_shift": -110,
+        "tablet_media_shift": -212,
         "tablet_text_scale": 90,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
         "tablet_text_offset": -20,
-        "mobile_media_width": 180,
+        "mobile_media_width": 197,
         "mobile_media_x": -256,
         "mobile_media_y": 0,
         "mobile_text_y": -72,
@@ -302,7 +302,7 @@
         "mobile_media_height": 700,
         "margin_bottom": 0,
         "text_offset": 0,
-        "mobile_margin_bottom": 30
+        "mobile_margin_bottom": 124
       }
     },
     "choose": {
@@ -385,8 +385,9 @@
         "margin_top_desktop": -60,
         "margin_bottom_desktop": 60,
         "margin_top_mobile": 0,
-        "margin_bottom_mobile": 0,
-        "large_cards": true
+        "margin_bottom_mobile": 60,
+        "large_cards": true,
+        "mobile_large_heading": true
       }
     },
     "locator": {

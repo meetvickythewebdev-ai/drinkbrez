@@ -1,7 +1,7 @@
 {{ 'section-home-faq.css' | asset_url | stylesheet_tag }}
 
 <home-faq
-  class="home-faq brand-section page-width{% if section.settings.background_image != blank %} home-faq--with-background{% endif %}"
+  class="home-faq brand-section page-width{% if section.settings.background_image != blank %} home-faq--with-background{% endif %}{% if section.settings.compact %} home-faq--compact{% endif %}"
   style="--faq-margin-top: {{ section.settings.margin_top }}px; --faq-margin-bottom: {{ section.settings.margin_bottom }}px; --faq-margin-bottom-mobile: {{ section.settings.margin_bottom_mobile | default: section.settings.margin_bottom }}px;"
 >
   {%- if section.settings.background_image != blank -%}
@@ -76,11 +76,17 @@
       "label": "Background image"
     },
     {
+      "type": "checkbox",
+      "id": "compact",
+      "label": "Use a smaller heading and tighter spacing on tablets and phones",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "margin_top",
       "label": "Top margin",
       "min": 0,
-      "max": 100,
+      "max": 200,
       "step": 4,
       "unit": "px",
       "default": 40
@@ -90,7 +96,7 @@
       "id": "margin_bottom",
       "label": "Bottom margin",
       "min": 0,
-      "max": 100,
+      "max": 200,
       "step": 4,
       "unit": "px",
       "default": 40

@@ -196,3 +196,8 @@
 .bundle-carousel--full .bundle-carousel__slide {
   flex-basis: calc((var(--carousel-strip) - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view));
 }
+
+.bundle-carousel--full .bundle-carousel__image {
+  max-height: 412px;
+  object-fit: cover;
+}

@@ -1232,3 +1232,71 @@
 .product-brand--simple .product-form__submit:not(.product-sticky-bar *) .product-form__final-price {
   display: none;
 }
+
+.product-brand--simple .product-intro {
+  letter-spacing: normal;
+}
+
+.product-brand--simple .product-review-summary {
+  min-height: 29px;
+  margin-top: 14px;
+}
+
+.product-brand--simple .product__info-container > variant-selects {
+  margin-top: 10px;
+}
+
+.product-brand--simple .product__text + .product-intro {
+  margin-top: 0;
+}
+
+.product-brand--simple .product-link-boxes__item {
+  min-height: 107px;
+}
+
+.product-brand--simple .product__info-container > .product-subscription + * {
+  margin-top: 30px;
+}
+
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  .product-brand--simple .product-intro {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .product-brand--simple .product-intro {
+    font-size: 15px;
+  }
+
+  .product-brand--simple .product__title h1 {
+    font-size: 32px;
+    line-height: 29px;
+  }
+
+  .product-brand--simple .product-review-summary {
+    height: 27px;
+    margin-top: 14px;
+  }
+}
+
+/* The simple templates keep the phone gallery inset instead of edge to edge. */
+@media screen and (max-width: 600px) {
+  .product-brand--simple .product__media-wrapper {
+    padding-inline: 15px;
+  }
+
+  .product-brand--simple .slider.product__media-list {
+    min-height: 490px;
+  }
+
+  .product-brand--simple .product__media-item .product-media-container {
+    height: 490px;
+    overflow: hidden;
+    border-radius: 30px;
+  }
+
+  .product-brand--simple .product__info-wrapper {
+    padding-top: 25px;
+  }
+}

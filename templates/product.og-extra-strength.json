@@ -248,7 +248,7 @@
         "text_trim": 120,
         "tablet_media_scale": 100,
         "tablet_media_extra": 43,
-        "tablet_media_shift": 22,
+        "tablet_media_shift": 24,
         "tablet_text_scale": 100,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
@@ -328,7 +328,7 @@
         "text_trim": 40,
         "tablet_media_scale": 132,
         "tablet_media_extra": 96,
-        "tablet_media_shift": -110,
+        "tablet_media_shift": -112,
         "tablet_text_scale": 90,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
@@ -421,11 +421,12 @@
         "title": "",
         "subtitle": "",
         "columns_desktop": "4",
-        "margin_top_desktop": -60,
+        "margin_top_desktop": 20,
         "margin_bottom_desktop": 60,
         "margin_top_mobile": 0,
         "margin_bottom_mobile": 0,
-        "large_cards": true
+        "large_cards": true,
+        "mobile_large_heading": false
       }
     },
     "reviews_heading": {

@@ -247,18 +247,19 @@
         "text_trim": 90,
         "tablet_media_scale": 100,
         "tablet_media_extra": 43,
-        "tablet_media_shift": 22,
+        "tablet_media_shift": 24,
         "tablet_text_scale": 100,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
-        "mobile_media_width": 107,
+        "mobile_media_width": 117,
         "mobile_media_x": -28,
-        "mobile_media_y": 0,
+        "mobile_media_y": 46,
         "mobile_text_y": 0,
         "margin_bottom": 10,
         "text_offset": 0,
         "mobile_margin_bottom": 10,
-        "video": "shopify://files/videos/home-alternative.mp4"
+        "video": "shopify://files/videos/home-alternative.mp4",
+        "tablet_stack": true
       }
     },
     "waiting": {
@@ -276,12 +277,12 @@
         "text_trim": 90,
         "tablet_media_scale": 132,
         "tablet_media_extra": 96,
-        "tablet_media_shift": -110,
+        "tablet_media_shift": -112,
         "tablet_text_scale": 90,
         "tablet_text_trim": 60,
         "tablet_text_padding": 40,
         "tablet_text_offset": -20,
-        "mobile_media_width": 107,
+        "mobile_media_width": 117,
         "mobile_media_x": -28,
         "mobile_media_y": 0,
         "mobile_text_y": 0,
@@ -290,7 +291,8 @@
         "margin_bottom": 10,
         "text_offset": 0,
         "mobile_margin_bottom": 86,
-        "video_file": "pdp-cherry-video-2.mp4"
+        "video_file": "pdp-cherry-video-2.mp4",
+        "tablet_stack": true
       }
     },
     "choose": {
@@ -370,11 +372,12 @@
         "title": "",
         "subtitle": "",
         "columns_desktop": "4",
-        "margin_top_desktop": -60,
+        "margin_top_desktop": 20,
         "margin_bottom_desktop": 60,
         "margin_top_mobile": 0,
         "margin_bottom_mobile": 0,
-        "large_cards": true
+        "large_cards": true,
+        "mobile_large_heading": false
       }
     },
     "reviews_heading": {

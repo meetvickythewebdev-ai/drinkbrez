@@ -34,7 +34,7 @@
 
 <div id="ProductRow-{{ section.id }}" class="product-row brand-section page-width">
   {%- if section.settings.heading != blank -%}
-    <h2 class="product-row__heading{% if section.settings.large_cards %} product-row__heading--large{% endif %}">{{ section.settings.heading | escape }}</h2>
+    <h2 class="product-row__heading{% if section.settings.large_cards %} product-row__heading--large{% endif %}{% if section.settings.mobile_large_heading %} product-row__heading--mobile-large{% endif %}">{{ section.settings.heading | escape }}</h2>
   {%- endif -%}
 
   {%- if section.blocks.size > 0 -%}
@@ -61,7 +61,7 @@
     </div>
     {%- endif -%}
 
-    <div class="product-row__grid product-row__grid--{{ section.settings.columns_desktop }}{% if section.settings.large_cards %} product-row__grid--large{% endif %}">
+    <div class="product-row__grid product-row__grid--{{ section.settings.columns_desktop }}{% if section.settings.large_cards %} product-row__grid--large{% endif %}{% if section.settings.mobile_large_heading %} product-row__grid--mobile-wide{% endif %}">
       {%- for block in section.blocks -%}
         <div class="product-row__item product-row__item--{{ block.settings.visibility }}" {{ block.shopify_attributes }}>
           <a href="{{ block.settings.link | default: '#' }}" class="product-row__link">
@@ -233,6 +233,12 @@
       "type": "checkbox",
       "id": "large_cards",
       "label": "Use large heading and cards",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_large_heading",
+      "label": "Use a larger heading and wider cards on mobile",
       "default": false
     },
     {

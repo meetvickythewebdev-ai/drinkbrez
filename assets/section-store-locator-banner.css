@@ -2,9 +2,9 @@
   padding: 12px 0 36px;
 }
 
-.store-locator-banner__container {
-  max-width: 140rem;
-  padding-inline: 70px;
+.store-locator-banner.brand-section .store-locator-banner__container.page-width {
+  max-width: 130rem;
+  padding-inline: 0;
 }
 
 .store-locator-banner__wrapper {
@@ -40,6 +40,7 @@
   font-family: var(--bundle-font-body);
   font-size: 20px;
   font-weight: 500;
+  line-height: 1.2;
   color: #000;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -70,8 +71,8 @@
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
 }
 
-@media screen and (max-width: 1024px) {
-  .store-locator-banner__container {
+@media screen and (max-width: 1399px) {
+  .store-locator-banner.brand-section .store-locator-banner__container.page-width {
     padding-inline: 40px;
   }
 }
@@ -114,7 +115,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .store-locator-banner__container {
+  .store-locator-banner.brand-section .store-locator-banner__container.page-width {
     padding-inline: 1.5rem;
   }
 }

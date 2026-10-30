@@ -17,6 +17,14 @@
     --split-tablet-text-padding: {{ section.settings.tablet_text_padding }}px;
     --split-tablet-text-offset: {{ section.settings.tablet_text_offset }}px;
     --split-margin-bottom: {{ section.settings.margin_bottom }}px;
+    {%- if section.settings.tablet_margin_bottom == 0 %}
+      --split-tablet-margin-bottom: {{ section.settings.margin_bottom }}px;
+    {%- else %}
+      --split-tablet-margin-bottom: {{ section.settings.tablet_margin_bottom }}px;
+    {%- endif %}
+    {%- if section.settings.tablet_media_height > 0 %}
+      --split-tablet-media-height: {{ section.settings.tablet_media_height }}px;
+    {%- endif %}
     --split-margin-bottom-mobile: {{ section.settings.mobile_margin_bottom }}px;
     {%- if section.settings.media_height > 0 %}
       --split-media-height: {{ section.settings.media_height }}px;
@@ -24,6 +32,7 @@
     {%- if section.settings.mobile_media_height > 0 %}
       --split-mobile-media-height: {{ section.settings.mobile_media_height }}px;
     {%- endif %}
+    --split-mobile-heading: {{ section.settings.mobile_heading_size }}px;
     --split-mobile-media-width: {{ section.settings.mobile_media_width }}%;
     --split-mobile-media-x: {{ section.settings.mobile_media_x }}px;
     --split-mobile-media-y: {{ section.settings.mobile_media_y }}px;
@@ -50,7 +59,7 @@
 
 <div
   id="MediaTextSplit-{{ section.id }}"
-  class="media-text-split brand-section media-text-split--media-{{ section.settings.media_position }}"
+  class="media-text-split brand-section media-text-split--media-{{ section.settings.media_position }}{% if section.settings.tablet_stack %} media-text-split--tablet-stack{% endif %}"
 >
   {%- if section.settings.mobile_button_on_top and review_button != blank -%}
     <div class="media-text-split__mobile-button">{{ review_button }}</div>
@@ -290,6 +299,34 @@
     },
     {
       "type": "range",
+      "id": "tablet_media_height",
+      "label": "Video height",
+      "info": "0 keeps the video's own proportions.",
+      "min": 0,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "tablet_margin_bottom",
+      "label": "Bottom margin",
+      "info": "0 uses the desktop margin.",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "tablet_stack",
+      "label": "Stack the media above the text",
+      "default": false
+    },
+    {
+      "type": "range",
       "id": "tablet_media_scale",
       "label": "Media width (share of its column)",
       "min": 50,
@@ -312,9 +349,9 @@
       "type": "range",
       "id": "tablet_media_shift",
       "label": "Media shift from the column's left edge",
-      "min": -150,
-      "max": 50,
-      "step": 2,
+      "min": -300,
+      "max": 100,
+      "step": 4,
       "unit": "px",
       "default": 0
     },
@@ -364,6 +401,16 @@
     },
     {
       "type": "range",
+      "id": "mobile_heading_size",
+      "label": "Heading size",
+      "min": 36,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
       "id": "mobile_media_width",
       "label": "Media width",
       "min": 100,
@@ -397,8 +444,8 @@
       "type": "range",
       "id": "mobile_media_y",
       "label": "Media vertical offset",
-      "min": -100,
-      "max": 100,
+      "min": -50,
+      "max": 150,
       "step": 2,
       "unit": "px",
       "default": 0
@@ -417,9 +464,9 @@
       "type": "range",
       "id": "mobile_text_y",
       "label": "Text overlap with media",
-      "min": -150,
-      "max": 50,
-      "step": 2,
+      "min": -148,
+      "max": 152,
+      "step": 4,
       "unit": "px",
       "default": 0
     }

@@ -346,7 +346,7 @@
   max-width: 140rem;
 }
 
-/* Large variant: a bigger heading over four portrait cards, as on the product templates. */
+/* Large variant: a bigger heading over portrait cards, as on the product templates. */
 .product-row__heading--large {
   margin-bottom: 75px;
   font-size: 90px;
@@ -354,29 +354,50 @@
   letter-spacing: -1px;
 }
 
-@media (min-width: 768px) {
+.product-row__grid--large .product-row__media {
+  padding-top: 125%;
+}
+
+.product-row__grid--large .product-row__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-row__grid--large .product-row__product-title {
+  margin-top: 15px;
+  font-size: 24px;
+  letter-spacing: -1px;
+}
+
+@media (min-width: 1025px) {
   .product-row__grid--large.product-row__grid--4 {
+    --row-width: min(100vw - 150px, 1410px);
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
-    width: 100%;
-    max-width: 141rem;
-    margin-inline: auto;
-    padding-inline: 75px;
+    width: var(--row-width);
+    max-width: none;
+    margin-left: calc(50% - var(--row-width) / 2);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .product-row:has(.product-row__grid--large) {
+    margin-top: 47px;
   }
 
-  .product-row__grid--large .product-row__media {
-    aspect-ratio: 4 / 5;
+  .product-row__heading--large {
+    margin-bottom: 95px;
+    font-size: 68px;
+    line-height: 61px;
   }
 
-  .product-row__grid--large .product-row__media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .product-row__grid--large .product-row__product-title {
-    margin-top: 15px;
-    font-size: 24px;
-    letter-spacing: -1px;
+  .product-row__grid--large.product-row__grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: calc(100vw - 110px);
+    max-width: none;
+    margin-left: calc(50% - 50vw + 55px);
   }
 }
 
@@ -385,5 +406,29 @@
     margin-bottom: 46px;
     font-size: 44px;
     line-height: 40px;
+  }
+
+  .product-row__grid--large.product-row__grid--4 {
+    gap: 10px;
+    width: calc(100% + 10px);
+    max-width: none;
+    margin-left: -5px;
+  }
+}
+
+.product-row:has(.product-row__grid--large) {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .product-row__heading--mobile-large {
+    font-size: 58px;
+    line-height: 52px;
+  }
+
+  .product-row__grid--large.product-row__grid--mobile-wide {
+    width: calc(100% + 22px);
+    margin-left: -11px;
   }
 }
