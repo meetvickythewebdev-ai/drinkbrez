@@ -200,7 +200,6 @@ cart-drawer.cart-drawer-brand.is-empty .drawer__inner {
   top: 0;
   bottom: 0;
   left: 0;
-  min-width: 20px;
   max-width: 100%;
   border-radius: 10px;
   background: var(--cart-accent);

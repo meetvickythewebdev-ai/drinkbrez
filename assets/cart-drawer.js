@@ -6,6 +6,11 @@ class CartDrawer extends HTMLElement {
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
 
+    // Every cart update swaps the drawer's markup, whichever script makes it, so the rewards bar is watched here.
+    this.rewardFill = this.querySelector('.cart-drawer__reward-fill');
+    this.rewardWidth = this.rewardFill?.style.width;
+    new MutationObserver(() => this.animateRewardFill()).observe(this, { childList: true, subtree: true });
+
     this.addEventListener('click', (event) => {
       const upgrade = event.target.closest('[data-upgrade]');
       if (upgrade) {
@@ -37,6 +42,26 @@ class CartDrawer extends HTMLElement {
       },
       true
     );
+  }
+
+  // A freshly rendered bar starts at its new width, so it is put back at the old one and transitions from there.
+  animateRewardFill() {
+    const fill = this.querySelector('.cart-drawer__reward-fill');
+    if (!fill || fill === this.rewardFill) return;
+    const previous = this.rewardWidth;
+    const target = fill.style.width;
+    this.rewardFill = fill;
+    this.rewardWidth = target;
+    if (!previous || previous === target) return;
+
+    fill.style.transition = 'none';
+    fill.style.width = previous;
+    fill.getBoundingClientRect();
+    fill.style.removeProperty('transition');
+    // When the drawer is about to slide in, wait so the change is seen.
+    setTimeout(() => {
+      fill.style.width = target;
+    }, this.classList.contains('active') ? 0 : 400);
   }
 
   // Switches a line to or from a subscription, then redraws the drawer.
