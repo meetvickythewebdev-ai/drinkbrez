@@ -66,8 +66,48 @@ if (!customElements.get('bundle-reviews')) {
           if (event.key === 'ArrowRight') this.showSlide(this.current + 1);
         });
 
+        this.ratings = new Set();
+        this.count = this.querySelector('[data-reviews-count]');
+        this.totalLabel = this.count?.textContent.trim();
+        this.filters = this.querySelector('[data-reviews-filters]');
+        this.filterClear = this.querySelector('[data-reviews-filter-clear]');
+        this.querySelector('[data-reviews-filter-toggle]')?.addEventListener('click', (event) => {
+          const open = this.filters.hidden;
+          this.filters.hidden = !open;
+          event.currentTarget.setAttribute('aria-expanded', open);
+        });
+        this.filters?.addEventListener('change', (event) => {
+          if (!event.target.matches('[data-reviews-rating]')) return;
+          const rating = Number(event.target.value);
+          event.target.checked ? this.ratings.add(rating) : this.ratings.delete(rating);
+          this.applyFilters();
+        });
+        this.filterClear?.addEventListener('click', () => {
+          this.filters.querySelectorAll('[data-reviews-rating]').forEach((input) => (input.checked = false));
+          this.ratings.clear();
+          this.applyFilters();
+        });
+
         this.renderStrip();
         this.renderList();
+      }
+
+      applyFilters() {
+        this.shown = this.perPage;
+        this.filterClear.hidden = this.ratings.size === 0;
+        this.renderList();
+        if (this.count) {
+          const matches = this.filtered().length;
+          this.count.textContent = this.ratings.size
+            ? `${matches.toLocaleString('en-US')} ${matches === 1 ? 'review' : 'reviews'}`
+            : this.totalLabel;
+        }
+      }
+
+      filtered() {
+        const reviews = this.sorted(this.sort);
+        if (!this.ratings?.size) return reviews;
+        return reviews.filter((review) => this.ratings.has(Math.round(Number(review.rating))));
       }
 
       sorted(order) {
@@ -93,7 +133,7 @@ if (!customElements.get('bundle-reviews')) {
       }
 
       renderList() {
-        const reviews = this.sorted(this.sort);
+        const reviews = this.filtered();
         this.list.innerHTML = reviews
           .slice(0, this.shown)
           .map((review) => `<li class="bundle-reviews__item">${this.reviewMarkup(review)}</li>`)

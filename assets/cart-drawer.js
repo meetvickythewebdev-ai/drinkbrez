@@ -5,6 +5,83 @@ class CartDrawer extends HTMLElement {
     this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
+
+    this.addEventListener('click', (event) => {
+      const upgrade = event.target.closest('[data-upgrade]');
+      if (upgrade) {
+        upgrade.textContent = 'Upgrading...';
+        this.changeLine(upgrade, {
+          line: Number(upgrade.dataset.line),
+          quantity: Number(upgrade.dataset.quantity),
+          selling_plan: Number(upgrade.dataset.sellingPlan),
+        });
+        return;
+      }
+
+      const add = event.target.closest('[data-upsell-add]');
+      if (add) this.addVariant(add, Number(add.dataset.upsellAdd));
+    });
+
+    // Caught on the way down so cart-drawer-items doesn't treat the plan menu as a quantity input.
+    this.addEventListener(
+      'change',
+      (event) => {
+        const select = event.target.closest('[data-plan-select]');
+        if (!select) return;
+        event.stopPropagation();
+        this.changeLine(select, {
+          line: Number(select.dataset.line),
+          quantity: Number(select.dataset.quantity),
+          selling_plan: select.value ? Number(select.value) : null,
+        });
+      },
+      true
+    );
+  }
+
+  // Switches a line to or from a subscription, then redraws the drawer.
+  changeLine(control, body) {
+    control.disabled = true;
+    this.requestCart(routes.cart_change_url, body);
+  }
+
+  addVariant(control, variantId) {
+    control.disabled = true;
+    control.textContent = 'Adding...';
+    this.requestCart(routes.cart_add_url, { items: [{ id: variantId, quantity: 1 }] });
+  }
+
+  requestCart(url, body) {
+    const sections = this.getSectionsToRender().map((section) => section.id);
+    return fetch(url, {
+      ...fetchConfig('javascript'),
+      body: JSON.stringify({ ...body, sections, sections_url: window.location.pathname }),
+    })
+      .then((response) => response.json())
+      .then((state) => {
+        if (state.status || state.errors || !state.sections) throw new Error(state.description || state.errors);
+        this.renderSections(state.sections);
+        const itemCount = state.item_count ?? state.items?.length;
+        if (typeof itemCount === 'number') this.classList.toggle('is-empty', itemCount === 0);
+        publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: state });
+      })
+      .catch(() => {
+        const errors = this.querySelector('#CartDrawer-CartErrors');
+        if (errors) errors.textContent = window.cartStrings.error;
+        this.querySelectorAll('[data-upgrade], [data-upsell-add], [data-plan-select]').forEach((control) => {
+          control.disabled = false;
+        });
+      });
+  }
+
+  renderSections(sections) {
+    const drawer = this.getSectionDOM(sections['cart-drawer'], '.drawer__inner');
+    if (drawer) this.querySelector('.drawer__inner').innerHTML = drawer.innerHTML;
+    const bubble = document.getElementById('cart-icon-bubble');
+    if (bubble && sections['cart-icon-bubble']) {
+      bubble.innerHTML = this.getSectionInnerHTML(sections['cart-icon-bubble']);
+    }
+    if (this.classList.contains('active')) trapFocus(this.querySelector('.drawer__inner'));
   }
 
   setHeaderCartIconAccessibility() {

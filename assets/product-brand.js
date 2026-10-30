@@ -48,6 +48,19 @@ if (!customElements.get('product-subscription')) {
           units > 0 ? `${formatMoney(Math.round(cents / units))} per ${this.unit}` : '';
       }
 
+      // Keep the selected purchase type in the URL, as the reference does.
+      updateUrl(variantId, subscribe) {
+        if (window.Shopify?.designMode) return;
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', variantId);
+        if (subscribe && this.sellingPlanInput.value) {
+          url.searchParams.set('selling_plan', this.sellingPlanInput.value);
+        } else {
+          url.searchParams.delete('selling_plan');
+        }
+        window.history.replaceState(window.history.state, '', url);
+      }
+
       update() {
         const variant = this.variant;
         if (!variant) return;
@@ -66,6 +79,8 @@ if (!customElements.get('product-subscription')) {
         if (variant.price > 0) {
           this.querySelector('[data-percent]').textContent = `${Math.round((savings / variant.price) * 100)}%`;
         }
+
+        this.updateUrl(variant.id, subscribe);
 
         const total = subscribe ? variant.subscription_price : variant.price;
         document.querySelectorAll(`[data-final-price]`).forEach((price) => {
@@ -232,3 +247,19 @@ Promise.all([customElements.whenDefined('product-info'), customElements.whenDefi
     });
   });
 });
+
+// Regional notices: an element with data-geo-region="CA" is hidden once a location lookup places the
+// visitor outside that state. If the lookup fails, the notice stays visible, as on the reference.
+(() => {
+  const notices = document.querySelectorAll('[data-geo-region]');
+  if (!notices.length || window.Shopify?.designMode) return;
+  fetch('https://ipapi.co/json/')
+    .then((response) => (response.ok ? response.json() : Promise.reject()))
+    .then((data) => {
+      if (!data?.region_code) return;
+      notices.forEach((notice) => {
+        notice.hidden = notice.dataset.geoRegion.split(',').map((region) => region.trim()).indexOf(data.region_code) === -1;
+      });
+    })
+    .catch(() => {});
+})();

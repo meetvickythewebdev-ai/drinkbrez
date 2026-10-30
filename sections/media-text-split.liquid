@@ -3,9 +3,19 @@
 {%- style -%}
   #MediaTextSplit-{{ section.id }} {
     --split-media-width: {{ section.settings.media_width }}px;
+    --split-media-scale: {{ section.settings.media_scale }}%;
     --split-media-overhang: {{ section.settings.media_overhang }}px;
     --split-text-width: {{ section.settings.text_width }}px;
+    --split-text-padding: {{ section.settings.text_padding }}px;
+    --split-text-trim: {{ section.settings.text_trim }}px;
     --split-text-offset: {{ section.settings.text_offset }}px;
+    --split-tablet-media-scale: {{ section.settings.tablet_media_scale }}%;
+    --split-tablet-media-extra: {{ section.settings.tablet_media_extra }}px;
+    --split-tablet-media-shift: {{ section.settings.tablet_media_shift }}px;
+    --split-tablet-text-scale: {{ section.settings.tablet_text_scale }}%;
+    --split-tablet-text-trim: {{ section.settings.tablet_text_trim }}px;
+    --split-tablet-text-padding: {{ section.settings.tablet_text_padding }}px;
+    --split-tablet-text-offset: {{ section.settings.tablet_text_offset }}px;
     --split-margin-bottom: {{ section.settings.margin_bottom }}px;
     --split-margin-bottom-mobile: {{ section.settings.mobile_margin_bottom }}px;
     {%- if section.settings.media_height > 0 %}
@@ -168,7 +178,8 @@
     {
       "type": "range",
       "id": "media_width",
-      "label": "Media width",
+      "label": "Maximum media width",
+      "info": "Also caps the media on tablets.",
       "min": 400,
       "max": 1200,
       "step": 10,
@@ -177,8 +188,19 @@
     },
     {
       "type": "range",
+      "id": "media_scale",
+      "label": "Media width (share of its column)",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
       "id": "media_overhang",
-      "label": "Media overhang toward the text",
+      "label": "Media shift from the column's left edge",
+      "info": "Negative values move the media left.",
       "min": -200,
       "max": 200,
       "step": 10,
@@ -188,8 +210,8 @@
     {
       "type": "range",
       "id": "media_height",
-      "label": "Video height",
-      "info": "0 keeps the video's own proportions.",
+      "label": "Minimum video height",
+      "info": "Applies on tablets and desktops. 0 keeps the video's own proportions.",
       "min": 0,
       "max": 1000,
       "step": 10,
@@ -199,12 +221,33 @@
     {
       "type": "range",
       "id": "text_width",
-      "label": "Text width",
+      "label": "Maximum text width",
       "min": 300,
       "max": 800,
       "step": 10,
       "unit": "px",
       "default": 600
+    },
+    {
+      "type": "range",
+      "id": "text_padding",
+      "label": "Text inset from its column's left edge",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "text_trim",
+      "label": "Space taken from the text column",
+      "info": "The text is as wide as its column minus this amount.",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 120
     },
     {
       "type": "range",
@@ -221,6 +264,84 @@
       "id": "margin_bottom",
       "label": "Bottom margin",
       "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Tablet layout"
+    },
+    {
+      "type": "paragraph",
+      "content": "Screens from 750px to 1024px wide."
+    },
+    {
+      "type": "range",
+      "id": "tablet_media_scale",
+      "label": "Media width (share of its column)",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "tablet_media_extra",
+      "label": "Extra media width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "tablet_media_shift",
+      "label": "Media shift from the column's left edge",
+      "min": -150,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "tablet_text_scale",
+      "label": "Text width (share of its column)",
+      "min": 50,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "tablet_text_trim",
+      "label": "Space taken from the text column",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "tablet_text_padding",
+      "label": "Text inset from its column's left edge",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "tablet_text_offset",
+      "label": "Text vertical offset",
+      "min": -100,
       "max": 100,
       "step": 2,
       "unit": "px",

@@ -18,7 +18,14 @@
     {%- if icon != blank or text != blank -%}
       <div class="product-icon-grid__item">
         {%- if icon != blank -%}
-          {{ icon | image_url: width: 80 | image_tag: width: 30, height: 30, loading: 'lazy', alt: '' }}
+          {%- comment -%} No srcset, so the icon keeps its own size and can shrink no further than that on narrow screens. {%- endcomment -%}
+          <img
+            src="{{ icon | image_url: width: 120 }}"
+            alt=""
+            loading="lazy"
+            width="{{ icon.width }}"
+            height="{{ icon.height }}"
+          >
         {%- endif -%}
         <p>{{ text | escape }}</p>
       </div>

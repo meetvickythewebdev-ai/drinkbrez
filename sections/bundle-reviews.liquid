@@ -4,6 +4,8 @@
 {%- style -%}
   #BundleReviews-{{ section.id }} {
     --bundle-container-width: {{ section.settings.container_width }}px;
+    --reviews-padding-top: {{ section.settings.padding_top }}px;
+    --reviews-padding-bottom: {{ section.settings.padding_bottom }}px;
   }
 
   {% render 'bundle-fonts' %}
@@ -43,8 +45,75 @@
 
       <ul class="bundle-reviews__media-strip" role="list" data-reviews-strip></ul>
 
+      {%- if section.settings.show_filters or section.settings.write_review_url != blank -%}
+        <div class="bundle-reviews__head">
+          {%- if section.settings.show_filters -%}
+            <button
+              type="button"
+              class="bundle-reviews__button"
+              aria-expanded="false"
+              aria-controls="BundleReviewsFilters-{{ section.id }}"
+              data-reviews-filter-toggle
+            >
+              <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false">
+                <path d="M2.5 4.5h9M4 7h6M5.5 9.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              Filters
+            </button>
+          {%- endif -%}
+          {%- if section.settings.write_review_url != blank -%}
+            <a
+              href="{{ section.settings.write_review_url }}"
+              class="bundle-reviews__button bundle-reviews__write"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg viewBox="0 0 14 14" width="12" height="12" aria-hidden="true" focusable="false">
+                <path d="M9.6 1.4l3 3L4.8 12.2 1 13l.8-3.8z" fill="currentColor"/>
+              </svg>
+              {{ section.settings.write_review_label | escape }}
+              <span class="visually-hidden">(Opens in a new window)</span>
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.show_filters -%}
+          <div class="bundle-reviews__filters" id="BundleReviewsFilters-{{ section.id }}" data-reviews-filters hidden>
+            <div class="bundle-reviews__filter-title">
+              Rating
+              <button type="button" class="bundle-reviews__filter-clear" data-reviews-filter-clear hidden>
+                <svg viewBox="0 0 10 10" width="8" height="8" aria-hidden="true" focusable="false">
+                  <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+                Clear <span class="visually-hidden">Rating filter</span>
+              </button>
+            </div>
+            <fieldset class="bundle-reviews__filter-options">
+              <legend class="visually-hidden">Ratings</legend>
+              {%- for rating in (1..5) -%}
+                <input
+                  type="checkbox"
+                  class="bundle-reviews__filter-input visually-hidden"
+                  id="BundleReviewsRating-{{ section.id }}-{{ rating }}"
+                  value="{{ rating }}"
+                  data-reviews-rating
+                >
+                <label class="bundle-reviews__filter-option" for="BundleReviewsRating-{{ section.id }}-{{ rating }}">
+                  {%- for i in (1..rating) -%}
+                    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+                      <path d="M9.944 6.4L8 0L6.056 6.4H0L4.944 9.928L3.064 16L8 12.248L12.944 16L11.064 9.928L16 6.4H9.944Z" fill="currentColor"/>
+                    </svg>
+                  {%- endfor -%}
+                  <span class="visually-hidden">{{ rating }} stars</span>
+                </label>
+              {%- endfor -%}
+            </fieldset>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
       <div class="bundle-reviews__controls">
-        <div class="bundle-reviews__count">
+        <div class="bundle-reviews__count" data-reviews-count>
           {{- total | default: 0 | times: 100 | money_without_currency | remove: '.00' }} reviews
         </div>
         <div class="bundle-reviews__sort">
@@ -234,6 +303,48 @@
       "unit": "px",
       "label": "Container width",
       "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Toolbar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show rating filters",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "write_review_url",
+      "label": "Write a review link",
+      "info": "Opens in a new window. Leave blank to hide the button."
+    },
+    {
+      "type": "text",
+      "id": "write_review_label",
+      "label": "Write a review label",
+      "default": "Write a Review"
     }
   ],
   "presets": [

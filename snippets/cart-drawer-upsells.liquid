@@ -1,0 +1,64 @@
+{% doc %}
+  Renders the cart drawer's recommendations: the products picked in the theme's cart settings that are
+  not already in the cart, each with a button that adds its first available variant.
+
+  @example
+  {% render 'cart-drawer-upsells' %}
+{% enddoc %}
+
+{%- liquid
+  assign cart_product_ids = cart.items | map: 'product_id'
+  assign shown = 0
+-%}
+
+{%- capture cards -%}
+  {%- for product in settings.cart_upsell_products -%}
+    {%- liquid
+      if cart_product_ids contains product.id or product.available == false or product.requires_selling_plan
+        continue
+      endif
+      assign variant = product.selected_or_first_available_variant
+      assign shown = shown | plus: 1
+    -%}
+    <li class="cart-drawer-upsell">
+      <a href="{{ product.url }}" class="cart-drawer-upsell__media" tabindex="-1" aria-hidden="true">
+        {%- if product.featured_image -%}
+          <img
+            src="{{ product.featured_image | image_url: width: 200 }}"
+            alt=""
+            loading="lazy"
+            width="98"
+            height="{{ 98 | divided_by: product.featured_image.aspect_ratio | round }}"
+          >
+        {%- endif -%}
+      </a>
+      <a href="{{ product.url }}" class="cart-drawer-upsell__title">{{ product.title | escape }}</a>
+      <p class="cart-drawer-upsell__price">
+        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+        {%- if variant.compare_at_price > variant.price -%}
+          <s>{{ variant.compare_at_price | money }}</s>
+        {%- endif -%}
+        <span>{{ variant.price | money }}</span>
+      </p>
+      <button
+        type="button"
+        class="cart-drawer-upsell__add"
+        data-upsell-add="{{ variant.id }}"
+        aria-label="Add {{ product.title | escape }}"
+      >
+        Add
+      </button>
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if shown > 0 -%}
+  <div class="cart-drawer__upsells">
+    {%- if settings.cart_upsell_heading != blank -%}
+      <h3 class="cart-drawer__upsells-heading">{{ settings.cart_upsell_heading | escape }}</h3>
+    {%- endif -%}
+    <ul class="cart-drawer__upsell-list" role="list">
+      {{- cards -}}
+    </ul>
+  </div>
+{%- endif -%}

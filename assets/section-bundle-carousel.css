@@ -164,3 +164,15 @@
 .bundle-carousel--compact .bundle-carousel__viewport {
   margin: 0;
 }
+
+/*
+  On tablets the reference gives the compact strip a fixed 361px band, cards centered in it, and lets
+  taller cards spill over its edges. The margins below are that band minus half a card's height,
+  where a card is a third of the strip (less two 20px gaps) and about 1.19 times as tall as wide.
+*/
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .bundle-carousel--compact .bundle-carousel__viewport {
+    height: auto;
+    margin: calc(174px - (100% - 40px) * 0.1983) 0 calc(144px - (100% - 40px) * 0.1983);
+  }
+}

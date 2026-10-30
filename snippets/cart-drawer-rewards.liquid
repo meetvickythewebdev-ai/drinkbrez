@@ -1,0 +1,103 @@
+{% doc %}
+  Renders the cart drawer's rewards bar: up to four spend goals from the theme's cart settings, a meter
+  that fills between them, and a message for the next goal. Goals sit at the middle of equal columns,
+  so the meter reaches each goal's column center when its amount is spent.
+
+  @example
+  {% render 'cart-drawer-rewards' %}
+{% enddoc %}
+
+{%- liquid
+  assign total = cart.total_price
+  assign amounts = ''
+  assign goal_count = 0
+  for i in (1..4)
+    assign amount_key = 'cart_reward_' | append: i | append: '_amount'
+    assign amount = settings[amount_key] | default: 0
+    if amount > 0
+      assign goal_count = goal_count | plus: 1
+      assign amounts = amounts | append: i | append: ','
+    endif
+  endfor
+  assign goal_indexes = amounts | split: ','
+-%}
+
+{%- if settings.cart_rewards_enabled and goal_count > 0 -%}
+  {%- liquid
+    assign fill = 100.0
+    assign message = ''
+    assign previous_amount = 0
+    assign previous_position = 0.0
+    assign next_found = false
+    assign last_index = goal_indexes | last
+
+    for index in goal_indexes
+      assign position = forloop.index | times: 2 | minus: 1 | times: 100.0 | divided_by: goal_count | divided_by: 2
+      assign amount_key = 'cart_reward_' | append: index | append: '_amount'
+      assign goal_cents = settings[amount_key] | times: 100
+
+      if next_found == false and total < goal_cents
+        assign next_found = true
+        assign span = goal_cents | minus: previous_amount
+        assign spent = total | minus: previous_amount
+        assign fill = position | minus: previous_position | times: spent | divided_by: span | plus: previous_position
+        assign remaining_key = 'cart_reward_' | append: index | append: '_remaining'
+        assign remaining = goal_cents | minus: total | money
+        assign message = settings[remaining_key] | replace: '[amount]', remaining
+      endif
+
+      assign previous_amount = goal_cents
+      assign previous_position = position
+    endfor
+
+    if next_found == false
+      assign reached_key = 'cart_reward_' | append: last_index | append: '_reached'
+      assign message = settings[reached_key]
+    endif
+  -%}
+  <div class="cart-drawer__rewards">
+    <ol class="cart-drawer__reward-steps" role="list">
+      {%- for index in goal_indexes -%}
+        {%- liquid
+          assign amount_key = 'cart_reward_' | append: index | append: '_amount'
+          assign label_key = 'cart_reward_' | append: index | append: '_label'
+          assign goal_cents = settings[amount_key] | times: 100
+          assign reached = false
+          if total >= goal_cents
+            assign reached = true
+          endif
+        -%}
+        <li class="cart-drawer__reward-step{% if reached %} is-reached{% endif %}">
+          <span class="cart-drawer__reward-icon" aria-hidden="true">
+            {%- if reached -%}
+              <svg viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.82415 6.15237L0.726419 4.05464L0.012085 4.76395L2.82415 7.57601L8.86078 1.53938L8.15147 0.830078L2.82415 6.15237Z" fill="currentColor"/>
+              </svg>
+            {%- else -%}
+              <svg viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.7808 3.71012H10.9961C10.9961 1.73797 9.39873 0.140625 7.42658 0.140625C5.45444 0.140625 3.85709 1.73797 3.85709 3.71012H2.07234C1.09073 3.71012 0.287598 4.51325 0.287598 5.49486V16.2033C0.287598 17.185 1.09073 17.9881 2.07234 17.9881H12.7808C13.7624 17.9881 14.5656 17.185 14.5656 16.2033V5.49486C14.5656 4.51325 13.7624 3.71012 12.7808 3.71012ZM7.42658 1.92537C8.40819 1.92537 9.21133 2.72851 9.21133 3.71012H5.64184C5.64184 2.72851 6.44497 1.92537 7.42658 1.92537ZM12.7808 16.2033H2.07234V5.49486H3.85709V7.27961C3.85709 7.77042 4.25866 8.17198 4.74946 8.17198C5.24027 8.17198 5.64184 7.77042 5.64184 7.27961V5.49486H9.21133V7.27961C9.21133 7.77042 9.6129 8.17198 10.1037 8.17198C10.5945 8.17198 10.9961 7.77042 10.9961 7.27961V5.49486H12.7808V16.2033Z" fill="#8494A0"/>
+              </svg>
+            {%- endif -%}
+          </span>
+          <span class="cart-drawer__reward-label">{{ settings[label_key] | escape }}</span>
+          <span class="visually-hidden">
+            {%- if reached %} (unlocked){% else %} ({{ goal_cents | money }}){% endif -%}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ol>
+    <div
+      class="cart-drawer__reward-meter{% if total == 0 %} is-empty{% endif %}"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ fill | round }}"
+      aria-label="Rewards progress"
+    >
+      <span class="cart-drawer__reward-fill" style="width: {{ fill | round: 2 }}%;"></span>
+    </div>
+    {%- if message != blank -%}
+      <p class="cart-drawer__reward-message">{{ message }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

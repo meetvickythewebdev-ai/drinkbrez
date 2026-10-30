@@ -1449,6 +1449,173 @@
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
         "default": "scheme-1"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer: header and checkout"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_login",
+        "label": "Show a login button to signed-out customers",
+        "default": true
+      },
+      {
+        "type": "inline_richtext",
+        "id": "cart_legal_text",
+        "label": "Text above the checkout button",
+        "default": "Taxes and <a href=\"/policies/shipping-policy\">shipping</a> calculated at checkout. By checking out, I certify I'm 21+ and have read and agreed to BRĒZ’s <a href=\"/policies/terms-of-service\">Terms</a> and <a href=\"/policies/privacy-policy\">Privacy Policy</a>"
+      },
+      {
+        "type": "text",
+        "id": "cart_checkout_label",
+        "label": "Checkout button label",
+        "info": "The cart total is shown after the label.",
+        "default": "Checkout"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer: rewards bar"
+      },
+      {
+        "type": "paragraph",
+        "content": "Up to four goals shown above the cart. Use [amount] in a message for the amount still to spend. Leave a goal's amount at 0 to hide it."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_rewards_enabled",
+        "label": "Show rewards bar",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "cart_reward_1_amount",
+        "label": "Goal 1 cart total",
+        "default": 125
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_1_label",
+        "label": "Goal 1 label",
+        "default": "Free Shipping"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_1_remaining",
+        "label": "Goal 1 message while short",
+        "default": "You are [amount] away from <b>FREE SHIPPING</b>!"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_1_reached",
+        "label": "Goal 1 message once reached",
+        "default": "🎉 Congrats! You've unlocked <b>FREE SHIPPING!</b>"
+      },
+      {
+        "type": "number",
+        "id": "cart_reward_2_amount",
+        "label": "Goal 2 cart total",
+        "default": 150
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_2_label",
+        "label": "Goal 2 label",
+        "default": "Save $15"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_2_remaining",
+        "label": "Goal 2 message while short",
+        "default": "You're [amount] away from $15 off!"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_2_reached",
+        "label": "Goal 2 message once reached",
+        "default": "You have unlocked something great!"
+      },
+      {
+        "type": "number",
+        "id": "cart_reward_3_amount",
+        "label": "Goal 3 cart total",
+        "default": 200
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_3_label",
+        "label": "Goal 3 label",
+        "default": "Save $30"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_3_remaining",
+        "label": "Goal 3 message while short",
+        "default": "Wow! You're [amount] away from unlocking $30 off!"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_3_reached",
+        "label": "Goal 3 message once reached",
+        "default": "You have unlocked something great!"
+      },
+      {
+        "type": "number",
+        "id": "cart_reward_4_amount",
+        "label": "Goal 4 cart total",
+        "default": 250
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_4_label",
+        "label": "Goal 4 label",
+        "default": "Save $50"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_4_remaining",
+        "label": "Goal 4 message while short",
+        "default": "You're only [amount] away from $50 off!"
+      },
+      {
+        "type": "text",
+        "id": "cart_reward_4_reached",
+        "label": "Goal 4 message once reached",
+        "default": "Nice savings! 🎉 Spend $500+ and get our best discount offered!"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer: subscriptions"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_subscription_switch",
+        "label": "Let customers switch items to and from a subscription",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_subscription_upgrade_label",
+        "label": "Upgrade button label",
+        "info": "Use [percent] for the subscription discount.",
+        "default": "Upgrade to Subscription & Save [percent]%"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer: recommendations"
+      },
+      {
+        "type": "text",
+        "id": "cart_upsell_heading",
+        "label": "Heading",
+        "default": "You may also like"
+      },
+      {
+        "type": "product_list",
+        "id": "cart_upsell_products",
+        "label": "Products",
+        "info": "Products already in the cart are skipped.",
+        "limit": 12
       }
     ]
   },
