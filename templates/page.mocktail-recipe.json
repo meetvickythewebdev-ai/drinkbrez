@@ -1,0 +1,67 @@
+{
+  "sections": {
+    "recipe": {
+      "type": "recipe-detail",
+      "settings": {
+        "ingredients_label": "Ingredients",
+        "instructions_label": "Instructions",
+        "not_found": "Recipe not found."
+      }
+    },
+    "instagram": {
+      "type": "image-marquee",
+      "blocks": {
+        "image_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-1.jpg",
+            "link": "https://www.instagram.com/reel/DWPjv0rEnSw/",
+            "show_reel_icon": true
+          }
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-2.jpg",
+            "link": "https://www.instagram.com/reel/DWfa_7Jkjwt/",
+            "show_reel_icon": false
+          }
+        },
+        "image_3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-3.jpg",
+            "link": "https://www.instagram.com/reel/DTnthscj0ys/",
+            "show_reel_icon": false
+          }
+        },
+        "image_4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-4.jpg",
+            "link": "https://www.instagram.com/reel/DR7mkZ2gX0d/",
+            "show_reel_icon": true
+          }
+        }
+      },
+      "block_order": [
+        "image_1",
+        "image_2",
+        "image_3",
+        "image_4"
+      ],
+      "settings": {
+        "title": "Follow our recipes on Instagram",
+        "card_style": "tall",
+        "button_label": "Follow us on Instagram",
+        "button_link": "https://www.instagram.com/drinkabrez/",
+        "heading": "Instagram recipes",
+        "speed": 40
+      }
+    }
+  },
+  "order": [
+    "recipe",
+    "instagram"
+  ]
+}

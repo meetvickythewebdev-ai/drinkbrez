@@ -1,0 +1,139 @@
+{{ 'section-recipe-detail.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'recipe-detail.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  {% render 'bundle-fonts' %}
+{%- endstyle -%}
+
+<recipe-detail class="recipe-detail brand-section">
+  {%- paginate shop.metaobjects.recipe.values by 250 -%}
+    {%- for recipe in shop.metaobjects.recipe.values -%}
+      {%- assign recipe_product = recipe.recipe_product.value -%}
+      <div class="recipe-detail__inner page-width" data-recipe="{{ recipe.system.handle }}" hidden>
+        <recipe-gallery class="recipe-detail__gallery" data-visible="3">
+          <div class="recipe-detail__main-image">
+            {%- for image in recipe.images.value -%}
+              <div class="recipe-detail__main-slide{% if forloop.first %} is-active{% endif %}" data-slide>
+                {{
+                  image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', widths: '500, 700, 900', sizes: '(min-width: 750px) 50vw, 100vw', alt: recipe.title.value
+                }}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- if recipe.images.value.count > 1 -%}
+            <div class="recipe-detail__thumbnails">
+              <button type="button" class="recipe-detail__thumb-arrow" data-thumb-prev aria-label="Previous thumbnails">‹</button>
+              <div class="recipe-detail__thumbs-grid">
+                {%- for image in recipe.images.value -%}
+                  <button
+                    type="button"
+                    class="recipe-detail__thumb{% if forloop.first %} is-active{% endif %}"
+                    data-thumb="{{ forloop.index0 }}"
+                    aria-label="View image {{ forloop.index }}"
+                  >
+                    {{ image | image_url: width: 300 | image_tag: loading: 'lazy', alt: recipe.title.value }}
+                  </button>
+                {%- endfor -%}
+              </div>
+              <button type="button" class="recipe-detail__thumb-arrow" data-thumb-next aria-label="Next thumbnails">›</button>
+            </div>
+          {%- endif -%}
+        </recipe-gallery>
+
+        <div class="recipe-detail__content">
+          <h1 class="recipe-detail__title">{{ recipe.title.value | escape }}</h1>
+          {%- if recipe.ingredients != blank -%}
+            <h2 class="recipe-detail__section-title">{{ section.settings.ingredients_label | escape }}</h2>
+            <div class="recipe-detail__rich-text">{{ recipe.ingredients.value }}</div>
+            <hr class="recipe-detail__divider">
+          {%- endif -%}
+          {%- if recipe.instructions != blank -%}
+            <h2 class="recipe-detail__section-title">{{ section.settings.instructions_label | escape }}</h2>
+            <div class="recipe-detail__rich-text">{{ recipe.instructions.value }}</div>
+            <hr class="recipe-detail__divider">
+          {%- endif -%}
+          {%- if recipe_product != blank -%}
+            <div class="recipe-detail__product">
+              {%- if recipe_product.image != blank -%}
+                <div class="recipe-detail__product-image">
+                  {{ recipe_product.image.value | image_url: width: 500 | image_tag: loading: 'lazy', alt: recipe_product.name.value }}
+                </div>
+              {%- endif -%}
+              <div class="recipe-detail__product-info">
+                {%- if recipe_product.wordmark != blank -%}
+                  <div class="recipe-detail__product-title">
+                    {{ recipe_product.wordmark.value | image_url: width: 500 | image_tag: loading: 'lazy', alt: recipe_product.name.value }}
+                  </div>
+                {%- endif -%}
+                {%- if recipe_product.description != blank -%}
+                  <div class="recipe-detail__product-description">{{ recipe_product.description.value }}</div>
+                {%- endif -%}
+                {%- capture arrow -%}
+                  <svg aria-hidden="true" width="27" height="17" viewBox="0 0 27 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 8.5H26.5" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18.5 0.5L26.5 8.5L18.5 16.5" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {%- endcapture -%}
+                {%- if recipe_product.variant != blank -%}
+                  <a
+                    href="{{ recipe_product.variant.value.url }}"
+                    class="recipe-detail__product-btn"
+                    data-add-variant="{{ recipe_product.variant.value.id }}"
+                  >
+                    {{- recipe_product.button_label.value | escape }}
+                    {{ arrow -}}
+                  </a>
+                {%- elsif recipe_product.product != blank -%}
+                  <a href="{{ recipe_product.product.value.url }}" class="recipe-detail__product-btn">
+                    {{- recipe_product.button_label.value | escape }}
+                    {{ arrow -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- endpaginate -%}
+
+  <div class="recipe-detail__not-found" data-recipe-missing hidden>{{ section.settings.not_found | escape }}</div>
+</recipe-detail>
+
+{% schema %}
+{
+  "name": "Recipe detail",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the recipe named in the page's ?recipe= link."
+    },
+    {
+      "type": "text",
+      "id": "ingredients_label",
+      "label": "Ingredients heading",
+      "default": "Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "instructions_label",
+      "label": "Instructions heading",
+      "default": "Instructions"
+    },
+    {
+      "type": "text",
+      "id": "not_found",
+      "label": "Recipe not found message",
+      "default": "Recipe not found."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recipe detail"
+    }
+  ]
+}
+{% endschema %}

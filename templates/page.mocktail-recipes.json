@@ -1,0 +1,160 @@
+{
+  "sections": {
+    "recipes": {
+      "type": "recipe-list",
+      "blocks": {
+        "flavor_1": {
+          "type": "flavor",
+          "settings": {
+            "image": "shopify://shop_images/recipe-flavor-og.png",
+            "label": "OG",
+            "value": "OG"
+          }
+        },
+        "flavor_2": {
+          "type": "flavor",
+          "settings": {
+            "image": "shopify://shop_images/recipe-flavor-spirit.png",
+            "label": "Spirit/Shots",
+            "value": "Spirit/Shots"
+          }
+        },
+        "flavor_3": {
+          "type": "flavor",
+          "settings": {
+            "image": "shopify://shop_images/recipe-flavor-flow.png",
+            "label": "FLOW",
+            "value": "FLOW"
+          }
+        },
+        "flavor_4": {
+          "type": "flavor",
+          "settings": {
+            "image": "shopify://shop_images/recipe-flavor-elevate.png",
+            "label": "ELEVATE",
+            "value": "ELEVATE"
+          }
+        },
+        "flavor_5": {
+          "type": "flavor",
+          "settings": {
+            "image": "shopify://shop_images/recipe-flavor-dream.png",
+            "label": "DREAM",
+            "value": "DREAM"
+          }
+        },
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "label": "Holiday"
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "label": "Our Favs"
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "label": "Simple"
+          }
+        },
+        "category_4": {
+          "type": "category",
+          "settings": {
+            "label": "Hosting"
+          }
+        },
+        "category_5": {
+          "type": "category",
+          "settings": {
+            "label": "Classics"
+          }
+        },
+        "category_6": {
+          "type": "category",
+          "settings": {
+            "label": "Mocktail Madness"
+          }
+        }
+      },
+      "block_order": [
+        "flavor_1",
+        "flavor_2",
+        "flavor_3",
+        "flavor_4",
+        "flavor_5",
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4",
+        "category_5",
+        "category_6"
+      ],
+      "settings": {
+        "heading": "Mocktail Recipes",
+        "recipe_page": "mocktail-recipe",
+        "search_placeholder": "Search all recipes",
+        "no_results": "No recipes found for the selected filters.",
+        "per_page": 24
+      }
+    },
+    "instagram": {
+      "type": "image-marquee",
+      "blocks": {
+        "image_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-1.jpg",
+            "link": "https://www.instagram.com/reel/DWPjv0rEnSw/",
+            "show_reel_icon": true
+          }
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-2.jpg",
+            "link": "https://www.instagram.com/reel/DWfa_7Jkjwt/",
+            "show_reel_icon": false
+          }
+        },
+        "image_3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-3.jpg",
+            "link": "https://www.instagram.com/reel/DTnthscj0ys/",
+            "show_reel_icon": false
+          }
+        },
+        "image_4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/recipe-ig-4.jpg",
+            "link": "https://www.instagram.com/reel/DR7mkZ2gX0d/",
+            "show_reel_icon": true
+          }
+        }
+      },
+      "block_order": [
+        "image_1",
+        "image_2",
+        "image_3",
+        "image_4"
+      ],
+      "settings": {
+        "title": "Follow our recipes on Instagram",
+        "card_style": "tall",
+        "button_label": "Follow us on Instagram",
+        "button_link": "https://www.instagram.com/drinkabrez/",
+        "heading": "Instagram recipes",
+        "speed": 40
+      }
+    }
+  },
+  "order": [
+    "recipes",
+    "instagram"
+  ]
+}

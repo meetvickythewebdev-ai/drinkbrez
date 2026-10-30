@@ -18,6 +18,10 @@ if (!customElements.get('image-marquee')) {
         this.position = 0;
 
         this.viewport.addEventListener('pointerdown', (event) => this.onPointerDown(event));
+        // A drag shouldn't also follow the card's link.
+        this.viewport.addEventListener('click', (event) => {
+          if (this.dragged) event.preventDefault();
+        }, true);
         if (this.speed && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           this.frame = requestAnimationFrame((time) => this.step(time));
         }
@@ -43,12 +47,15 @@ if (!customElements.get('image-marquee')) {
         if (event.pointerType !== 'mouse' || event.button !== 0) return;
         event.preventDefault();
         this.dragging = true;
+        this.dragged = false;
         this.viewport.classList.add('is-dragging');
         const startX = event.clientX;
         const startScroll = this.viewport.scrollLeft;
 
         const onMove = (moveEvent) => {
-          this.viewport.scrollLeft = startScroll - (moveEvent.clientX - startX);
+          const delta = moveEvent.clientX - startX;
+          if (Math.abs(delta) > 5) this.dragged = true;
+          this.viewport.scrollLeft = startScroll - delta;
         };
         const onUp = () => {
           window.removeEventListener('pointermove', onMove);

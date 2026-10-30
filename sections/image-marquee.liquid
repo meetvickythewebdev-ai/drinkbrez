@@ -1,8 +1,12 @@
 {{ 'section-image-marquee.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'image-marquee.js' | asset_url }}" defer="defer"></script>
 
+{%- style -%}
+  {% render 'bundle-fonts' %}
+{%- endstyle -%}
+
 <image-marquee
-  class="image-marquee"
+  class="image-marquee image-marquee--{{ section.settings.card_style }} brand-section"
   data-speed="{{ section.settings.speed }}"
   role="region"
   aria-roledescription="carousel"
@@ -10,10 +14,16 @@
     aria-label="{{ section.settings.heading | escape }}"
   {% endif %}
 >
+  {%- if section.settings.title != blank -%}
+    <h2 class="image-marquee__title">{{ section.settings.title | escape }}</h2>
+  {%- endif -%}
   <div class="image-marquee__viewport" data-marquee-viewport>
     <ul class="image-marquee__track list-unstyled" role="list" data-marquee-track>
       {%- for block in section.blocks -%}
         <li class="image-marquee__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="image-marquee__link" target="_blank" rel="noopener noreferrer" draggable="false">
+          {%- endif -%}
           {%- if block.settings.image != blank -%}
             {{
               block.settings.image
@@ -23,10 +33,27 @@
           {%- else -%}
             {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
+          {%- if block.settings.show_reel_icon -%}
+            <img src="{{ 'icon-reel.png' | asset_url }}" class="image-marquee__icon" alt="" width="26" height="26" loading="lazy">
+          {%- endif -%}
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
         </li>
       {%- endfor -%}
     </ul>
   </div>
+  {%- if section.settings.button_label != blank -%}
+    <div class="image-marquee__cta">
+      <a href="{{ section.settings.button_link | default: '#' }}" class="image-marquee__button" target="_blank" rel="noopener noreferrer">
+        {{- section.settings.button_label | escape }}
+        <svg aria-hidden="true" width="27" height="17" viewBox="0 0 27 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.5 8.5H26.5" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.5 0.5L26.5 8.5L18.5 16.5" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  {%- endif -%}
 </image-marquee>
 
 {% schema %}
@@ -34,6 +61,37 @@
   "name": "Image marquee",
   "max_blocks": 12,
   "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "rounded",
+          "label": "Extra rounded"
+        },
+        {
+          "value": "tall",
+          "label": "Tall"
+        }
+      ],
+      "default": "rounded"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -60,6 +118,17 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_reel_icon",
+          "label": "Show reel icon",
+          "default": false
         }
       ]
     }

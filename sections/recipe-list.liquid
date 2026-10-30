@@ -1,0 +1,162 @@
+{{ 'section-recipe-list.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'recipe-list.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  {% render 'bundle-fonts' %}
+{%- endstyle -%}
+
+<recipe-list class="recipe-list brand-section" data-per-page="{{ section.settings.per_page }}">
+  {%- if section.settings.heading != blank -%}
+    <h1 class="recipe-list__title">{{ section.settings.heading | escape }}</h1>
+  {%- endif -%}
+
+  <div class="recipe-list__flavors">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'flavor' -%}
+        <button type="button" class="recipe-flavor" aria-pressed="false" data-flavor="{{ block.settings.value | default: block.settings.label | escape }}" {{ block.shopify_attributes }}>
+          <span class="recipe-flavor__image">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 120 | image_tag: widths: '60, 90, 120', sizes: '54px', loading: 'lazy', alt: block.settings.label }}
+            {%- endif -%}
+          </span>
+          <span class="recipe-flavor__label">{{ block.settings.label | escape }}</span>
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="recipe-list__tabs" role="group" aria-label="Recipe categories">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'category' -%}
+        <button type="button" class="recipe-tab" aria-pressed="false" data-category="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+          {{- block.settings.label | escape -}}
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="recipe-list__search">
+    <input type="text" placeholder="{{ section.settings.search_placeholder | escape }}" aria-label="{{ section.settings.search_placeholder | escape }}" data-recipe-search>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+    </svg>
+  </div>
+
+  <div class="recipe-list__grid">
+    {%- paginate shop.metaobjects.recipe.values by 250 -%}
+      {%- for recipe in shop.metaobjects.recipe.values -%}
+        <div
+          class="recipe-card"
+          data-title="{{ recipe.title.value | downcase | escape }}"
+          data-categories="{{ recipe.categories.value | json | escape }}"
+          data-flavors="{{ recipe.flavors.value | json | escape }}"
+          data-position="{{ recipe.position.value | default: 9999 }}"
+        >
+          <a href="{{ section.settings.recipe_page.url | default: '/pages/mocktail-recipe' }}?recipe={{ recipe.system.handle }}" class="recipe-card__link">
+            <div class="recipe-card__media">
+              {%- assign first_image = recipe.images.value | first -%}
+              {%- if first_image != blank -%}
+                {{
+                  first_image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 900',
+                    sizes: '(min-width: 990px) 33vw, 50vw',
+                    alt: recipe.title.value
+                }}
+              {%- endif -%}
+            </div>
+            <span class="recipe-card__title">{{ recipe.title.value | escape }} ›</span>
+          </a>
+        </div>
+      {%- endfor -%}
+    {%- endpaginate -%}
+  </div>
+
+  <div class="recipe-list__no-results" data-recipe-empty hidden>{{ section.settings.no_results | escape }}</div>
+
+  <nav class="recipe-list__pagination" data-recipe-pagination aria-label="Pagination" hidden></nav>
+</recipe-list>
+
+{% schema %}
+{
+  "name": "Recipe list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Mocktail Recipes"
+    },
+    {
+      "type": "page",
+      "id": "recipe_page",
+      "label": "Recipe detail page"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search all recipes"
+    },
+    {
+      "type": "text",
+      "id": "no_results",
+      "label": "No results message",
+      "default": "No recipes found for the selected filters."
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "min": 6,
+      "max": 48,
+      "step": 3,
+      "label": "Recipes per page",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "flavor",
+      "name": "Flavor filter",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Recipe flavor value",
+          "info": "Must match the recipe's Flavors field. Defaults to the label."
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "name": "Category filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Must match the recipe's Categories field."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recipe list"
+    }
+  ]
+}
+{% endschema %}
